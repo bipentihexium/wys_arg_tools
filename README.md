@@ -27,10 +27,10 @@ This script will find all occurences of characters inside string and will print 
 Probably the most interesting program here. It is written in C++ so you will need a C++ compiler to use it. On Linux you can use g++:
 
 ```shell
-g++ algo_bruteforce.cpp -o algo -O3
+g++ algo_bruteforce.cpp -o algo -O3 -std=c++11 -lpthread
 ./algo
 ```
 
-on Windows it is a bit more complicated. You need to use Visual Studio or MinGW (with MinGW it's basically same as on Linux; I don't know how to use VS for C++).
+on Windows it is a bit more complicated. You need to use Visual Studio or MinGW (with MinGW it's basically same as on Linux, just replace `-lpthread` with `-lwinpthread`, note that you need the right MinGW version (posix thread model); I don't know how to use VS for C++).
 
 I recommend using this program only if you know C++ at least a bit, so you know how to change the constants, in best case the algorithm. I might make something here about how to change constants and their meaning in the future.

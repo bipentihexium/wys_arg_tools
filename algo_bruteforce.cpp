@@ -23,12 +23,27 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#include <array>
+#include <chrono>
+#include <iomanip>
 #include <iostream>
-#include <stdlib.h>
+#include <memory>
+#include <random>
 #include <string>
-#include <time.h>
+#include <thread>
 
 // TODO: add support for testing multiple keys
+
+// nubmer of search threads - usually used processor cores
+constexpr int no_threads = 2;
+// how much algorithms need to be searched to print the count
+constexpr unsigned long int searchprint = 100000ul;
+// precision of "Nm algorithms searched..."
+constexpr unsigned searched_count_precision = 1;
+// precision of "...avg search speed Nm/s"
+constexpr unsigned search_time_precision = 2;
+// precision of "...avg search speed Nm/s"
+constexpr unsigned search_speed_precision = 2;
 
 constexpr const char data1[] = "Nw;:OPxPo st;AEp fbwpe  idIosEtn TnipeMp H ui;zcE ntcrATsHrhUtxHRW   CCsoo( reEMantTtOafStNOBxaIEtARorYATHa trOBuQtx(NCPshtMUt:NpsvLdA aSeNIrUeeAee rsALs|iCeNhEss;apTbtiA;stlAaer)t tOL7P t: s  NotA SsTttdeE' WL kTv puLDSifANr7oiReiS aeytforoMfctt)dlHOsA n;slDRWYdp rtDssLUS)t;SIkC; ac;oteiVH Wi jfidlR; 7udsRE s uDEtoE|lSeT;LcVTlHCSaAd( hnI  zorkHIcpSEeCoAecenEe UyIlNeot;t Tc eEA  KISKi  H t sDxsttn;MhSUi' KAORNtxotTeAE O spAAeOe ets l OCgBt AetbTeHm)ao|iRIiElt YaDnhtBTlhCGeSwTGbn ncLyFthyO N xdTCDeirnyhstAU T(:SOEs lyTEjMsePup lstkRnnpyndUieIe)rF fr6SttTaHfI;Ne Oh:pAc TiMenE s h)esLsbs roOll VcnwLTO;nhKTsnePmUN;UusHdusDt l B Ho72EyMNuRoy znm dwEs IEiAxtteCrwee MeRen ;iB OstnAtL(NroEtwe| (t:se hyniEdr;iKsnt Ee;ooeSoEdug iu Rd H ddCaLSPC ADiiAYA";
 constexpr const char key2[] = "HUMANSCANTSOLVETHISSOBETTERSTOPHERE";
@@ -53,7 +68,7 @@ constexpr int keylen = const_strlength(_KEY);
 //#define INV_ALGO
 
 enum class operation {
-	CONST, VAR, REV, ADD, MULT, COUNT
+	CONSTANT, VAR, REV, ADD, MULT, COUNT
 };
 enum class variable {
 	INDEX, KEYINDEX, KEY, KEYLEN, DATA, DATALEN, COUNT
@@ -74,7 +89,7 @@ public:
 	/**
 	 * @brief constructs empty expression
 	 */
-	expr() : a(nullptr), b(nullptr), constant(0), op(operation::CONST) { }
+	expr() : a(nullptr), b(nullptr), constant(0), op(operation::CONSTANT) { }
 	/**
 	 * @brief constructs variable expression
 	 */
@@ -82,7 +97,7 @@ public:
 	/**
 	 * @brief constructs constant expression
 	 */
-	expr(int c) : a(nullptr), b(nullptr), constant(c), op(operation::CONST) { }
+	expr(int c) : a(nullptr), b(nullptr), constant(c), op(operation::CONSTANT) { }
 	/**
 	 * @brief constructs unary expression (from reference)
 	 */
@@ -120,7 +135,7 @@ public:
 	 */
 	int get(const algo_context &c) {
 		switch (op) {
-		case operation::CONST: return constant;
+		case operation::CONSTANT: return constant;
 		case operation::VAR:
 			switch (var) {
 			case variable::DATA: return c.d[c.index];
@@ -143,7 +158,7 @@ public:
  */
 std::ostream &operator<<(std::ostream &o, const expr &e) {
 	switch (e.op) {
-	case operation::CONST: o << e.constant; break;
+	case operation::CONSTANT: o << e.constant; break;
 	case operation::VAR:
 		switch (e.var) {
 		case variable::DATA: o << "data[index]"; break;
@@ -293,13 +308,14 @@ bool ismsg(const std::string &msg) {
 	//	return false;
 	//;
 }
-#define R(n) (rand()%(n))
+#define R(n) (std::uniform_int_distribution<int>(0, (n)-1)(random_engine))
 /**
  * @brief creates random expression leaf:
  *  - 90% chance to return random number between -20 ad 20
  *  - 10% chance to return ranodm variable
  */
-expr *randLeaf() {
+template<typename RANDOM_T>
+expr *randLeaf(RANDOM_T &random_engine) {
 	if (R(10)) {
 		return new expr(R(41)-20);
 	} else {
@@ -315,7 +331,8 @@ expr *randLeaf() {
  *    > it has 25% chance to have some unary operator (currently only -a)
  *    > it has 1/7 chance to be in a binary expression with another random leaf
  */
-expr *randExpr(expr *base) {
+template<typename RANDOM_T>
+expr *randExpr(RANDOM_T &random_engine, expr *base) {
 	int count = R(4);
 	constexpr operation binops[] = { operation::ADD, operation::MULT, operation::ADD }; // add is there for second time to increase the chance of selecting it
 	constexpr operation unops[] = { operation::REV };
@@ -325,12 +342,12 @@ expr *randExpr(expr *base) {
 	for (int i = 0; i < count; ++i) {
 		int op = R(sumlen);
 		if (op < binoplen) {
-			expr *leaf = randLeaf();
+			expr *leaf = randLeaf(random_engine);
 			if (!R(4)) {
 				leaf = new expr(leaf, unops[R(unoplen)]);
 			}
 			if (!R(7)) {
-				leaf = new expr(leaf, randLeaf(), binops[R(binoplen)]);
+				leaf = new expr(leaf, randLeaf(random_engine), binops[R(binoplen)]);
 			}
 			base = new expr(base, leaf, binops[op]);
 		} else {
@@ -346,30 +363,59 @@ expr *randExpr(expr *base) {
  *  - and then loops through data, changing index using random expression (which contains index, but it can be nullified (like index-index or index*0))
  *  - keyindex has also its own random expression
  */
-algo randAlgo() {
+template<typename RANDOM_T>
+algo randAlgo(RANDOM_T &random_engine) {
 #ifdef INV_ALGO
-	return algo(R(2) * R(datalen), R(2) * R(keylen), randExpr(randLeaf()), randExpr(new expr(variable::KEYINDEX)));
+	return algo(R(2) * R(datalen), R(2) * R(keylen), randExpr(random_engine, randLeaf(random_engine)), randExpr(random_engine, new expr(variable::KEYINDEX)));
 #else
-	return algo(R(2) * R(datalen), R(2) * R(keylen), randExpr(new expr(variable::INDEX)), randExpr(new expr(variable::KEYINDEX)));
+	return algo(R(2) * R(datalen), R(2) * R(keylen), randExpr(random_engine, new expr(variable::INDEX)), randExpr(random_engine, new expr(variable::KEYINDEX)));
 #endif
 }
 #undef R
 
-int main() {
-	srand(time(NULL));
-	//algo a1(0, 0, new expr(new expr(variable::INDEX), new expr(17), operation::ADD), new expr(0)); // lvl1 algorithm
-	//algo a2(0, 0, new expr(new expr(variable::INDEX), new expr(variable::KEY), operation::ADD),
-	//	new expr(new expr(variable::KEYINDEX), new expr(1), operation::ADD)); // lvl2 algorithm
-	for (unsigned long int i = 0; ; ++i) {
-		algo a = randAlgo();
+unsigned long int searched = 0;
+std::chrono::high_resolution_clock::time_point search_start;
+bool do_search = true;
+
+void runtests() {
+	std::mt19937 random_engine;
+	while (do_search) {
+		algo a = randAlgo(random_engine);
 		std::string res = a.run();
 		if (ismsg(res)) {
 			std::cout << "==================================== FOUND ====================================" << std::endl <<
 				a << std::endl << "-------------- out ------------------" << std::endl << res << std::endl;
 		}
-		if (i%100000==0) {
-			std::cout << (i/1000000.f) << "m algos searched" << std::endl;
+		if ((++searched)%searchprint == 0) {
+			std::chrono::high_resolution_clock::time_point now = std::chrono::high_resolution_clock::now();
+			std::chrono::milliseconds millis = std::chrono::duration_cast<std::chrono::milliseconds>(now - search_start);
+			std::cout << std::fixed << std::setprecision(searched_count_precision) << (searched/1000000.f) << "m algos searched; "
+				"time: " << std::setprecision(search_time_precision) << (millis.count()/1000.f) << "s; "
+				"avg search speed" << std::setprecision(search_speed_precision) << (searched/millis.count()/1000.f) << "m/s" << std::endl;
 		}
+	}
+}
+
+int main() {
+	//algo a1(0, 0, new expr(new expr(variable::INDEX), new expr(17), operation::ADD), new expr(0)); // lvl1 algorithm
+	//algo a2(0, 0, new expr(new expr(variable::INDEX), new expr(variable::KEY), operation::ADD),
+	//	new expr(new expr(variable::KEYINDEX), new expr(1), operation::ADD)); // lvl2 algorithm
+	search_start = std::chrono::high_resolution_clock::now();
+	std::array<std::unique_ptr<std::thread>, no_threads> thrs;
+	do_search = true;
+	for (auto &thr : thrs) {
+		thr = std::unique_ptr<std::thread>(new std::thread(runtests));
+	}
+	std::string cmd;
+	while (true) {
+		std::getline(std::cin, cmd);
+		if (cmd == "exit") {
+			break;
+		}
+	}
+	do_search = false;
+	for (auto &thr : thrs) {
+		thr->join();
 	}
 	return 0;
 }
