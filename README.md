@@ -31,5 +31,5 @@ g++ algo_bruteforce.cpp -o algo -O3
 ./algo
 ```
 
-on Windows it is a bit more complicated. You need to use Visual Studio or MinGW.
+on Windows it is a bit more complicated. You need to use Visual Studio or MinGW (with MinGW it's basically same as on Linux; I don't know how to use VS for C++).
 I recommend using this program only if you know C++ at least a bit, so you know how to change the constants, in best case the algorithm. I might make something here about how to change constants and their meaning in the future.
