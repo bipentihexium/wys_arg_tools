@@ -1,0 +1,9 @@
+.vscode/
+algo
+algo_bruteforce.py
+in.txt
+word_list.txt
+wys
+wys_decrypt_track.py
+wys_search_filtered.py
+wys.cpp
