@@ -37,13 +37,19 @@ constexpr const char key3[] = "DLIHCREHTONMAITUBREHTOMYMSIEHS";
 constexpr const char key3r[] = "SHEISMYMOTHERBUTIAMNOTHERCHILD";
 constexpr const char data3[] = "AtniotoMK;hHLt hOT(NSCCiMs  aEeMifpCesul)t: su|'yhlRtsW ;tFpb7t actt lbA  L|c  Ar:SlihA7Eof kh rK;LSPrfdswdrBrHekblUytasxKsnc 7uAROslOyELt SSUC;G Amu snOaACtrutyreebN;TPx thNIteelset;seis;  drs  nDdEpdltueUc And o c dyS7tdTlwFcA TItiePoA:(slpr(ltefKaIeeR  EdN;AvtetEE psottTCTEaCoAa IyYfsnouotsbUti sAkSetL;iui hNpnedped nIhcetx ;ttAeN lsytTnhKtD EeiaexRELityHU'Uux )e UMVr NVhtYiHc  rj Blu;Oe rN e pdsYNHIDo6NeS: D OOAlnn aC TC f So RPoGMsntsan EI LtE anoOiEeP    wDThxdt;CLp)eoEHo arS;wrwgiABeRzwAsue evirjOotiimo;L L( NEwros|oIpNiWeisoin;AiOAit2EQnyUlzsR TWRn rfCAeBEO ks PTW in|sngscthezHt eD)";
 constexpr const char data3r[] = ")De tHzehtcsgns|ni WTP sk OEBeACfr nRWT RszlUynQE2tiAOiA;niosieWiNpIo|sorwEN (L L;omiitoOjrive eusAwzReBAigwrw;Sra oHEoe)pLC;tdxhTDw    PeEiOona EtL IE nastnsMGoPR oS f CT Ca nnlAOO D :SeN6oDIHNYsdp e Nr eO;ulB jr  cHiYthVN rVMU e) xuU'UHytiLERxeaieE DtKhnTtysl NeAtt; xtechIn depdenpNh iui;LteSkAs itUbstouonsfYyI aAoCaETCTttosp EEtetvA;NdE  ReeIaKfetl(rpls(:AoPeitIT AcFwlTdt7Syd c o dnA cUeutldpEdDn  srd  ;sies;tesleetINht xPT;NbeeryturtCAaOns umA G;CUSS tLEyOlsORAu7 cnsKxsatyUlbkeHrBrdwsdfrPSL;Kr hk foE7AhilS:rA  c|L  Abl ttca t7bpFt; WstRlhy'|us :t)luseCpfiMeEa  sMiCCSN(TOh tLHh;KMotointA";
-#define data data3
-#define key key3
+// put your custom data here
+constexpr const char key_custom[] = "DLIHCREHTONMAITUBREHTOMYMSIEHS";
+constexpr const char data_custom[] = "AtniotoMK;hHLt hOT(NSCCiMs  aEeMifpCesul)t: su|'yhlRtsW ;tFpb7t actt lbA  L|c  Ar:SlihA7Eof kh rK;LSPrfdswdrBrHekblUytasxKsnc 7uAROslOyELt SSUC;G Amu snOaACtrutyreebN;TPx thNIteelset;seis;  drs  nDdEpdltueUc And o c dyS7tdTlwFcA TItiePoA:(slpr(ltefKaIeeR  EdN;AvtetEE psottTCTEaCoAa IyYfsnouotsbUti sAkSetL;iui hNpnedped nIhcetx ;ttAeN lsytTnhKtD EeiaexRELityHU'Uux )e UMVr NVhtYiHc  rj Blu;Oe rN e pdsYNHIDo6NeS: D OOAlnn aC TC f So RPoGMsntsan EI LtE anoOiEeP    wDThxdt;CLp)eoEHo arS;wrwgiABeRzwAsue evirjOotiimo;L L( NEwros|oIpNiWeisoin;AiOAit2EQnyUlzsR TWRn rfCAeBEO ks PTW in|sngscthezHt eD)";
+// you can change which data and key is used here
+#define _DATA data_custom
+#define _KEY key_custom
+
 template<int N>
 constexpr int const_strlength(char const (&)[N]) { return N-1; }
-constexpr int datalen = const_strlength(data);
-constexpr int keylen = const_strlength(key);
+constexpr int datalen = const_strlength(_DATA);
+constexpr int keylen = const_strlength(_KEY);
 
+// uncomment this line if you want to use HCSTSBSH encryption algorithm instead
 //#define INV_ALGO
 
 enum class operation {
@@ -65,18 +71,42 @@ public:
 	variable var;
 	operation op;
 
+	/**
+	 * @brief constructs empty expression
+	 */
 	expr() : a(nullptr), b(nullptr), constant(0), op(operation::CONST) { }
+	/**
+	 * @brief constructs variable expression
+	 */
 	expr(variable v) : a(nullptr), b(nullptr), constant(0), var(v), op(operation::VAR) { }
+	/**
+	 * @brief constructs constant expression
+	 */
 	expr(int c) : a(nullptr), b(nullptr), constant(c), op(operation::CONST) { }
+	/**
+	 * @brief constructs unary expression (from reference)
+	 */
 	expr(const expr &f, operation o) : b(nullptr), constant(0), op(o) {
 		a = new expr(f);
 	}
+	/**
+	 * @brief constructs binary expression (from references)
+	 */
 	expr(const expr &f, const expr &f2, operation o) : constant(0), op(o) {
 		a = new expr(f);
 		b = new expr(f2);
 	}
+	/**
+	 * @brief constructs unary expression (from pointer, consumes it)
+	 */
 	expr(expr *f, operation o) : a(f), b(nullptr), constant(0), op(o) { }
+	/**
+	 * @brief constructs binary expression (from pointers, consumes them)
+	 */
 	expr(expr *f, expr *f2, operation o) : a(f), b(f2), constant(0), op(o) { }
+	/**
+	 * @brief copy constructor
+	 */
 	expr(const expr &f) : constant(f.constant), var(f.var), op(f.op) {
 		a = f.a == nullptr ? nullptr : new expr(*f.a);
 		b = f.b == nullptr ? nullptr : new expr(*f.b);
@@ -85,6 +115,9 @@ public:
 		if (a != nullptr) delete a;
 		if (b != nullptr) delete b;
 	}
+	/**
+	 * @brief gets value of expression in given context
+	 */
 	int get(const algo_context &c) {
 		switch (op) {
 		case operation::CONST: return constant;
@@ -93,7 +126,7 @@ public:
 			case variable::DATA: return c.d[c.index];
 			case variable::DATALEN: return c.d.size();
 			case variable::INDEX: return c.index;
-			case variable::KEY: return key[c.keyindex]-'@';
+			case variable::KEY: return _KEY[c.keyindex]-'@';
 			case variable::KEYINDEX: return c.keyindex;
 			case variable::KEYLEN: return keylen;
 			default: return 0;
@@ -105,6 +138,9 @@ public:
 		};
 	}
 };
+/**
+ * @brief oputputs expression
+ */
 std::ostream &operator<<(std::ostream &o, const expr &e) {
 	switch (e.op) {
 	case operation::CONST: o << e.constant; break;
@@ -138,6 +174,10 @@ public:
 		delete index_expr;
 		delete keyindex_expr;
 	}
+	/**
+	 * @brief runs the algorithm on _DATA with _KEY
+	 * @returns resulting message
+	 */
 	std::string run() {
 #ifdef INV_ALGO
 		algo_context ctx;
@@ -145,9 +185,9 @@ public:
 		ctx.keyindex = start_keyindex;
 		std::string res(datalen, '-');
 		const char *c;
-		for (c = data; *c; ++c) {
+		for (c = _DATA; *c; ++c) {
 			int step = index_expr->get(ctx);
-			step %= res.size()-(c-data);
+			step %= res.size()-(c-_DATA);
 			if (step > 0) {
 				while (step) {
 					ctx.index = (ctx.index + 1) % res.size();
@@ -175,7 +215,7 @@ public:
 		algo_context ctx;
 		ctx.index = start_index;
 		ctx.keyindex = start_keyindex;
-		ctx.d = data;
+		ctx.d = _DATA;
 		std::string res;
 		res.reserve(datalen);
 		while (!ctx.d.empty()) {
@@ -192,6 +232,9 @@ public:
 #endif
 	}
 };
+/**
+ * @brief oputputs algorithm as a python function
+ */
 std::ostream &operator<<(std::ostream &o, const algo &a) {
 #ifdef INV_ALGO
 	o << "def algo(data, key):\n"
@@ -238,6 +281,11 @@ std::ostream &operator<<(std::ostream &o, const algo &a) {
 #endif
 	return o;
 }
+/**
+ * @brief tests if function is valid message; valid message:
+ *  - contains "DATA("
+ *  - that is actually already enough to filter the messages :), no more complicated test needed
+ */
 bool ismsg(const std::string &msg) {
 	size_t pos = msg.find("DATA(", 0);
 	return pos != std::string::npos;
@@ -246,6 +294,11 @@ bool ismsg(const std::string &msg) {
 	//;
 }
 #define R(n) (rand()%(n))
+/**
+ * @brief creates random expression leaf:
+ *  - 90% chance to return random number between -20 ad 20
+ *  - 10% chance to return ranodm variable
+ */
 expr *randLeaf() {
 	if (R(10)) {
 		return new expr(R(41)-20);
@@ -255,9 +308,16 @@ expr *randLeaf() {
 		return new expr(vars[R(varc)]);
 	}
 }
+/**
+ * @brief creates random expression from base:
+ *  - it adds 0-3 operations to base
+ *  - binary operations have second operand as random leaf (see randomLeaf()), but:
+ *    > it has 25% chance to have some unary operator (currently only -a)
+ *    > it has 1/7 chance to be in a binary expression with another random leaf
+ */
 expr *randExpr(expr *base) {
 	int count = R(4);
-	constexpr operation binops[] = { operation::ADD, operation::MULT, operation::ADD };
+	constexpr operation binops[] = { operation::ADD, operation::MULT, operation::ADD }; // add is there for second time to increase the chance of selecting it
 	constexpr operation unops[] = { operation::REV };
 	constexpr int binoplen = 3;
 	constexpr int unoplen = 1;
@@ -279,6 +339,13 @@ expr *randExpr(expr *base) {
 	}
 	return base;
 }
+/**
+ * @brief creates algorithm:
+ *  - starts at random position (50% to start at 0, 50% to start at random position)
+ *  - key iterator starts at random position (50% to start at 0, 50% to start at random position)
+ *  - and then loops through data, changing index using random expression (which contains index, but it can be nullified (like index-index or index*0))
+ *  - keyindex has also its own random expression
+ */
 algo randAlgo() {
 #ifdef INV_ALGO
 	return algo(R(2) * R(datalen), R(2) * R(keylen), randExpr(randLeaf()), randExpr(new expr(variable::KEYINDEX)));
@@ -287,12 +354,12 @@ algo randAlgo() {
 #endif
 }
 #undef R
+
 int main() {
 	srand(time(NULL));
-	//algo a1(0, 0, new expr(new expr(variable::INDEX), new expr(17), operation::ADD), new expr(0));
+	//algo a1(0, 0, new expr(new expr(variable::INDEX), new expr(17), operation::ADD), new expr(0)); // lvl1 algorithm
 	//algo a2(0, 0, new expr(new expr(variable::INDEX), new expr(variable::KEY), operation::ADD),
-	//	new expr(new expr(variable::KEYINDEX), new expr(1), operation::ADD));
-	//std::cout << a2 << std::endl;
+	//	new expr(new expr(variable::KEYINDEX), new expr(1), operation::ADD)); // lvl2 algorithm
 	for (unsigned long int i = 0; ; ++i) {
 		algo a = randAlgo();
 		std::string res = a.run();
