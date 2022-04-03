@@ -39,7 +39,7 @@ I recommend using this program only if you know C++ at least a bit, so you know 
 
 It generates random algorithms like this:
 
-```
+```python
 def humanscantsolvethis_decrypt(data, key):
     key = [ord(c)-64 for c in key]
     index = <random number>
