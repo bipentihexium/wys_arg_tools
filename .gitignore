@@ -1,5 +1,6 @@
 .vscode/
 algo
+algo_test
 algo_bruteforce.py
 in.txt
 word_list.txt

@@ -25,6 +25,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 #include <array>
 #include <chrono>
+#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <memory>
@@ -50,13 +51,13 @@ constexpr const char data[] = "AtniotoMK;hHLt hOT(NSCCiMs  aEeMifpCesul)t: su|'y
 //#define CHECK_CLOSING_PAREN
 // uncomment this line if you want to use HCSTSBSH encryption algorithm instead
 //#define INV_ALGO
-
-// you can change which data is used here
-#define _DATA data
+// comment this line if you want to disable expression optimizations (not reccommended)
+#define EXPR_OPTI
 
 // put your keys here
-constexpr const char *keys[] = { "DLIHCREHTONMAITUBREHTOMYMSIEHS", "SHEISMYMOTHERBUTIAMNOTHERCHILD",
-	"HUMANSCANTSOLVETHISSOBETTERSTOPHERE", "EREHPOTSRETTEBOSSIHTEVLOSTNACSNAMUH",
+constexpr const char *keys[] = {
+	"DLIHCREHTONMAITUBREHTOMYMSIEHS", "SHEISMYMOTHERBUTIAMNOTHERCHILD",
+	//"HUMANSCANTSOLVETHISSOBETTERSTOPHERE", "EREHPOTSRETTEBOSSIHTEVLOSTNACSNAMUH",
 	//"STEPMOTHER", "REHTOMPETS", "MATERFAMILIAS", "SAILIMAFRETAM", "MATRIARCH", "HCRAIRTAM",
 };
 
@@ -73,7 +74,7 @@ template<int N>
 constexpr int const_strlength(char const (&)[N]) { return N-1; }
 template<typename T, int N>
 constexpr int const_arrlength(T const (&)[N]) { return N; }
-constexpr int datalen = const_strlength(_DATA);
+constexpr int datalen = const_strlength(data);
 constexpr int keycount = const_arrlength(keys);
 
 enum class operation {
@@ -88,6 +89,10 @@ struct algo_context {
 	std::string d;
 	std::string k;
 };
+class expr;
+std::ostream &operator<<(std::ostream &o, const expr &e);
+bool valid(const expr &e);
+void printExprDetail(const expr &e);
 class expr {
 public:
 	expr *a;
@@ -99,7 +104,7 @@ public:
 	/**
 	 * @brief constructs empty expression
 	 */
-	expr() : a(nullptr), b(nullptr), constant(0), op(operation::CONSTANT) { }
+	expr() : a(nullptr), b(nullptr), constant(0), var(variable::INDEX), op(operation::CONSTANT) { }
 	/**
 	 * @brief constructs variable expression
 	 */
@@ -107,28 +112,28 @@ public:
 	/**
 	 * @brief constructs constant expression
 	 */
-	expr(int c) : a(nullptr), b(nullptr), constant(c), op(operation::CONSTANT) { }
+	expr(int c) : a(nullptr), b(nullptr), constant(c), var(variable::INDEX), op(operation::CONSTANT) { }
 	/**
 	 * @brief constructs unary expression (from reference)
 	 */
-	expr(const expr &f, operation o) : b(nullptr), constant(0), op(o) {
+	expr(const expr &f, operation o) : b(nullptr), constant(0), var(variable::INDEX), op(o) {
 		a = new expr(f);
 	}
 	/**
 	 * @brief constructs binary expression (from references)
 	 */
-	expr(const expr &f, const expr &f2, operation o) : constant(0), op(o) {
+	expr(const expr &f, const expr &f2, operation o) : constant(0), var(variable::INDEX), op(o) {
 		a = new expr(f);
 		b = new expr(f2);
 	}
 	/**
 	 * @brief constructs unary expression (from pointer, consumes it)
 	 */
-	expr(expr *f, operation o) : a(f), b(nullptr), constant(0), op(o) { }
+	expr(expr *f, operation o) : a(f), b(nullptr), constant(0), var(variable::INDEX), op(o) { }
 	/**
 	 * @brief constructs binary expression (from pointers, consumes them)
 	 */
-	expr(expr *f, expr *f2, operation o) : a(f), b(f2), constant(0), op(o) { }
+	expr(expr *f, expr *f2, operation o) : a(f), b(f2), constant(0), var(variable::INDEX), op(o) { }
 	/**
 	 * @brief copy constructor
 	 */
@@ -137,13 +142,13 @@ public:
 		b = f.b == nullptr ? nullptr : new expr(*f.b);
 	}
 	~expr() {
-		if (a != nullptr) delete a;
-		if (b != nullptr) delete b;
+		if (a != nullptr) { delete a; }
+		if (b != nullptr) { delete b; }
 	}
 	/**
 	 * @brief gets value of expression in given context
 	 */
-	int get(const algo_context &c) {
+	int get(const algo_context &c) const {
 		switch (op) {
 		case operation::CONSTANT: return constant;
 		case operation::VAR:
@@ -160,6 +165,110 @@ public:
 		case operation::ADD: return a->get(c) + b->get(c);
 		case operation::MULT: return a->get(c) * b->get(c);
 		default: return 0;
+		};
+	}
+	/**
+	 * @brief attempts to optimize the expression
+	 */
+	void optimize() {
+		switch (op) {
+		case operation::REV:
+			a->optimize();
+			if (a->op == operation::CONSTANT) { // -const => const
+				op = operation::CONSTANT;
+				constant = -a->constant;
+				delete a;
+				a = nullptr;
+			} else if (a->op == operation::REV) { // --x => x
+				expr *inside = a->a;
+				op = inside->op;
+				constant = inside->constant;
+				var = inside->var;
+				expr *temp_a = inside->a == nullptr ? nullptr : new expr(*inside->a);
+				b = inside->b == nullptr ? nullptr : new expr(*inside->b);
+				delete a;
+				a = temp_a;
+			}
+			break;
+		case operation::ADD:
+			a->optimize();
+			b->optimize();
+			if (a->op == operation::CONSTANT) {
+				if (b->op == operation::CONSTANT) { // const + const => const
+					op = operation::CONSTANT;
+					constant = a->constant+b->constant;
+					delete a;
+					delete b;
+					a = b = nullptr;
+				} else if (b->op == operation::ADD) {
+					if (b->a->op == operation::CONSTANT) { // const + (const + x) => const + x
+						a->constant += b->a->constant;
+						expr *temp_b = new expr(*b->b);
+						delete b;
+						b = temp_b;
+					} else if (b->b->op == operation::CONSTANT) { // const + (x + const) => const + x
+						a->constant += b->b->constant;
+						expr *temp_b = new expr(*b->a);
+						delete b;
+						b = temp_b;
+					}
+				}
+			} else if (b->op == operation::CONSTANT) {
+				if (a->op == operation::ADD) {
+					if (a->a->op == operation::CONSTANT) { // (const + x) + const => x + const
+						b->constant += a->a->constant;
+						expr *temp_a = new expr(*a->b);
+						delete a;
+						a = temp_a;
+					} else if (a->b->op == operation::CONSTANT) { // (x + const) + const => x + const
+						b->constant += a->b->constant;
+						expr *temp_a = new expr(*a->a);
+						delete a;
+						a = temp_a;
+					}
+				}
+			}
+			break;
+		case operation::MULT:
+			a->optimize();
+			b->optimize();
+			if (a->op == operation::CONSTANT) {
+				if (b->op == operation::CONSTANT) { // const * const => const
+					op = operation::CONSTANT;
+					constant = a->constant*b->constant;
+					delete a;
+					delete b;
+					a = b = nullptr;
+				} else if (b->op == operation::MULT) {
+					if (b->a->op == operation::CONSTANT) { // const * (const * x) => const * x
+						a->constant *= b->a->constant;
+						expr *temp_b = new expr(*b->b);
+						delete b;
+						b = temp_b;
+					} else if (b->b->op == operation::CONSTANT) { // const * (x * const) => const * x
+						a->constant *= b->b->constant;
+						expr *temp_b = new expr(*b->a);
+						delete b;
+						b = temp_b;
+					}
+				}
+			} else if (b->op == operation::CONSTANT) {
+				if (a->op == operation::MULT) {
+					if (a->a->op == operation::CONSTANT) { // (const * x) * const => x * const
+						b->constant *= a->a->constant;
+						expr *temp_a = new expr(*a->b);
+						delete a;
+						a = temp_a;
+					} else if (a->b->op == operation::CONSTANT) { // (x * const) * const => x * const
+						b->constant *= a->b->constant;
+						expr *temp_a = new expr(*a->a);
+						delete a;
+						a = temp_a;
+					}
+				}
+			}
+			break;
+		default: break;
 		};
 	}
 };
@@ -194,26 +303,32 @@ public:
 	expr *index_expr;
 	expr *keyindex_expr;
 
-	algo(int si, int ski, expr *i, expr *ki) : start_index(si), start_keyindex(ski), index_expr(i), keyindex_expr(ki) { }
+	algo(int si, int ski, expr *i, expr *ki) : start_index(si), start_keyindex(ski), index_expr(i), keyindex_expr(ki) {
+#ifdef EXPR_OPTI
+		index_expr->optimize();
+		keyindex_expr->optimize();
+#endif
+	}
 	~algo() {
 		delete index_expr;
 		delete keyindex_expr;
 	}
 	/**
-	 * @brief runs the algorithm on _DATA with _KEY
+	 * @brief runs the algorithm on data with key
 	 * @returns resulting message
 	 */
-	std::string run(const char *key) {
+	std::string run(const char *data, const char *key) const {
 		algo_context ctx;
+		ctx.d = data;
 		ctx.index = start_index;
 		ctx.k = key;
 		ctx.keyindex = start_keyindex % ctx.k.size();
 #ifdef INV_ALGO
-		std::string res(datalen, '-');
+		std::string res(ctx.d.size(), '-');
 		const char *c;
-		for (c = _DATA; *c; ++c) {
+		for (c = data; *c; ++c) {
 			int step = index_expr->get(ctx);
-			step %= res.size()-(c-_DATA);
+			step %= res.size()-(c-data);
 			if (step > 0) {
 				while (step) {
 					ctx.index = (ctx.index + 1) % res.size();
@@ -232,22 +347,21 @@ public:
 				return res;
 			}
 			ctx.keyindex = keyindex_expr->get(ctx);
-			while (ctx.keyindex < 0) { ctx.keyindex += ctx.k.size(); }
 			ctx.keyindex %= ctx.k.size();
+			if (ctx.keyindex < 0) { ctx.keyindex += ctx.k.size(); }
 			res[ctx.index] = *c;
 		}
 		return res;
 #else
-		ctx.d = _DATA;
 		std::string res;
-		res.reserve(datalen);
+		res.reserve(ctx.d.size());
 		while (!ctx.d.empty()) {
 			ctx.index = index_expr->get(ctx);
-			while (ctx.index < 0) { ctx.index += ctx.d.size(); }
 			ctx.index %= ctx.d.size();
+			if (ctx.index < 0) { ctx.index += ctx.d.size(); }
 			ctx.keyindex = keyindex_expr->get(ctx);
-			while (ctx.keyindex < 0) { ctx.keyindex += ctx.k.size(); }
 			ctx.keyindex %= ctx.k.size();
+			if (ctx.keyindex < 0) { ctx.keyindex += ctx.k.size(); }
 			res.push_back(ctx.d[ctx.index]);
 			ctx.d.erase(ctx.index, 1);
 		}
@@ -323,13 +437,13 @@ bool ismsg(const std::string &msg) {
 #define R(n) (std::uniform_int_distribution<int>(0, (n)-1)(random_engine))
 /**
  * @brief creates random expression leaf:
- *  - 90% chance to return random number between -20 ad 20
+ *  - 90% chance to return random number between -30 ad 30
  *  - 10% chance to return ranodm variable
  */
 template<typename RANDOM_T>
 expr *randLeaf(RANDOM_T &random_engine) {
 	if (R(10)) {
-		return new expr(R(41)-20);
+		return new expr(R(61)-30);
 	} else {
 		constexpr variable vars[] = { variable::INDEX, variable::KEYINDEX, variable::KEY };
 		constexpr int varc = 3;
@@ -345,7 +459,7 @@ expr *randLeaf(RANDOM_T &random_engine) {
  */
 template<typename RANDOM_T>
 expr *randExpr(RANDOM_T &random_engine, expr *base) {
-	int count = R(4);
+	int count = R(5);
 	constexpr operation binops[] = { operation::ADD, operation::MULT, operation::ADD }; // add is there for second time to increase the chance of selecting it
 	constexpr operation unops[] = { operation::REV };
 	constexpr int binoplen = 3;
@@ -390,11 +504,13 @@ std::chrono::high_resolution_clock::time_point search_start;
 bool do_search = true;
 
 void runtests() {
-	std::mt19937 random_engine;
+	uint_fast32_t seed = std::hash<std::thread::id>{}(std::this_thread::get_id());
+	seed ^= std::chrono::system_clock::now().time_since_epoch().count();
+	std::mt19937 random_engine(seed);
 	while (do_search) {
 		algo a = randAlgo(random_engine);
 		for (const char * const &key : keys) {
-			std::string res = a.run(key);
+			std::string res = a.run(data, key);
 			if (ismsg(res)) {
 				std::cout << "============================== FOUND <KEY: " << key << "> ===============================" << std::endl <<
 					a << std::endl << "-------------- out ------------------" << std::endl << res << std::endl;

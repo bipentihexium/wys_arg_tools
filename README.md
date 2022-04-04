@@ -24,16 +24,28 @@ This script will find all occurences of characters inside string and will print 
 
 ### algo_bruteforce.cpp
 
-Probably the most interesting program here. It is written in C++ so you will need a C++ compiler to use it. On Linux you can use g++:
+Probably the most interesting program here. It is written in C++ so you will need a C++ compiler to use it.
+
+#### Linux (maybe Mac with g++)
+
+On Linux you can use g++:
 
 ```shell
 g++ algo_bruteforce.cpp -o algo -O3 -std=c++11 -lpthread
 ./algo
 ```
 
+I made a bash script which also builds and runs tests - `algo_bruteforce_run.sh`. You can add `-d` to compile with `-g` instead of `-O3`, `-i` to build and run without tests and `-g` to compile with `-g` instead of `-O3` but also lauch the program with `gdb`.
+
+#### Windows
+
 on Windows it is a bit more complicated. You need to use Visual Studio or MinGW (with MinGW it's basically same as on Linux, just replace `-lpthread` with `-lwinpthread`, note that you need the right MinGW version (posix thread model); I don't know how to use VS for C++).
 
-I recommend using this program only if you know C++ at least a bit, so you know how to change the constants, in best case the algorithm. I might make something here about how to change constants and their meaning in the future.
+If you have MinGW and GitBash you should be able to use the `algo_bruteforce_run.sh` if you replace `-lpthread` with `-lwinpthread` (on line 7). This is not tested though. Feel free to make a pull request with version written in batch!
+
+#### Notes
+
+I recommend using this program only if you know C++ at least a bit, so you know how to change the constants, in best case the algorithm. If you can think of any way of improving this or making different algorithm generator, make a pull request or DM me on discord (I'm `__noop__#0077`).
 
 #### What does this do?
 
