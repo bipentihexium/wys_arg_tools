@@ -41,7 +41,7 @@ constexpr const char data[] = "AtniotoMK;hHLt hOT(NSCCiMs  aEeMifpCesul)t: su|'y
 //#define CHECK_CLOSING_PAREN
 // uncomment this line if you want to use HCSTSBSH encryption algorithm instead
 //#define INV_ALGO
-// comment this line if you want to disable expression optimizations (not reccommended)
+// comment this line if you want to disable expression optimizations (I reccommend to keep this uncommented)
 #define EXPR_OPTI
 
 // put your keys here

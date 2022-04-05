@@ -24,4 +24,4 @@ This script will find all occurences of characters inside string and will print 
 
 ### algo_bruteforce
 
-Check out [it's own readme :)](algo_bruteforce/READNE.md)
+Check out [it's own readme :)](algo_bruteforce/README.md)
