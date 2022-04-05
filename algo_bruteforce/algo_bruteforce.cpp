@@ -42,6 +42,11 @@ constexpr int const_arrlength(T const (&)[N]) { return N; }
 constexpr int datalen = const_strlength(data);
 constexpr int keycount = const_arrlength(keys);
 
+/**
+ * @brief tests if function is valid message; valid message:
+ *  - contains "DATA("
+ *  - that is actually already enough to filter the messages :), no more complicated test needed
+ */
 bool ismsg(const std::string &msg) {
 #ifdef CHECK_CLOSING_PAREN
 	if (msg.back() != ')')
@@ -176,11 +181,6 @@ std::ostream &operator<<(std::ostream &o, const algo &a) {
 #endif
 	return o;
 }
-/**
- * @brief tests if function is valid message; valid message:
- *  - contains "DATA("
- *  - that is actually already enough to filter the messages :), no more complicated test needed
- */
 #define R(n) (std::uniform_int_distribution<int>(0, (n)-1)(random_engine))
 /**
  * @brief creates random expression leaf:
