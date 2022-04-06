@@ -25,10 +25,12 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 #include <array>
 #include <chrono>
+#include <fstream>
 #include <functional>
 #include <iomanip>
 #include <iostream>
 #include <memory>
+#include <mutex>
 #include <random>
 #include <string>
 #include <thread>
@@ -64,6 +66,10 @@ bool ismsg(const std::string &msg) {
 unsigned long int searched = 0;
 std::chrono::high_resolution_clock::time_point search_start;
 bool do_search = true;
+#ifdef OUTFILE
+std::ofstream outfile;
+std::mutex outfilemutex;
+#endif
 
 void runtests() {
 	uint_fast32_t seed = std::hash<std::thread::id>{}(std::this_thread::get_id());
@@ -76,6 +82,19 @@ void runtests() {
 			if (ismsg(res)) {
 				std::cout << "============================== FOUND <KEY: " << key << "> ===============================" << std::endl <<
 					a << std::endl << "-------------- out ------------------" << std::endl << res << std::endl;
+#ifdef OUTFILE
+				outfilemutex.lock();
+				outfile.open(OUTFILE, std::ios_base::app);
+				if (outfile.good()) {
+					outfile << "============================== FOUND <KEY: " << key << "> ===============================" << std::endl <<
+						a << std::endl << "-------------- out ------------------" << std::endl << res << std::endl;
+					outfile.close();
+					outfile.clear();
+				} else {
+					std::cout << "[ERROR]: Failed to append output to " OUTFILE << std::endl;
+				}
+				outfilemutex.unlock();
+#endif
 			}
 		}
 		if ((++searched)%searchprint == 0) {
@@ -84,14 +103,35 @@ void runtests() {
 			std::cout << std::fixed << std::setprecision(searched_count_precision) << (searched/1000000.f) << "m algos searched; "
 				"time: " << std::setprecision(search_time_precision) << (millis.count()/1000.f) << "s; "
 				"avg search speed" << std::setprecision(search_speed_precision) << (searched/millis.count()/1000.f) << "m/s" << std::endl;
+#ifdef OUTFILE
+			if (searched%(searchprint*filesearchprintmodifier) == 0) {
+				outfilemutex.lock();
+				outfile.open(OUTFILE, std::ios_base::app);
+				if (outfile.good()) {
+					outfile << std::fixed << std::setprecision(searched_count_precision) << (searched/1000000.f) << "m algos searched; "
+						"time: " << std::setprecision(search_time_precision) << (millis.count()/1000.f) << "s; "
+						"avg search speed" << std::setprecision(search_speed_precision) << (searched/millis.count()/1000.f) << "m/s" << std::endl;;
+					outfile.close();
+					outfile.clear();
+				} else {
+					std::cout << "[ERROR]: Failed to append output to " OUTFILE << std::endl;
+				}
+				outfilemutex.unlock();
+			}
+#endif
 		}
 	}
 }
 
 int main() {
-	//algo a1(0, 0, new expr(new expr(variable::INDEX), new expr(17), operation::ADD), new expr(0)); // lvl1 algorithm
-	//algo a2(0, 0, new expr(new expr(variable::INDEX), new expr(variable::KEY), operation::ADD),
-	//	new expr(new expr(variable::KEYINDEX), new expr(1), operation::ADD)); // lvl2 algorithm
+	outfile.open(OUTFILE, std::ios_base::app);
+	if (outfile.good()) {
+		outfile << std::endl << ">========================================================== NEW SEARCH =====================================================<" << std::endl;
+		outfile.close();
+		outfile.clear();
+	} else {
+		std::cout << "[ERROR]: Failed to append output to " OUTFILE << std::endl;
+	}
 	search_start = std::chrono::high_resolution_clock::now();
 	std::array<std::unique_ptr<std::thread>, no_threads> thrs;
 	do_search = true;

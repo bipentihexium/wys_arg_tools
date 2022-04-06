@@ -46,6 +46,10 @@ constexpr const char data[] = "AtniotoMK;hHLt hOT(NSCCiMs  aEeMifpCesul)t: su|'y
 #define ALGO_INDET_GEN(F) F ## _ ## default
 // comment this line if you want to disable expression optimizations (I reccommend to keep this uncommented)
 #define EXPR_OPTI
+// uncomment this line of you want to save output to a file; you can also set the filename here
+#define OUTFILE "./ab_out.txt"
+// how much "algos searched" prints are skipped in file (when 10, then writes every 10th "algos searched" into the file)
+constexpr int filesearchprintmodifier = 50;
 
 // put your keys here
 constexpr const char *keys[] = {
