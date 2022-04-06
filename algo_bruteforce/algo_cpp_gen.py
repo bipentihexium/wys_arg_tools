@@ -55,10 +55,10 @@ class Lex: # just a lexer
 				break
 		return res
 # lexer rules (regex patterns)
-special = [r"\[[a-z_]+\]", r"\{", r"\}", r"//.*", r"#\?", r"#", r"\$[a-z_0-9A-Z]+"]
+special = [r"\[[a-z_]+\]", r"\{", r"\}", r"//.*", r"#\?", r"#", r"\$[a-z_0-9A-Z]+", "\".*\"", r"'.'"]
 keywords = ["if", "else", "elif", "while", "int"]
 keyvars = [r"index", r"keyindex", r"\.\.data", r"\.\.key", r"data", r"key"]
-operators = [r"\+", r"\-", r"\*", r"/", r"%", r",", r"=", r"\+=", r"\-=", r"\*=", r"/=", r"%=", r"\(", r"\)"]
+operators = [r"\+", r"\-", r"\*", r"/", r"%", r",", r"=", r"\+=", r"\-=", r"\*=", r"/=", r"%=", r"\(", r"\)", r"\[", r"\]", r"<", r">", r"<=", r">=", r"=="]
 other = [r":", r"[a-zA-Z_][a-zA-Z_0-9]*", r"[0-9]+", r"0x[0-9a-fA-F]+", r"\s+", r";"]
 rules = [*special, *keywords, *keyvars, *operators, *other]
 lex = Lex(rules)
@@ -284,7 +284,9 @@ std::ostream &operator<<(std::ostream &o, const algo{self.fadd} &a) {{
 				"nonempty":"!$0.empty()",\
 				"rot0":"$0 %= $1; if ($0 < 0) { $0 += $1; }",\
 				"appendchar":"$0.push_back($1)",\
-				"removechar":"$0.erase($1,1)"}
+				"removechar":"$0.erase($1,1)",\
+				"decl_filled_str":"std::string $0($2, $1)",\
+				}
 			name = s[1:].split("{", 1)[0]
 			s = s[2+len(name):]
 			args = [""]
@@ -330,6 +332,8 @@ std::ostream &operator<<(std::ostream &o, const algo{self.fadd} &a) {{
 				i -= 1
 			elif t[0] == "str":
 				res += "std::string"
+			elif t[0] == "elif":
+				res += "else if"
 			elif t[0] == "{":
 				ident += 1
 				res += "{\n" + "\t" * ident
@@ -367,7 +371,9 @@ std::ostream &operator<<(std::ostream &o, const algo{self.fadd} &a) {{
 				"nonempty":"$0",\
 				"rot0":"$0 %= $1; if $0 < 0: $0 += $1",\
 				"appendchar":"$0 += $1",\
-				"removechar":"del $0[$1]"}
+				"removechar":"del $0[$1]",\
+				"decl_filled_str":"$0 = $2*$1",\
+				}
 			name = s[1:].split("{", 1)[0]
 			s = s[2+len(name):]
 			args = [""]

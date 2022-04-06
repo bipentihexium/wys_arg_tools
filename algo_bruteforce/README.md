@@ -38,7 +38,7 @@ The `algos.abalgo` file has structure like this:
 }
 ```
 
-The code is the most part you can have most fun with :). Its pretty reduced C-like language.
+The code is the part you can have most fun with :). Its pretty reduced C-like language.
 
 ```c
 [algorithm]{
@@ -68,6 +68,7 @@ macro | what it does
 \$rot0{n, limit} | puts k*limit+n to n so that 0 \<= n \< limit
 \$appendchar{str, char} | appends char to str
 \$removechar{str, index} | removes character from str at index
+\$decl_filled_str{var, char, length} | declares a string variable filled with length*char
 
 ## Running this
 
