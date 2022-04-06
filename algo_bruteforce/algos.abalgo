@@ -1,0 +1,29 @@
+[default]{ // hcstsbsh
+	[algorithm]{
+		index = 0;//#{..data};
+		keyindex = 0;//#{..data};
+		keyindex %= ..key;
+		str result;
+		while ($nonempty{data}) {
+			index = #?{index};
+			$rot0{index, ..data};
+			keyindex = #?{keyindex};
+			$rot0{keyindex, ..data};
+			$appendchar{result, data[index]};
+			$removechar{data, index};
+		}
+		return result;
+	}
+
+	[generator]{
+		[leaf]{
+			[var_chance]{10}
+			[num_range]{-30,31}
+		}
+		[expr]{
+			[main_operations_max]{5}
+			[leaf_unop_chance]{4}
+			[leaf_binop_chance]{7}
+		}
+	}
+}

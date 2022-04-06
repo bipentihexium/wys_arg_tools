@@ -33,7 +33,7 @@ constexpr const char test_key2[] = "HUMANSCANTSOLVETHISSOBETTERSTOPHERE";
 constexpr const char test_data2[] = "at iatutsSfo e tT RSdsnaEcuNtseeLoEnoxxeh tAc oRHS; x iwDTUNen deetHOIECICraP e ;dSol Ot|GiMe: UytAEiYe; BPeb voY;sAc ie)Gesrc H M|eS;MHfuITsLMtWEzesAAt  epldn :Ei  eAseLLfp |ktnpmbslHseue SiicntatoNHCs(Ut Tett;ssw d s Crvs fA u  he yEf so;ndturaUsdeDlCeDAitlr);snn ohO:EAiWjl teax  wow   TaMNSis ncAe : sDx( psNpAEt;lo sBAisuAtdpxYetiR;rKEtnn sCiC  (|tttVtNo yhleswiSA)7SEe'bOnL Bo trLelicHgysn7tudotlrtLEshe tOgttd oipMaUfKr;waN:duEtlurys;RhOf7y nITiontsDaIKTkLeupHtr At ARisRiyDIHOV aHLWkClheICre   ldmtbO )A PTwps R ne AtrUoDT AEsH;Nnozslehh(erDTFOK teAFnn;cRpE ;tOOrORNTMcTdh2E'I(LTnobAphj NcyyAa6Pk NEiSN Ir7CNSYRdt KEo)TexEETiSPUoCeBO zLIUtU;lhPQrCAIi tBWsdM;";
 constexpr const char test_result2[] = "second test passed; next test: DLIHCREHTONMAITUBREHTOMYMSIEHS; DATA(AtniotoMK;hHLt hOT(NSCCiMs  aEeMifpCesul)t: su|'yhlRtsW ;tFpb7t actt lbA  L|c  Ar:SlihA7Eof kh rK;LSPrfdswdrBrHekblUytasxKsnc 7uAROslOyELt SSUC;G Amu snOaACtrutyreebN;TPx thNIteelset;seis;  drs  nDdEpdltueUc And o c dyS7tdTlwFcA TItiePoA:(slpr(ltefKaIeeR  EdN;AvtetEE psottTCTEaCoAa IyYfsnouotsbUti sAkSetL;iui hNpnedped nIhcetx ;ttAeN lsytTnhKtD EeiaexRELityHU'Uux )e UMVr NVhtYiHc  rj Blu;Oe rN e pdsYNHIDo6NeS: D OOAlnn aC TC f So RPoGMsntsan EI LtE anoOiEeP    wDThxdt;CLp)eoEHo arS;wrwgiABeRzwAsue evirjOotiimo;L L( NEwros|oIpNiWeisoin;AiOAit2EQnyUlzsR TWRn rfCAeBEO ks PTW in|sngscthezHt eD))";
 
-bool test_algo(const algo &a, const char *data, const char *key, const std::string &res) {
+/*bool test_algo(const algo &a, const char *data, const char *key, const std::string &res) {
 	std::string r = a.run(data, key);
 	bool failed = r != res;
 	if (failed) {
@@ -41,7 +41,7 @@ bool test_algo(const algo &a, const char *data, const char *key, const std::stri
 			key << "\n\tres:\n\t\t" << r << "\n\texpected:\n\t\t" << res << std::endl;
 	}
 	return failed;
-}
+}*/
 bool valid(const expr &e) {
 	switch (e.op) {
 	case operation::CONSTANT:
@@ -176,10 +176,10 @@ int main() {
 			operation::ADD));
 
 	// ---------------- algos ------------------
-	algo a1(0, 0, new expr(new expr(variable::INDEX), new expr(17), operation::ADD), new expr(0));
-	algo a2(0, 0, new expr(new expr(variable::INDEX), new expr(variable::KEY), operation::ADD),
-		new expr(new expr(variable::KEYINDEX), new expr(1), operation::ADD));
-	failed |= test_algo(a1, test_data1, "KEY", test_result1);
-	failed |= test_algo(a2, test_data2, test_key2, test_result2);
+	//algo a1(0, 0, new expr(new expr(variable::INDEX), new expr(17), operation::ADD), new expr(0));
+	//algo a2(0, 0, new expr(new expr(variable::INDEX), new expr(variable::KEY), operation::ADD),
+	//	new expr(new expr(variable::KEYINDEX), new expr(1), operation::ADD));
+	//failed |= test_algo(a1, test_data1, "KEY", test_result1);
+	//failed |= test_algo(a2, test_data2, test_key2, test_result2);
 	return failed;
 }

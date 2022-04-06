@@ -23,6 +23,9 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#ifndef __EXPR_HPP__
+#define __EXPR_HPP__
+
 enum class operation {
 	CONSTANT, VAR, REV, ADD, MULT, COUNT
 };
@@ -242,3 +245,5 @@ std::ostream &operator<<(std::ostream &o, const expr &e) {
 	};
 	return o;
 }
+
+#endif

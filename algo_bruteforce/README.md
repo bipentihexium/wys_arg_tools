@@ -1,5 +1,7 @@
 # Algo bruteforce
 
+## THIS IS FOR AN OLDER VERSION - WILL MAKE README SOON
+
 Probably the most interesting program here. It is written in C++ so you will need a C++ compiler to use it.
 
 ## Notes

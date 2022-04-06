@@ -32,14 +32,29 @@ LPTHREAD="-lpthread"
 do_debug_build=0
 ignore_tests=0
 use_gdb=0
-while getopts "dig" opt
+regen_algo=1
+while getopts "adgi" opt
 do
     case $opt in
+	(a) regen_algo=0 ;;
     (d) do_debug_build=1 ;;
     (i) ignore_tests=1 ;;
     (g) do_debug_build=1; use_gdb=1 ;;
     esac
 done
+
+if [ ${regen_algo} -eq 1 ]; then
+	echo -e "${CYAN}Running algo_cpp_gen.py${RESET}"
+	python3 ./algo_cpp_gen.py
+	if [ $? -eq 0 ]; then
+		echo -e "${LIME}Algo generation successful${RESET}"
+	else
+		echo -e "${RED}Algo generation failed${RESET}"
+		exit -1
+	fi
+else
+	echo -e "${CYAN}Skipping running algo_cpp_gen.py${RESET}"
+fi
 
 echo -e "${CYAN}building algo_bruteforce.cpp${RESET}"
 if [ ${do_debug_build} -eq 1 ]; then
