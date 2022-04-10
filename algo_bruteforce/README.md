@@ -2,6 +2,8 @@
 
 Probably the most interesting program here. It is written in C++ so you will need a C++ compiler to use it, but there is also a Python script so you'll need Python 3.6+ (I used f-strings).
 
+## This readme is for old version, I'm currently working on updating it!
+
 ## Notes
 
 To customize parameters, check `algo_bruteforce_cfg.hpp`, to customize algorithm, check `algos.abalgo` and "Custom algorithms" below.
