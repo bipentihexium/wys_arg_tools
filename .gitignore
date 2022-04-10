@@ -11,3 +11,4 @@ wys.cpp
 notes.txt
 algo_bruteforce_algos.hpp
 ab_out.txt
+*__pycache__*
