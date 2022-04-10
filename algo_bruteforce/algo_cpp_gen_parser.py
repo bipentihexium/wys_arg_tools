@@ -283,7 +283,8 @@ class Parser:
 				self.indent -= 1
 				statement["selse"] = type('', (object,), else_statement)()
 	def parse_for(self, statement):
-		self.expect_pattern(self.tokens[0], ident_pattern, "ident")
+		if self.tokens[0][0] not in ["index", "keyindex"]:
+			self.expect_pattern(self.tokens[0], ident_pattern, "ident")
 		self.expect(self.tokens[1], "in")
 		statement["svar"] = self.tokens[0]
 		statement["sintoken"] = self.tokens[1]

@@ -50,3 +50,24 @@ algo inv_hcstsbsh:
 			rot0(keyindex, len(key))
 			result[index] = data[i]
 		return result
+
+algo test:
+	__generator_leaf_var_chance__: 15
+	__generator_leaf_num_range__:
+		-30
+		30
+	__generator_expr_operations_max__: 5
+	__generator_expr_leaf_unop_chance__: 4
+	__generator_expr_leaf_binop_chance__: 7
+	algo:
+		result = data
+		keyindex = rand{2} * (len(key) - 1)
+		for index in 0..len(data):
+			i2 = randexpr{index}
+			rot0(i2, len(data))
+			keyindex = randexpr{keyindex}
+			rot0(keyindex, len(key))
+			tmp = result[index]
+			result[index] = result[i2]
+			result[i2] = tmp
+		return result

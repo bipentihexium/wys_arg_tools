@@ -407,10 +407,12 @@ class CodeGenerator:
 		elif statement.stype == "for":
 			fid = "for_" + str(self.forloops)
 			self.forloops += 1
-			formats = self.statement_formats["for"]
 			if statement.svar[0] not in self.vars:
 				self.vars[statement.svar[0]] = type('', (object,), {"ident":statement.svar[0], "type":"i"})()
-			res = formats[0].replace("$0", statement.svar[0]).\
+				formats = self.statement_formats["for-undef"]
+			else:
+				formats = self.statement_formats["for-def"]
+			res = formats[0].replace("$0", self.vars[statement.svar[0]].ident).\
 				replace("$1", self.gen_expr(statement.sstart)).\
 				replace("$2", self.gen_expr(statement.send)).\
 				replace("$3", self.gen_expr(statement.sstep))
@@ -426,6 +428,8 @@ class CodeGenerator:
 					res += "".join(["\n\t" + x for x in s.split("\n")])
 				res += self.statement_formats["for-else"][1]
 			res += formats[2].replace("$0", fid)
+			if statement.svar[0] not in ["index", "keyindex"]:
+				del self.vars[statement.svar[0]]
 			return res
 		elif statement.stype == "continue":
 			return self.statement_formats[statement.stype]
@@ -480,7 +484,8 @@ class CppCodeGenerator(CodeGenerator):
 		self.ternary_format = "($1 ? $0 : $2)"
 		self.statement_formats = {"if":["if ($0) {", "\n}", ""], "elif":["else if ($0) {", "\n}"], "else":["else {", "\n}"],\
 			"while":["while ($0) {", "\n}", "\nlab_$0:;"], "while-else":["\n", ""],\
-			"for":["for (int $0 = $1; $0 != $2; $0 += $3) {", "\n}", "\nlab_$0:;"], "for-else":["\n", ""],\
+			"for-undef":["for (int $0 = $1; $0 != $2; $0 += $3) {", "\n}", "\nlab_$0:;"],\
+				"for-def":["for ($0 = $1; $0 != $2; $0 += $3) {", "\n}", "\nlab_$0:;"], "for-else":["\n", ""],\
 			"break":"goto lab_$0;", "continue":"continue;", "return":"return $0;","expr":"$0;"}
 		self.decl_formats = {"i":"int $0($1)", "c":"char $0($1)", "s":"std::string $0($1)"}
 class PyCodeGenerator(CodeGenerator):
@@ -508,7 +513,8 @@ class PyCodeGenerator(CodeGenerator):
 		self.ternary_format = "($0 if $1 else $2)"
 		self.assign_formats["/="] = "$0//=$1"
 		self.statement_formats = {"if":["if $0:", "", ""], "elif":["elif $0:", ""], "else":["else:", ""],\
-			"while":["while $0:", "", ""], "while-else":["else:", ""], "for":["for $0 in range($1, $2):", "", ""], "for-else":["else:", ""],\
+			"while":["while $0:", "", ""], "while-else":["else:", ""],\
+			"for-undef":["for $0 in range($1, $2):", "", ""], "for-def":["for $0 in range($1, $2):", "", ""], "for-else":["else:", ""],\
 			"break":"break", "continue":"continue", "return":"return $0","expr":"$0"}
 		self.decl_formats = {"i":"$0 = $1", "c":"$0 = $1", "s":"$0 = $1"}
 
