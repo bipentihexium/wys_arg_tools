@@ -2,75 +2,71 @@
 
 Probably the most interesting program here. It is written in C++ so you will need a C++ compiler to use it, but there is also a Python script so you'll need Python 3.6+ (I used f-strings).
 
-## This readme is for old version, I'm currently working on updating it!
-
 ## Notes
 
-To customize parameters, check `algo_bruteforce_cfg.hpp`, to customize algorithm, check `algos.abalgo` and "Custom algorithms" below.
+To customize parameters, check `algo_bruteforce_cfg.hpp`, to customize algorithm, check `algos.abl` and "Custom algorithms" below.
 
 ### What does this do?
 
-It generates random algorithms (from the one you put `algos.abalgo` file and specified in `algo_bruteforce_cfg.hpp`). Then tests them if they are a valid message (by default, message is valid when it contains `DATA(`, but you can change it in `algo_bruteforce_cfg.hpp`.) When it is, it prints the algorithm.
+It generates random algorithms (from the one you put `algos.abl` file and specified in `algo_bruteforce_cfg.hpp`). Then tests them if they are a valid message (by default, message is valid when it contains `DATA(`, but you can change it in `algo_bruteforce_cfg.hpp`.) When it is, it prints the algorithm. And appends it to the `ab_out.txt` file.
 
-If you can think of any way of improving this or making different algorithm generator, make a pull request or DM me on discord (I'm `__noop__#0077`).
+If you can think of any way of improving this or making better algorithm generator, make a pull request or DM me on discord (I'm `__noop__#0077`).
 
 ### Custom algorithms
 
-The `algos.abalgo` file has structure like this:
+The `algos.abl` file has structure like this:
 
 ```
-[<algo_name>]{
-	[algorithm]{
-		// code...; more on that later
-	}
-	[generator]{
-		[leaf]{
-			[var_chance]{<n>} // the chance of expression leaf being a variable is 1/n
-			[num_range]{<min>, <max>} // the range of integer constants which are expression leafs between min (inclusive) and max (exclusive)
-		}
-		[expr]{
-			[main_operations_max]{<n>} // every random expression will have random number from [0, n) operations applied to it
-			[leaf_unop_chance]{<n>} // chance (1/n) for added leaf to have unary operator applied to it
-			[leaf_binop_chance]{<n>} // chance (1/n) for added leaf to have binary operator with new random leaf applied to it
-		}
-	}
-}
-[<algo_name2>]{
-	// same as in the first one
-}
+algo <name>:
+	__generator_leaf_var_chance__: <n> # the chance of expression leaf being a variable is 1/n
+	__generator_leaf_num_range__:
+		<min>
+		<max> # the range of integer constants which are expression leafs between min (inclusive) and max (exclusive)
+	__generator_expr_operations_max__: <n> # every random expression will have random number from [0, n) operations applied to it
+	__generator_expr_leaf_unop_chance__: <n> # chance (1/n) for added leaf to have unary operator applied to it
+	__generator_expr_leaf_binop_chance__: <n> # chance (1/n) for added leaf to have binary operator with new random leaf applied to it
+	algo:
+		<source_code>
+algo <name2>:
+	...
 ```
 
-The code is the part you can have most fun with :). Its pretty reduced C-like language.
+The code is the part you can have most fun with :). Its python-like language. There are only 3 types: `int`. `char` and `str`. There are operators for basic math with `int`s, `+` and `-` is also defined for `char` and `int`. `str` can be subscripted with int, which gives you char, and it is possible to delete character at index using `del strvar[index]`.
 
-```c
-[algorithm]{
-	index = 0;
-	keyindex = #{100}; // #{<n>} means random number from [0, n)
-	keyindex %= ..key; // ..key means "length of key"
-	str result; // declare string variable; only "int" and "str" variables supported; you can't assign during declaration :/
-	while ($nonempty{data}) { // here is use of macro. more on that later :D
-		index = #?{index}; // #?{<var>} means random expression based off/including <var>; you can use #? instead of var to make fully random expression
-		$rot0{index, ..data};
-		keyindex = #?{keyindex};
-		$rot0{keyindex, ..data};
-		$appendchar{result, data[index]};
-		$removechar{data, index};
-	}
-	return result;
-}
-```
+There are some predefined macros:
 
-Note that there are no for loops.
-
-Macros are there because it generates C++ code as well as Python code, which can be pretty different for some tasks. They have arguments in curly braces and separated by commas: `$macro{arg1, arg2}` There are currently these macros avaliable:
-
-macro | what it does
+macro | effect
 --- | ---
-\$nonempty{str} | checks if str is empty
-\$rot0{n, limit} | puts k*limit+n to n so that 0 \<= n \< limit
-\$appendchar{str, char} | appends char to str
-\$removechar{str, index} | removes character from str at index
-\$decl_filled_str{var, char, length} | declares a string variable filled with length*char
+`len(s : str)` | *returns* length of `s`
+`rot0(n : int, limit : int)` | folds `n` into [0, `limit`) - it puts k*`limit`+`n` into `n` so that `n` is greater than 0 and smaller than `limit`
+`str(n : int)` (string constructor) | *returns* new string with reserved space of length `n` (for optimization)
+`str(n : int, c : char)` (string constructor) | *returns* new string filled with `n` `c`s
+`str.empty()` | *returns* True/1 if `str` is empty, else False/0
+`str.append(c : char)` | appends `c` to `str`
+`str.append(s : str)` | appends `s` to `str`
+
+You can use `rand{n}` to make a random constant (from interval [0, n)) which is generated when generating the algorithm. Then there is `randexpr{base}` which is a random expression based off `base`, or completly random when used `randexpr{..}`.
+
+```python
+index = rand{2} * (len(data) - 1)
+keyindex = rand{2} * (len(key) - 1)
+keyindex %= len(key)
+result = str(len(data))
+while not data.empty():
+	index = randexpr{index}
+	rot0(index, len(data))
+	keyindex = randexpr{keyindex}
+	rot0(keyindex, len(key))
+	result.append(data[index])
+	del data[index]
+return result
+```
+
+There is also `for` cycle:
+
+```python
+for i in min..max(..step): # ..step is optional
+```
 
 ## Running this
 
@@ -84,11 +80,11 @@ g++ algo_bruteforce.cpp -o algo -O3 -std=c++11 -lpthread
 ./algo
 ```
 
-I made a bash script which also builds and runs tests - `algo_bruteforce_run.sh`. You can add `-a` to skip generating c++ code from `algos.abalgo`, `-d` to compile with `-g` instead of `-O3`, `-i` to build and run without tests and `-g` to compile with `-g` instead of `-O3` but also lauch the program with `gdb`.
+I made a bash script which also builds and runs tests - `algo_bruteforce_run.sh`. You can add `-a` to skip generating c++ code from `algos.abl`, `-d` to compile with `-g` instead of `-O3`, `-i` to build and run without tests and `-g` to compile with `-g` instead of `-O3` but also lauch the program with `gdb`.
 
 ### Windows
 
-on Windows it is a bit more complicated. You need to use Visual Studio or MinGW:
+on Windows it is a bit more complicated. You need to use Visual Studio or MinGWs, or something I don't know about :P :
 
 #### MinGW
 
