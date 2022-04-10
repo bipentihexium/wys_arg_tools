@@ -500,7 +500,7 @@ class PyCodeGenerator(CodeGenerator):
 		self.macros["str"]["ctor i s"] = "\\\"\\\""
 		self.macros["str"]["ctor ic s"] = "$1 * $0"
 		self.macros["str"]["del[] i v"] = "$0 = $0[:$1] + $0[$1+1:]"
-		self.macros["str"]["empty  i"] = "$0"
+		self.macros["str"]["empty  i"] = "(not $0)"
 		self.macros["str"]["append c v"] = "$0 += $1"
 		self.macros["str"]["append s v"] = "$0 += $1"
 		self.lit_formats = {"int":"${evalue}","char":"'${evalue}'","str":"\"${evalue}\"",\
