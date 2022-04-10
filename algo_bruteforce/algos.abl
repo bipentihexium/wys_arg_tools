@@ -9,7 +9,6 @@ algo default:
 	algo:
 		index = rand{2} * (len(data) - 1)
 		keyindex = rand{2} * (len(key) - 1)
-		keyindex %= len(key)
 		result = str(len(data))
 		while not data.empty():
 			index = randexpr{index}
@@ -31,7 +30,6 @@ algo inv_hcstsbsh:
 	algo:
 		index = rand{2} * (len(data) - 1)
 		keyindex = rand{2} * (len(key) - 1)
-		keyindex %= len(key)
 		result = str(len(data), '-')
 		for i in 0..len(data):
 			skip = randexpr{..}

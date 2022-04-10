@@ -50,7 +50,6 @@ You can use `rand{n}` to make a random constant (from interval [0, n)) which is 
 ```python
 index = rand{2} * (len(data) - 1)
 keyindex = rand{2} * (len(key) - 1)
-keyindex %= len(key)
 result = str(len(data))
 while not data.empty():
 	index = randexpr{index}
