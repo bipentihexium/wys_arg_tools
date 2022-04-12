@@ -93,3 +93,4 @@ if [ ${use_gdb} -eq 1 ]; then
 else
 	./algo
 fi
+

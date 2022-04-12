@@ -477,4 +477,4 @@ class Parser:
 			self.syntax_error(token, "expected " + expected_name)
 	def syntax_error(self, token, msg):
 		print(f"Syntax error at '{token[0]}' - {token[1]}:{token[2]} - {msg}")
-		sys.exit(0)
+		sys.exit(-1)
