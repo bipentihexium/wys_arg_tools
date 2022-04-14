@@ -59,7 +59,7 @@ lexkeywords = [r"if\b", r"else\b", r"elif\b", r"while\b", r"for\b", r"algo\b",\
 	r"break\b", r"continue\b", r"return\b", r"in\b", r"and\b", r"or\b", r"not\b", r"rand\b", r"randexpr\b", r"del\b"]
 lexkeyvars = [r"index", r"keyindex", r"data", r"key"]
 lexother_preop = [num_pattern, hexnum_pattern]
-lexoperators = [r"<", r">", r"<=", r">=", r"==",\
+lexoperators = [r"<=", r">=", r"<", r">", r"==",\
 	r"=", r"\+=", r"\-=", r"\*=", r"/=", r"%=",\
 	r"\(", r"\)", r"\[", r"\]", r"\{", r"\}",\
 	r":", r",", r"\.\.", r"\.",\
