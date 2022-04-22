@@ -1,6 +1,7 @@
 #ifndef __CODE_HPP__
 #define __CODE_HPP__
 
+#include <initializer_list>
 #include <memory>
 #include <vector>
 
@@ -13,7 +14,8 @@ public:
 		PUSH_RES, REMOVE_DATA, TEST_DATA,
 		TEST_A_GT, TEST_A_EQ, TEST_B_GT, TEST_B_EQ,
 		TEST_C_GT, TEST_C_EQ, TEST_D_GT, TEST_D_EQ,
-		IF, WHILE, IFNOT, WHILENOT
+		IF, WHILE, IFNOT, WHILENOT,
+		LAST
 	};
 	codetype type;
 
@@ -32,6 +34,12 @@ class code_block : public code {
 public:
 	std::vector<std::unique_ptr<code>> instructions;
 	inline code_block(codetype type) : code(type) { }
+	inline code_block(codetype type, const std::initializer_list<code *> &instrs) : code(type) {
+		instructions.reserve(instrs.size());
+		for (const auto &i : instrs) {
+			instructions.push_back(std::unique_ptr<code>(i));
+		}
+	}
 };
 
 #endif
