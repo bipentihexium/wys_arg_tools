@@ -43,7 +43,7 @@ constexpr const char data[] = "AtniotoMK;hHLt hOT(NSCCiMs  aEeMifpCesul)t: su|'y
 // uncomment this line if you want to check for ')' at the end when checking message
 //#define CHECK_CLOSING_PAREN
 // put name of used algorithm here  vvvvvvvv (keep other stuff!!)
-#define ALGO_INDET_GEN(F) F ## _ ## default
+#define ALGO_INDET_GEN(F) F ## _ ## two_key
 // comment this line if you want to disable expression optimizations (I reccommend to keep this uncommented)
 #define EXPR_OPTI
 // uncomment this line of you want to save output to a file; you can also set the filename here
@@ -51,10 +51,12 @@ constexpr const char data[] = "AtniotoMK;hHLt hOT(NSCCiMs  aEeMifpCesul)t: su|'y
 // how much "algos searched" prints are skipped in file (when 10, then writes every 10th "algos searched" into the file)
 constexpr int filesearchprintmodifier = 50;
 
+// comment the line below to disable usage of two kys (will speed up the search if the generator uses only 1 jey)
+#define USE_TWO_KEYS
 // put your keys here
 constexpr const char *keys[] = {
 	"DLIHCREHTONMAITUBREHTOMYMSIEHS", "SHEISMYMOTHERBUTIAMNOTHERCHILD",
-	//"HUMANSCANTSOLVETHISSOBETTERSTOPHERE", "EREHPOTSRETTEBOSSIHTEVLOSTNACSNAMUH",
+	"HUMANSCANTSOLVETHISSOBETTERSTOPHERE", "EREHPOTSRETTEBOSSIHTEVLOSTNACSNAMUH",
 	//"STEPMOTHER", "REHTOMPETS", "MATERFAMILIAS", "SAILIMAFRETAM", "MATRIARCH", "HCRAIRTAM",
 };
 

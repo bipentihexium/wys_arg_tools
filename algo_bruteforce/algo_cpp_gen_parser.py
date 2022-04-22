@@ -57,7 +57,7 @@ char_pattern, str_pattern = r"'([^\\']|\\.)'", r'"([^\\"]|\\.)+"'
 lexspecial = [r"#.*"]
 lexkeywords = [r"if\b", r"else\b", r"elif\b", r"while\b", r"for\b", r"algo\b",\
 	r"break\b", r"continue\b", r"return\b", r"in\b", r"and\b", r"or\b", r"not\b", r"rand\b", r"randexpr\b", r"del\b"]
-lexkeyvars = [r"index", r"keyindex", r"data", r"key"]
+lexkeyvars = [r"index", r"keyindex2", r"keyindex", r"data", r"key2", r"key"]
 lexother_preop = [num_pattern, hexnum_pattern]
 lexoperators = [r"<=", r">=", r"<", r">", r"==",\
 	r"=", r"\+=", r"\-=", r"\*=", r"/=", r"%=",\
@@ -283,7 +283,7 @@ class Parser:
 				self.indent -= 1
 				statement["selse"] = type('', (object,), else_statement)()
 	def parse_for(self, statement):
-		if self.tokens[0][0] not in ["index", "keyindex"]:
+		if self.tokens[0][0] not in ["index", "keyindex", "keyindex2"]:
 			self.expect_pattern(self.tokens[0], ident_pattern, "ident")
 		self.expect(self.tokens[1], "in")
 		statement["svar"] = self.tokens[0]
@@ -454,7 +454,7 @@ class Parser:
 			leaf = type('', (object,), {"etype":"rand_expr", "etoken":self.tokens[0], "erand_id":len(self.algo.econstants)})()
 			self.expect(self.tokens[1], "{")
 			self.expect(self.tokens[3], "}")
-			if self.tokens[2][0] in ["..", "index", "keyindex", "key", "data"]:
+			if self.tokens[2][0] in ["..", "index", "keyindex", "keyindex2", "key", "key2", "data"]:
 				self.algo.econstants.append(self.tokens[2][0])
 			else:
 				self.syntax_error(self.tokens[2], "expected key variable (index, keyindex, data (which means data[index]), key (which means key[keyindex])) or '..' in randexpr")

@@ -77,16 +77,29 @@ void runtests() {
 	std::mt19937 random_engine(seed);
 	while (do_search) {
 		ALGO_INDET_GEN(algo) a = ALGO_INDET_GEN(randAlgo)(random_engine);
-		for (const char * const &key : keys) {
-			std::string res = a.run(data, key);
+		for (const char *const &key : keys) {
+#ifdef USE_TWO_KEYS
+		for (const char *const &key2 : keys) {
+			std::string res = a.run(data, key, key2);
+#else
+			std::string res = a.run(data, key, "a");
+#endif
 			if (ismsg(res)) {
+#ifdef USE_TWO_KEYS
+				std::cout << "============================== FOUND <KEY: " << key << "; " << key2 << "> ===============================" << std::endl <<
+#else
 				std::cout << "============================== FOUND <KEY: " << key << "> ===============================" << std::endl <<
+#endif
 					a << std::endl << "-------------- out ------------------" << std::endl << res << std::endl;
 #ifdef OUTFILE
 				outfilemutex.lock();
 				outfile.open(OUTFILE, std::ios_base::app);
 				if (outfile.good()) {
+#ifdef USE_TWO_KEYS
+					outfile << "============================== FOUND <KEY: " << key << "; " << key2 << "> ===============================" << std::endl <<
+#else
 					outfile << "============================== FOUND <KEY: " << key << "> ===============================" << std::endl <<
+#endif
 						a << std::endl << "-------------- out ------------------" << std::endl << res << std::endl;
 					outfile.close();
 					outfile.clear();
@@ -96,6 +109,9 @@ void runtests() {
 				outfilemutex.unlock();
 #endif
 			}
+#ifdef USE_TWO_KEYS
+		}
+#endif
 		}
 		if ((++searched)%searchprint == 0) {
 			std::chrono::high_resolution_clock::time_point now = std::chrono::high_resolution_clock::now();

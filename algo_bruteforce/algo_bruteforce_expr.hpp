@@ -30,13 +30,15 @@ enum class operation {
 	CONSTANT, VAR, REV, ADD, MULT, COUNT
 };
 enum class variable {
-	INDEX, KEYINDEX, KEY, KEYLEN, DATA, DATALEN, COUNT
+	INDEX, KEYINDEX, KEY, KEYLEN, KEYINDEX2, KEY2, KEYLEN2, DATA, DATALEN, COUNT
 };
 struct algo_context {
 	int index;
 	int keyindex;
+	int keyindex2;
 	std::string d;
 	std::string k;
+	std::string k2;
 };
 class expr;
 std::ostream &operator<<(std::ostream &o, const expr &e);
@@ -108,6 +110,9 @@ public:
 			case variable::KEY: return c.k[c.keyindex]-'@';
 			case variable::KEYINDEX: return c.keyindex;
 			case variable::KEYLEN: return c.k.size();
+			case variable::KEY2: return c.k2[c.keyindex2]-'@';
+			case variable::KEYINDEX2: return c.keyindex2;
+			case variable::KEYLEN2: return c.k2.size();
 			default: return 0;
 			}
 		case operation::REV: return -a->get(c);
@@ -235,6 +240,9 @@ std::ostream &operator<<(std::ostream &o, const expr &e) {
 		case variable::KEY: o << "key[keyindex]"; break;
 		case variable::KEYINDEX: o << "keyindex"; break;
 		case variable::KEYLEN: o << "len(key)"; break;
+		case variable::KEY2: o << "key2[keyindex2]"; break;
+		case variable::KEYINDEX2: o << "keyindex2"; break;
+		case variable::KEYLEN2: o << "len(key2)"; break;
 		default: break;
 		}
 		break;

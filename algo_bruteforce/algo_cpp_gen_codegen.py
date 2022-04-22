@@ -93,7 +93,7 @@ public:
 	 * @brief runs the algorithm on data with key
 	 * @returns resulting message
 	 */
-	std::string run(const char *data, const char *key) const {
+	std::string run(const char *data, const char *key, const char *key2) const {
 		auto reserving_string_constr = [](std::size_t reserve_size){
 			std::string str;
 			str.reserve(reserve_size);
@@ -103,6 +103,7 @@ public:
 		algo_context ctx;
 		ctx.d = data;
 		ctx.k = key;
+		ctx.k2 = key2;
 		%s
 	}
 };
@@ -110,7 +111,9 @@ public:
  * @brief oputputs algorithm as a python function
  */
 std::ostream &operator<<(std::ostream &o, const algo_%s &a) {
-	o << %s;
+	o << "key = [ord(c)-64 for c in key]\\n" <<
+		"key2 = [ord(c)-64 for c in key2]\\n" <<
+		%s;
 	return o;
 }
 """
@@ -143,8 +146,10 @@ class CodeGenerator:
 	def __init__(self):
 		self.vars = {"index":type('', (object,), {"ident":"index", "type":"i"})(),\
 			"keyindex":type('', (object,), {"ident":"keyindex", "type":"i"})(),\
+			"keyindex2":type('', (object,), {"ident":"keyindex2", "type":"i"})(),\
 			"data":type('', (object,), {"ident":"data", "type":"s"})(),\
-			"key":type('', (object,), {"ident":"key", "type":"s"})}
+			"key":type('', (object,), {"ident":"key", "type":"s"})(),\
+			"key2":type('', (object,), {"ident":"key2", "type":"s"})()}
 		self.types = ["int", "chr", "str"]
 		self.macros = {"extern":{}, "int":{}, "chr":{}, "str":{}}
 		self.macros["extern"]["unary+ i i"] = "($0)"
@@ -428,7 +433,7 @@ class CodeGenerator:
 					res += "".join(["\n\t" + x for x in s.split("\n")])
 				res += self.statement_formats["for-else"][1]
 			res += formats[2].replace("$0", fid)
-			if statement.svar[0] not in ["index", "keyindex"]:
+			if statement.svar[0] not in ["index", "keyindex", "keyindex2"]:
 				del self.vars[statement.svar[0]]
 			return res
 		elif statement.stype == "continue":
@@ -467,8 +472,10 @@ class CppCodeGenerator(CodeGenerator):
 		super().__init__()
 		self.vars = {"index":type('', (object,), {"ident":"ctx.index", "type":"i"})(),\
 			"keyindex":type('', (object,), {"ident":"ctx.keyindex", "type":"i"})(),\
+			"keyindex2":type('', (object,), {"ident":"ctx.keyindex2", "type":"i"})(),\
 			"data":type('', (object,), {"ident":"ctx.d", "type":"s"})(),\
-			"key":type('', (object,), {"ident":"ctx.k", "type":"s"})}
+			"key":type('', (object,), {"ident":"ctx.k", "type":"s"})(),\
+			"key2":type('', (object,), {"ident":"ctx.k2", "type":"s"})()}
 		self.macros["extern"]["unarynot i i"] = "(!$0)"
 		self.macros["extern"]["len s i"] = "($0.size())"
 		self.macros["extern"]["rot0 ii v"] = "$0 %= $1; if ($0 < 0) $0 += $1"
@@ -536,10 +543,14 @@ class CodeGen:
 				erand_params.append("new expr(variable::INDEX)")
 			elif e == "keyindex":
 				erand_params.append("new expr(variable::KEYINDEX)")
+			elif e == "keyindex2":
+				erand_params.append("new expr(variable::KEYINDEX2)")
 			elif e == "data":
 				erand_params.append("new expr(variable::DATA)")
 			elif e == "key":
 				erand_params.append("new expr(variable::KEY)")
+			elif e == "key2":
+				erand_params.append("new expr(variable::KEY2)")
 		rand_params = [a.iconstants, erand_params]
 		generator = generator_from_template(a.ident, leaf_var_chance, leaf_num_min, leaf_num_max,\
 			expr_op_max, expr_leaf_unop, expr_leaf_binop, rand_params)

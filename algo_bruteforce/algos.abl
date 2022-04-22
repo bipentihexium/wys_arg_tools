@@ -71,3 +71,27 @@ algo test:
 			result[index] = result[i2]
 			result[i2] = tmp
 		return result
+
+algo two_key:
+	__generator_leaf_var_chance__: 15
+	__generator_leaf_num_range__:
+		-30
+		30
+	__generator_expr_operations_max__: 5
+	__generator_expr_leaf_unop_chance__: 4
+	__generator_expr_leaf_binop_chance__: 7
+	algo:
+		index = rand{2} * (len(data) - 1)
+		keyindex = rand{2} * (len(key) - 1)
+		keyindex2 = rand{2} * (len(key2) - 1)
+		result = str(len(data))
+		while not data.empty():
+			index = randexpr{index}
+			rot0(index, len(data))
+			keyindex = randexpr{keyindex}
+			rot0(keyindex, len(key))
+			keyindex2 = randexpr{keyindex2}
+			rot0(keyindex2, len(key2))
+			result.append(data[index])
+			del data[index]
+		return result
