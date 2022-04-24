@@ -25,7 +25,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 import sys
 
-def dontbother17_decrypt(data, n):
+def dontbother17_decrypt(data, n=17):
 	index = 0
 	result = ""
 	while data:
@@ -33,7 +33,7 @@ def dontbother17_decrypt(data, n):
 		result += data[index]
 		data = data[:index] + data[index+1:]
 	return result
-def dontbother17_encrypt(data, n):
+def dontbother17_encrypt(data, n=17):
 	index = -1
 	result = "-" * len(data)
 	for char in data:
@@ -99,7 +99,7 @@ def try_wl(method, range, *args, **kw):
 		for i in range:
 			text = eval(method)
 			if "DATA(" in text and text.split(' ')[0] and text.split(' ')[0] in wl:
-				print(f"<<<<<<<<<<<<<< {' '.join([str(v) for k, v in kw.items()])} {i} >>>>>>>>>>>>>>>>>>")
+				print(f"<<<<<<<<<<<<<< {' '.join([str(v) for k, v in kw.items()])} {'; '.join([str(k)+'-'+str(v) for k, v in kw.items()])} {i} >>>>>>>>>>>>>>>>>>")
 				print(text)
 print(sheismymother_decrypt(data3, key3))
 print("======================================================== NORM ===================================================")
