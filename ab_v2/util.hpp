@@ -1,3 +1,6 @@
+#ifndef __UTIL_HPP__
+#define __UTIL_HPP__
+
 /*
 Copyright (c) 2022 bipentihexium
 
@@ -23,10 +26,4 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include <iostream>
-#include "cfg.hpp"
-
-int main() {
-	std::cout << CONFIG_INFO_FORMAT << std::endl;
-	return 0;
-}
+#endif

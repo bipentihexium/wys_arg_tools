@@ -1,4 +1,4 @@
-/*
+#[[
 Copyright (c) 2022 bipentihexium
 
 Permission is hereby granted, free of charge, to any person
@@ -21,12 +21,28 @@ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
-*/
+]]
 
-#include <iostream>
-#include "cfg.hpp"
+cmake_minimum_required(VERSION 3.14)
 
-int main() {
-	std::cout << CONFIG_INFO_FORMAT << std::endl;
-	return 0;
-}
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED true)
+
+project(AB2)
+
+include(CTest)
+
+add_executable(ab2 ./main.cpp)
+if(UNIX)
+	target_link_libraries(ab2 pthread)
+elseif(MINGW)
+	target_link_libraries(ab2 winpthread)
+elseif(WIN32)
+	#target_link_libraries(ab2 )
+endif()
+
+enable_testing()
+add_executable(ab2_test_mach0 ./tests/test_mach0.cpp)
+add_test(NAME machine_no_key COMMAND $<TARGET_FILE:ab2_test_mach0>)
+add_executable(ab2_test_mach1 ./tests/test_mach1.cpp)
+add_test(NAME machine_1_key COMMAND $<TARGET_FILE:ab2_test_mach1>)

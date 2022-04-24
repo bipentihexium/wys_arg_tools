@@ -1,4 +1,7 @@
-/*
+@echo off
+:: untested script, but should work :/
+goto skip_license
+
 Copyright (c) 2022 bipentihexium
 
 Permission is hereby granted, free of charge, to any person
@@ -21,12 +24,6 @@ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
-*/
 
-#include <iostream>
-#include "cfg.hpp"
-
-int main() {
-	std::cout << CONFIG_INFO_FORMAT << std::endl;
-	return 0;
-}
+skip_license:
+g++ main.cpp -o ab2 -std=c++11 -O3 -lwinpthread
