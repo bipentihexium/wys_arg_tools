@@ -26,4 +26,35 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#include <stdint.h>
+#include <chrono>
+#include <string>
+#include <thread>
+
+std::string resolve_permutation(const std::string &data, int *permutation, size_t permutation_len) {
+	std::string res;
+	res.reserve(permutation_len);
+	for (size_t i = 0; i < permutation_len; ++i) {
+		res.push_back(data[permutation[i]]);
+	}
+	return res;
+}
+std::string resolve_inverse_permutation(const std::string &data, int *permutation, size_t permutation_len) {
+	std::string res(permutation_len, '-');
+	for (size_t i = 0; i < permutation_len; ++i) {
+		res[permutation[i]] = data[i];
+	}
+	return res;
+}
+
+template<typename T, size_t N>
+constexpr size_t static_arrlen(T (&arr)[N]) { return N; }
+
+uint_fast32_t get_entropy() {
+	uint_fast32_t time = std::chrono::duration_cast<std::chrono::nanoseconds>(
+		std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+	uint_fast32_t threadid = std::hash<std::thread::id>{}(std::this_thread::get_id());
+	return time ^ threadid;
+}
+
 #endif

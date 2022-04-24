@@ -59,8 +59,12 @@ OTHER DEALINGS IN THE SOFTWARE.
 	constexpr long int search_count_for_info = 1000;
 
 // ----------------------------------- GLOBAL ------------------------------------------------------
-	// count of keys algorithm uses - minimum 0, maximum 16
+	// count of keys algorithm uses - minimum 0, recommended maximum 2
 #define KEY_COUNT 0
+
+// ----------------------------------- SEARCH ------------------------------------------------------
+	// if string contains this, then it's considered message
+	constexpr const char *message_identifier = "passed";
 
 // ----------------------------------- MACHINE -----------------------------------------------------
 	// count of instructions that are run before the algorithm is terminated
