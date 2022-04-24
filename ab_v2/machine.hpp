@@ -110,7 +110,14 @@ private:
 #undef RUN_DIV
 		case code::codetype::MOV: RUN_BINARY() break;
 #undef RUN_BINARY
-		case code::codetype::PUSH_RES: { int i = reg[0] % currdatalen; res[reslen++] = data[i < 0 ? i + currdatalen : i]; } break;
+		case code::codetype::PUSH_RES: { // terminate when res is full
+			int i = reg[0] % currdatalen;
+			res[reslen++] = data[i < 0 ? i + currdatalen : i];
+			if (reslen > datalen) {
+				instrcount = max_instrs;
+			}
+			break;
+		}
 		case code::codetype::REMOVE_DATA:{
 			int i = reg[0] % currdatalen;
 			if (i < 0) i += currdatalen;

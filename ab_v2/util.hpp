@@ -50,11 +50,4 @@ std::string resolve_inverse_permutation(const std::string &data, int *permutatio
 template<typename T, size_t N>
 constexpr size_t static_arrlen(T (&arr)[N]) { return N; }
 
-uint_fast32_t get_entropy() {
-	uint_fast32_t time = std::chrono::duration_cast<std::chrono::nanoseconds>(
-		std::chrono::high_resolution_clock::now().time_since_epoch()).count();
-	uint_fast32_t threadid = std::hash<std::thread::id>{}(std::this_thread::get_id());
-	return time ^ threadid;
-}
-
 #endif

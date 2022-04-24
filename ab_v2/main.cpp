@@ -23,12 +23,26 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#include <array>
 #include <iostream>
+#include <memory>
+#include <thread>
 #include "cfg.hpp"
-#include "codegen.hpp"
-#include "machine.hpp"
+#include "search.hpp"
 
 int main() {
 	std::cout << CONFIG_INFO_FORMAT << std::endl;
+	std::array<std::unique_ptr<std::thread>, no_threads> threads;
+	for (auto &thr : threads) {
+		thr = std::unique_ptr<std::thread>(new std::thread(search));
+	}
+	std::string in;
+	do {
+		std::getline(std::cin, in);
+	} while (in != "exit");
+	do_search = false;
+	for (auto &thr : threads) {
+		thr->join();
+	}
 	return 0;
 }

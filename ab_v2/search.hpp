@@ -36,7 +36,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 #include "machine.hpp"
 #include "util.hpp"
 
-bool do_search = false;
+bool do_search = true;
 unsigned long int searched = 0;
 
 bool is_message(const std::string &potential_message) {
@@ -67,7 +67,7 @@ std::vector<std::vector<int>> preprocess_keys() {
 
 template<bool inverse=false>
 void found(const machine &mach, const code_block &block,
-	const std::vector<std::pair<int *, size_t>> &current_keys,
+	const std::vector<std::pair<const int *, size_t>> &current_keys,
 	const std::string &message) {
 	std::cout << "------------------------ FOUND ---------------------------\n" <<
 		"inverted: " << inverse <<
@@ -78,10 +78,9 @@ void found(const machine &mach, const code_block &block,
 	std::cout << std::endl;
 }
 
-template<size_t depth=0>
 void try_keys(const std::vector<std::vector<int>> &preprocessed_keys,
-	std::vector<std::pair<int *, size_t>> &current_keys, machine &mach,
-	std::mt19937 &rand, size_t datalen) {
+	std::vector<std::pair<const int *, size_t>> &current_keys, machine &mach,
+	std::mt19937 &rand, size_t datalen, size_t depth=0) {
 	if (depth >= KEY_COUNT) {
 		mach.reset(datalen, current_keys.begin(), current_keys.end());
 		code_block block = generate_code(rand);
@@ -98,22 +97,23 @@ void try_keys(const std::vector<std::vector<int>> &preprocessed_keys,
 		}
 	} else {
 		for (const auto &key : preprocessed_keys) {
-			current_keys[depth] = std::pair<int *, size_t>(key.data(), key.size());
-			try_keys<depth + 1>(preprocessed_keys, current_keys, mach, rand, datalen);
+			current_keys[depth] = std::pair<const int *, size_t>(key.data(), key.size());
+			try_keys(preprocessed_keys, current_keys, mach, rand, datalen, depth + 1);
 		}
 	}
 }
 
 void search() {
 	machine mach;
-	std::mt19937 rand(get_entropy());
+	std::random_device rd;
+	std::mt19937 rand(rd());
 	std::chrono::high_resolution_clock::time_point search_start = std::chrono::high_resolution_clock::now();
 	size_t datalen = strlen(data);
 	std::vector<std::vector<int>> preprocessed_keys = preprocess_keys();
 	while (do_search) {
-		std::vector<std::pair<int *, size_t>> current_keys;
+		std::vector<std::pair<const int *, size_t>> current_keys;
 		try_keys(preprocessed_keys, current_keys, mach, rand, datalen);
-		if (++searched % search_count_for_info) {
+		if (++searched % search_count_for_info == 0) {
 			std::chrono::high_resolution_clock::time_point curr_time = std::chrono::high_resolution_clock::now();
 			float elapsed_secs = std::chrono::duration_cast<std::chrono::microseconds>(curr_time - search_start).count() * 0.000001f;
 			print_search_info(elapsed_secs);

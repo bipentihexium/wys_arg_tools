@@ -46,9 +46,9 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 // ----------------------------------- OUTPUT ------------------------------------------------------
 	// printed on start - use like this: "text " << <varialbe> << "text2"
-#define CONFIG_INFO_FORMAT "[Welcome to algortihm bruteforcer v2]\nalgorithm key count: " << KEY_COUNT <<\
-		"\nregister count: " << register_count << "\ninstructions before termination: " << max_instrs <<\
-		"\n[Good luck!]"
+#define CONFIG_INFO_FORMAT "[Welcome to algortihm bruteforcer v2]\nthreads: " << no_threads <<\
+		"\nalgorithm key count: " << KEY_COUNT << "\nregister count: " << register_count <<\
+		"\ninstructions before termination: " << max_instrs << "\n[Good luck!]"
 	// printed after searching search_count_for_info algortihms - use like this: "text " << <varialbe> << "text2"
 	// variables avaliable:
 	//     searched - number of searched algorithms
@@ -65,6 +65,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 // ----------------------------------- SEARCH ------------------------------------------------------
 	// if string contains this, then it's considered message
 	constexpr const char *message_identifier = "passed";
+	// thread count - usually used CPU cores
+	constexpr size_t no_threads = 2;
 
 // ----------------------------------- MACHINE -----------------------------------------------------
 	// count of instructions that are run before the algorithm is terminated

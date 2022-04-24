@@ -34,31 +34,32 @@ OTHER DEALINGS IN THE SOFTWARE.
 namespace {
 	template<typename R_T>
 	inline int generate_val(R_T &random_engine, binary_op::value_type &rhs_reg) {
-		const static std::uniform_int_distribution<int> value_dist = std::uniform_int_distribution<int>(value_min, value_max);
-		const static std::uniform_int_distribution<int> reg_dist = std::uniform_int_distribution<int>(0, register_count - 1);
-		const static std::uniform_int_distribution<int> key_dist = std::uniform_int_distribution<int>(0, KEY_COUNT - 1);
-		const static std::uniform_int_distribution<int> value_type_dist =
-			std::uniform_int_distribution<int>(0, KEY_COUNT > 0 ? binary_op::value_type::KEYLEN : binary_op::value_type::DATALEN);
-
-		rhs_reg = static_cast<binary_op::value_type>(value_type_dist(random_engine));
+		rhs_reg = static_cast<binary_op::value_type>(
+			std::uniform_int_distribution<int>(0, KEY_COUNT > 0
+				? static_cast<int>(binary_op::value_type::KEYLEN)
+				: static_cast<int>(binary_op::value_type::DATALEN))(random_engine));
 		switch (rhs_reg) {
-		case binary_op::value_type::VALUE: return value_dist(random_engine);
-		case binary_op::value_type::REG: return reg_dist(random_engine);
+		case binary_op::value_type::VALUE: return std::uniform_int_distribution<int>(value_min, value_max)(random_engine);
+		case binary_op::value_type::REG: return std::uniform_int_distribution<int>(0, register_count - 1)(random_engine);
 		case binary_op::value_type::DATALEN: return 0;
 		case binary_op::value_type::KEY:
-		case binary_op::value_type::KEYLEN: return key_dist(random_engine);
+		case binary_op::value_type::KEYLEN: return std::uniform_int_distribution<int>(0, KEY_COUNT - 1)(random_engine);
 		}
 		return 0;
 	}
 
 	template<typename R_T>
-	inline std::unique_ptr<code> generate_instr(R_T &random_engine, int depth) {
-		const static std::uniform_int_distribution<int> reg_dist = std::uniform_int_distribution<int>(0, register_count-1);
+	inline void generate_block(R_T &random_engine, code_block &block, int depth);
 
+	template<typename R_T>
+	inline std::unique_ptr<code> generate_instr(R_T &random_engine, int depth) {
 		int max = depth < 4 ? static_cast<int>(code::codetype::LAST)-1 : static_cast<int>(code::codetype::IF)-1;
 		code::codetype inst_type = static_cast<code::codetype>(std::uniform_int_distribution<int>(0, max)(random_engine));
 		switch (inst_type) {
-		case code::codetype::SWITCH_REG: return std::unique_ptr<code>(new reg_op(inst_type, reg_dist(random_engine)));
+		case code::codetype::SWITCH_REG:{
+			int rg = std::uniform_int_distribution<int>(0, register_count - 1)(random_engine);
+			return std::unique_ptr<code>(new reg_op(inst_type, rg));
+		}
 		case code::codetype::ADD:
 		case code::codetype::SUB:
 		case code::codetype::MUL:
@@ -90,6 +91,7 @@ namespace {
 		case code::codetype::LAST:
 			return std::unique_ptr<code>(nullptr);
 		}
+		return std::unique_ptr<code>(nullptr);
 	}
 
 	template<typename R_T>
@@ -97,7 +99,7 @@ namespace {
 		int instrs = std::uniform_int_distribution<int>((9-depth)/3, 9-depth)(random_engine);
 		block.instructions.reserve(instrs);
 		for (int i = 0; i < instrs; ++i) {
-			block.instructions.push_back(std::move(generate_instr(random_engine, depth-1)));
+			block.instructions.push_back(std::move(generate_instr(random_engine, depth + 1)));
 		}
 	}
 }
