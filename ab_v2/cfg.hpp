@@ -69,10 +69,6 @@ OTHER DEALINGS IN THE SOFTWARE.
 	constexpr int register_count = 5;
 
 // ----------------------------------- CODE GENERATION ---------------------------------------------
-	// chance for binary operation rhs to be register = 1 / value_reg_chance
-	constexpr int value_reg_chance = 5;
-	// chance for binary operation rhs to be value from key = 1 / value_key_chance * (value_reg_chance - 1) / value_reg_chance
-	constexpr int value_key_chance = 4;
 	// range of binary operation rhs range is [value_min; value_max]
 	constexpr int value_min = -20;
 	constexpr int value_max = 20;

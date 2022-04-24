@@ -73,7 +73,7 @@ public:
 
 class binary_op : public code {
 public:
-	enum class value_type { VALUE, REG, KEY, DATALEN, KEYLEN }; // TODO: Don't forget to disable generating KEY and KEYLEN when KEY_COUNT is 0
+	enum class value_type { VALUE, REG, DATALEN, KEY, KEYLEN }; // TODO: Don't forget to disable generating KEY and KEYLEN when KEY_COUNT is 0
 	static std::string to_str(const value_type &type) {
 		switch (type) {
 		case value_type::VALUE: return "VAL";
@@ -86,7 +86,7 @@ public:
 	}
 	int rhs_value;
 	value_type rhs_type;
-	inline binary_op(codetype type, value_type rhs_type, int rhs_value) : code(type), rhs_type(rhs_type), rhs_value(rhs_value) { }
+	inline binary_op(codetype type, value_type rhs_type, int rhs_value) : code(type), rhs_value(rhs_value), rhs_type(rhs_type) { }
 	inline std::string to_str() const override {
 		return code::to_str(type) + " " + binary_op::to_str(rhs_type) + "{" + std::to_string(rhs_value) + "}\n";
 	}

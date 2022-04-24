@@ -40,7 +40,7 @@ public:
 	int *res;
 	size_t reslen;
 
-	inline machine() : res(new int[0]), data(nullptr), reslen(-1), datalen(-1) {
+	inline machine() : res(new int[0]), reslen(-1), data(nullptr), datalen(-1) {
 		std::fill(keys.begin(), keys.end(), nullptr);
 		std::fill(keylens.begin(), keylens.end(), -1);
 	}
@@ -57,13 +57,13 @@ public:
 	}
 	template<typename KEY_IT>
 	inline void reset(size_t dlen, KEY_IT begin, KEY_IT end) {
-		if (datalen != dlen) { if (datalen != -1) delete[] data; data = new int[dlen]; }
+		if (datalen != dlen) { if (datalen != static_cast<size_t>(-1)) delete[] data; data = new int[dlen]; }
 		std::iota(data, data + dlen, 0);
 		currdatalen = datalen = dlen;
 		size_t i = 0;
 		for (KEY_IT it = begin; it != end; ++it, ++i) {
 			const auto &pair = *it;
-			if (keylens[i] != pair.second) { if (keylens[i] != -1) delete[] keys[i]; keys[i] = new int[pair.second]; }
+			if (keylens[i] != pair.second) { if (keylens[i] != static_cast<size_t>(-1)) delete[] keys[i]; keys[i] = new int[pair.second]; }
 			std::copy(pair.first, pair.first + pair.second, keys[i]);
 			keylens[i] = pair.second;
 		}
@@ -114,7 +114,7 @@ private:
 		case code::codetype::REMOVE_DATA:{
 			int i = reg[0] % currdatalen;
 			if (i < 0) i += currdatalen;
-			for (int j = i+1; j < currdatalen; ++j) {
+			for (size_t j = i+1; j < currdatalen; ++j) {
 				data[j-1] = data[j];
 			}
 			--currdatalen;

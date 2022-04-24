@@ -25,6 +25,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 #include <iostream>
 #include "cfg.hpp"
+#include "codegen.hpp"
+#include "machine.hpp"
 
 int main() {
 	std::cout << CONFIG_INFO_FORMAT << std::endl;
