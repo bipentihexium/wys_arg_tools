@@ -32,16 +32,15 @@ OTHER DEALINGS IN THE SOFTWARE.
 #include "../code.hpp"
 #include "../machine.hpp"
 
-template<size_t datalen>
-bool test_machine(machine &m, const code_block &block, const std::array<int, datalen> &expected, const std::string &msg) {
-	m.reset(datalen, {});
+bool test_machine(machine &m, const code_block &block, const std::vector<int> &expected, const std::string &msg) {
+	m.reset(expected.size(), { });
 	m.run(block);
-	bool fail = m.reslen != datalen || !std::equal(m.res, m.res + m.reslen, expected.begin());
+	bool fail = !std::equal(m.res.begin(), m.res.end(), expected.begin()); // m.res.size() != m.fulldatasize ||
 	if (fail) {
 		std::cout << "[TEST-MACHINE-0-KEYS::FAIL]: " << msg << "\n\tcode:\n" << block.to_str() << "\n\tresult:\n\t\t";
-		for (size_t i = 0; i < m.reslen; ++i) { std::cout << m.res[i] << " "; }
+		for (const auto &i : m.res) { std::cout << i << " "; }
 		std::cout << "\n\texpected:\n\t\t";
-		for (size_t i = 0; i < datalen; ++i) { std::cout << expected[i] << " "; }
+		for (const auto &i : expected) { std::cout << i << " "; }
 		std::cout << std::endl;
 	}
 	return fail;
@@ -62,7 +61,7 @@ int main() {
 				new code(code::codetype::REMOVE_DATA),
 			})
 		}),
-		int_array_of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15), "~{ < # } - keep");
+		{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 }, "~{ < # } - keep");
 	fail |= test_machine(m,
 		code_block(code::codetype::LAST, {
 			new code_block(code::codetype::WHILENOT, {
@@ -72,6 +71,6 @@ int main() {
 				new code(code::codetype::REMOVE_DATA),
 			})
 		}),
-		int_array_of(1, 3, 5, 7, 9, 11, 13, 15, 2, 6, 10, 14, 4, 12, 8, 0), "~{ +1 %. < # } - dontbother1");
+		{ 1, 3, 5, 7, 9, 11, 13, 15, 2, 6, 10, 14, 4, 12, 8, 0 }, "~{ +1 %. < # } - dontbother1");
 	return fail;
 }

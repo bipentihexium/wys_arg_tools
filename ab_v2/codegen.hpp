@@ -72,7 +72,6 @@ namespace {
 		}
 		case code::codetype::PUSH_RES:
 		case code::codetype::REMOVE_DATA:
-		case code::codetype::TEST_DATA:
 			return std::unique_ptr<code>(new code(inst_type));
 		case code::codetype::TEST_GT:
 		case code::codetype::TEST_EQ:{

@@ -37,7 +37,7 @@ public:
 	enum class codetype {
 		SWITCH_REG,
 		ADD, SUB, MUL, DIV, MOD, MOV,
-		PUSH_RES, REMOVE_DATA, TEST_DATA,
+		PUSH_RES, REMOVE_DATA,
 		TEST_EQ, TEST_GT,
 		IF, WHILE, IFNOT, WHILENOT,
 		LAST
@@ -52,8 +52,7 @@ public:
 		case codetype::MOD: return "MOD";
 		case codetype::MOV: return "MOV";
 		case codetype::PUSH_RES: return "PUSH_RES";
-		case codetype::REMOVE_DATA: return "REMOVE_DAT";
-		case codetype::TEST_DATA: return "TEST_DAT";
+		case codetype::REMOVE_DATA: return "REMOVE_DATA";
 		case codetype::TEST_EQ: return "TEST_EQ";
 		case codetype::TEST_GT: return "TEST_GT";
 		case codetype::IF: return "IF";

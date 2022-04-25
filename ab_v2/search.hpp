@@ -67,27 +67,34 @@ std::vector<std::vector<int>> preprocess_keys() {
 
 template<bool inverse=false>
 void found(const machine &mach, const code_block &block,
-	const std::vector<std::pair<const int *, size_t>> &current_keys,
+	const std::vector<const std::vector<int> *> &current_keys,
 	const std::string &message) {
 	std::cout << "------------------------ FOUND ---------------------------\n" <<
 		"inverted: " << inverse <<
 		"\tcode:\n" << block.to_str() <<
 		"\tmessage:\n\t\t" << message <<
-		"\n\tpermutation:\n\t\t";
-	for (size_t i = 0; i < mach.reslen; ++i) { std::cout << mach.res[i] << " "; }
+		"\tkeys:\n\t\t";
+	for (const auto &i : current_keys) {
+		for (const auto &j : *i) {
+			std::cout << static_cast<char>(j + 'A' - 1);
+		}
+		std::cout << " ";
+	}
+	std::cout << "\n\tpermutation:\n\t\t";
+	for (const auto &i : mach.res) { std::cout << i << " "; }
 	std::cout << std::endl;
 }
 
 void try_keys(const std::vector<std::vector<int>> &preprocessed_keys,
-	std::vector<std::pair<const int *, size_t>> &current_keys, machine &mach,
+	std::vector<const std::vector<int> *> &current_keys, machine &mach,
 	std::mt19937 &rand, size_t datalen, size_t depth=0) {
 	if (depth >= KEY_COUNT) {
-		mach.reset(datalen, current_keys.begin(), current_keys.end());
+		mach.reset_key_ptrs(datalen, current_keys.begin(), current_keys.end());
 		code_block block = generate_code(rand);
 		mach.run(block);
-		if (mach.reslen) {
-			std::string message = resolve_permutation(data, mach.res, mach.reslen);
-			std::string message_inv = resolve_inverse_permutation(data, mach.res, mach.reslen);
+		if (!mach.res.empty()) {
+			std::string message = resolve_permutation(data, mach.res.data(), mach.res.size());
+			std::string message_inv = resolve_inverse_permutation(data, mach.res.data(), mach.res.size());
 			if (is_message(message)) {
 				found(mach, block, current_keys, message);
 			}
@@ -97,7 +104,7 @@ void try_keys(const std::vector<std::vector<int>> &preprocessed_keys,
 		}
 	} else {
 		for (const auto &key : preprocessed_keys) {
-			current_keys[depth] = std::pair<const int *, size_t>(key.data(), key.size());
+			current_keys[depth] = &key;
 			try_keys(preprocessed_keys, current_keys, mach, rand, datalen, depth + 1);
 		}
 	}
@@ -111,7 +118,7 @@ void search() {
 	size_t datalen = strlen(data);
 	std::vector<std::vector<int>> preprocessed_keys = preprocess_keys();
 	while (do_search) {
-		std::vector<std::pair<const int *, size_t>> current_keys;
+		std::vector<const std::vector<int> *> current_keys;
 		try_keys(preprocessed_keys, current_keys, mach, rand, datalen);
 		if (++searched % search_count_for_info == 0) {
 			std::chrono::high_resolution_clock::time_point curr_time = std::chrono::high_resolution_clock::now();

@@ -29,54 +29,57 @@ OTHER DEALINGS IN THE SOFTWARE.
 #include <algorithm>
 #include <array>
 #include <initializer_list>
-#include <map>
 #include <numeric>
+#include <vector>
 #include "cfg.hpp"
 #include "code.hpp"
 #include "util.hpp"
 
 class machine {
 public:
-	int *res;
-	size_t reslen;
+	std::vector<int> res;
 
-	inline machine() : res(new int[0]), reslen(-1), data(nullptr), datalen(-1) {
-		std::fill(keys.begin(), keys.end(), nullptr);
-		std::fill(keylens.begin(), keylens.end(), -1);
-	}
-	inline machine(size_t dlen, const std::initializer_list<std::pair<const int *, size_t>> &ks) {
-		res = new int[0];
-		data = new int[dlen];
-		currdatalen = datalen = dlen;
-		reset(dlen, ks);
-	}
-	inline ~machine() {
-		if (res != nullptr) delete[] res;
-		if (data != nullptr) delete[] data;
-		std::for_each(keys.begin(), keys.end(), [](int *const &k) { delete[] k; });
+	inline machine() { }
+	inline machine(size_t datalen, const std::initializer_list<std::vector<int>> &ks) {
+		reset(datalen, ks);
 	}
 	template<typename KEY_IT>
-	inline void reset(size_t dlen, KEY_IT begin, KEY_IT end) {
-		if (datalen != dlen) { if (datalen != static_cast<size_t>(-1)) delete[] data; data = new int[dlen]; }
-		std::iota(data, data + dlen, 0);
-		currdatalen = datalen = dlen;
+	inline void reset(size_t datalen, KEY_IT begin, KEY_IT end) {
+		data.resize(datalen, 0);
+		std::iota(data.begin(), data.end(), 0);
+		fulldatalen = datalen;
 		size_t i = 0;
 		for (KEY_IT it = begin; it != end; ++it, ++i) {
-			const auto &pair = *it;
-			if (keylens[i] != pair.second) { if (keylens[i] != static_cast<size_t>(-1)) delete[] keys[i]; keys[i] = new int[pair.second]; }
-			std::copy(pair.first, pair.first + pair.second, keys[i]);
-			keylens[i] = pair.second;
+			keys[i].resize(it->size(), 0);
+			std::copy(it->begin(), it->end(), keys[i].begin());
 		}
-		delete[] res;
-		res = new int[datalen];
-		reslen = 0;
-		activereg = reg;
+		res.clear();
+		res.reserve(fulldatalen);
 		std::fill(std::begin(reg), std::end(reg), 0);
+		activereg = reg;
 		flag = false;
 		instrcount = 0;
 	}
-	inline void reset(size_t dlen, const std::initializer_list<std::pair<const int *, size_t>> &ks) {
-		reset(dlen, ks.begin(), ks.end());
+	template<typename KEY_IT>
+	inline void reset_key_ptrs(size_t datalen, KEY_IT begin, KEY_IT end) {
+		data.resize(datalen, 0);
+		std::iota(data.begin(), data.end(), 0);
+		fulldatalen = datalen;
+		size_t i = 0;
+		for (KEY_IT it = begin; it != end; ++it, ++i) {
+			const auto &j = *it;
+			keys[i].resize(j->size(), 0);
+			std::copy(j->begin(), j->end(), keys[i].begin());
+		}
+		res.clear();
+		res.reserve(fulldatalen);
+		std::fill(std::begin(reg), std::end(reg), 0);
+		activereg = reg;
+		flag = false;
+		instrcount = 0;
+	}
+	inline void reset(size_t datalen, const std::initializer_list<std::vector<int>> &ks) {
+		reset(datalen, ks.begin(), ks.end());
 	}
 	inline void run(const code_block &block) {
 		for (auto i = block.instructions.begin(); i != block.instructions.end() && instrcount < max_instrs; ++i) {
@@ -91,11 +94,9 @@ private:
 	bool flag;
 	int instrcount;
 
-	int *data;
-	size_t datalen;
-	size_t currdatalen;
-	std::array<int *, KEY_COUNT> keys;
-	std::array<size_t, KEY_COUNT> keylens;
+	size_t fulldatalen;
+	std::vector<int> data;
+	std::array<std::vector<int>, KEY_COUNT> keys;
 
 	inline void run(const code *c) {
 		switch (c->type) {
@@ -111,26 +112,21 @@ private:
 		case code::codetype::MOV: RUN_BINARY() break;
 #undef RUN_BINARY
 		case code::codetype::PUSH_RES: { // terminate when res is full
-			int i = reg[0] % currdatalen;
-			res[reslen++] = data[i < 0 ? i + currdatalen : i];
-			if (reslen > datalen) {
+			int i = reg[0] % data.size();
+			res.push_back(data[i < 0 ? i + data.size() : i]);
+			if (res.size() > fulldatalen) {
 				instrcount = max_instrs;
 			}
 			break;
 		}
 		case code::codetype::REMOVE_DATA:{
-			int i = reg[0] % currdatalen;
-			if (i < 0) i += currdatalen;
-			for (size_t j = i+1; j < currdatalen; ++j) {
-				data[j-1] = data[j];
-			}
-			--currdatalen;
-			if (currdatalen < 1) { // terminate when data is empty
+			int i = reg[0] % data.size();
+			data.erase(data.begin() + (i < 0 ? i + data.size() : i));
+			if (data.size() < 1) { // terminate when data is empty
 				instrcount = max_instrs;
 			}
 			break;
 		}
-		case code::codetype::TEST_DATA: { flag = currdatalen; } break;
 #define RUN_BINARY_TEST(op) flag = *activereg op get_binary_rhs_value((binary_op *)c);
 		case code::codetype::TEST_GT: RUN_BINARY_TEST(>) break;
 		case code::codetype::TEST_EQ: RUN_BINARY_TEST(==) break;
@@ -147,13 +143,11 @@ private:
 		case binary_op::value_type::VALUE: return c->rhs_value;
 		case binary_op::value_type::REG: return reg[c->rhs_value];
 		case binary_op::value_type::KEY:{
-			int regval = reg[c->rhs_value+1] % keylens[c->rhs_value];
-			if (regval < 0)
-				regval += c->rhs_value;
-			return keys[c->rhs_value][regval];
+			int regval = reg[c->rhs_value + 1] % keys[c->rhs_value].size();
+			return keys[c->rhs_value][regval < 0 ? regval + keys[c->rhs_value].size() : regval];
 		}
-		case binary_op::value_type::DATALEN: return currdatalen;
-		case binary_op::value_type::KEYLEN: return keylens[c->rhs_value];
+		case binary_op::value_type::DATALEN: return data.size();
+		case binary_op::value_type::KEYLEN: return keys[c->rhs_value].size();
 		};
 		return 0;
 	}

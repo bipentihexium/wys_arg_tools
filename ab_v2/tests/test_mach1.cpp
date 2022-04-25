@@ -34,22 +34,16 @@ OTHER DEALINGS IN THE SOFTWARE.
 #include "../code.hpp"
 #include "../machine.hpp"
 
-template<size_t datalen>
 bool test_machine(machine &m, const code_block &block, const std::initializer_list<std::vector<int>> &keys,
-	const std::array<int, datalen> &expected, const std::string &msg) {
-	std::vector<std::pair<const int *, size_t>> keyvec;
-	keyvec.reserve(keys.size());
-	for (const auto &k : keys) {
-		keyvec.emplace_back(k.data(), k.size());
-	}
-	m.reset(datalen, keyvec.begin(), keyvec.end());
+	const std::vector<int> &expected, const std::string &msg) {
+	m.reset(expected.size(), keys);
 	m.run(block);
-	bool fail = m.reslen != datalen || !std::equal(m.res, m.res + m.reslen, expected.begin());
+	bool fail = !std::equal(m.res.begin(), m.res.end(), expected.begin()); // m.res.size() != m.fulldatasize ||
 	if (fail) {
-		std::cout << "[TEST-MACHINE-0-KEYS::FAIL]: " << msg << "\n\tcode:\n" << block.to_str() << "\n\tresult:\n\t\t";
-		for (size_t i = 0; i < m.reslen; ++i) { std::cout << m.res[i] << " "; }
+		std::cout << "[TEST-MACHINE-1-KEY::FAIL]: " << msg << "\n\tcode:\n" << block.to_str() << "\n\tresult:\n\t\t";
+		for (const auto &i : m.res) { std::cout << i << " "; }
 		std::cout << "\n\texpected:\n\t\t";
-		for (size_t i = 0; i < datalen; ++i) { std::cout << expected[i] << " "; }
+		for (const auto &i : expected) { std::cout << i << " "; }
 		std::cout << std::endl;
 	}
 	return fail;
@@ -76,7 +70,7 @@ int main() {
 			})
 		}),
 		{ { 1, 2, 3 } },
-		int_array_of(1, 4, 8, 10, 13, 2, 5, 9, 15, 3, 11, 6, 12, 7, 0, 14),
+		{ 1, 4, 8, 10, 13, 2, 5, 9, 15, 3, 11, 6, 12, 7, 0, 14 },
 		"~{ +B %. b +1 a < # } - humanscantsolvethissobetterstophere - simpler");
 	fail |= test_machine(m,
 		code_block(code::codetype::LAST, {
@@ -91,7 +85,7 @@ int main() {
 			})
 		}),
 		{ { 8, 21, 13, 1, 14, 19, 3, 1, 14, 20, 19, 15, 12, 22, 5, 20, 8, 9, 19, 19, 15, 2, 5, 20, 20, 5, 18, 19, 20, 15, 16, 8, 5, 18, 5 } },
-		int_array_of(8, 30, 44, 46, 61, 81, 85, 87, 102, 123, 143, 159, 172, 195, 201, 222, 231, 241, 261, 281, 297, 300,
+		{ 8, 30, 44, 46, 61, 81, 85, 87, 102, 123, 143, 159, 172, 195, 201, 222, 231, 241, 261, 281, 297, 300,
 		306, 327, 348, 354, 373, 393, 414, 430, 447, 456, 462, 481, 487, 496, 518, 532, 534, 549, 569, 573, 575, 590, 12,
 		33, 51, 65, 91, 97, 119, 129, 139, 161, 182, 199, 203, 209, 232, 254, 260, 280, 303, 325, 342, 361, 370, 377, 397,
 		403, 412, 436, 451, 453, 470, 492, 497, 499, 514, 538, 559, 578, 592, 17, 23, 48, 58, 70, 94, 116, 135, 138, 146,
@@ -116,7 +110,7 @@ int main() {
 		595, 147, 188, 307, 463, 5, 122, 239, 292, 340, 502, 541, 7, 187, 272, 285, 439, 583, 22, 47, 160, 344, 521, 73,
 		212, 413, 480, 71, 158, 245, 477, 69, 236, 258, 331, 562, 218, 271, 505, 130, 398, 586, 220, 345, 442, 76, 153,
 		308, 10, 233, 248, 511, 219, 317, 358, 571, 429, 144, 519, 126, 62, 189, 68, 335, 555, 491, 449, 312, 387, 565,
-		82, 243, 500, 35, 376, 168, 484, 207, 101, 574, 444, 368, 84, 529, 11, 557, 277),
+		82, 243, 500, 35, 376, 168, 484, 207, 101, 574, 444, 368, 84, 529, 11, 557, 277 },
 		"~{ +B %. b +1 a < # } - humanscantsolvethissobetterstophere");
 	return fail;
 }
