@@ -35,7 +35,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 bool test_machine(machine &m, const code_block &block, const std::vector<int> &expected, const std::string &msg) {
 	m.reset(expected.size(), { });
 	m.run(block);
-	bool fail = !std::equal(m.res.begin(), m.res.end(), expected.begin()); // m.res.size() != m.fulldatasize ||
+	bool fail = m.res.size() != expected.size() || !std::equal(m.res.begin(), m.res.end(), expected.begin());
 	if (fail) {
 		std::cout << "[TEST-MACHINE-0-KEYS::FAIL]: " << msg << "\n\tcode:\n" << block.to_str() << "\n\tresult:\n\t\t";
 		for (const auto &i : m.res) { std::cout << i << " "; }
@@ -44,11 +44,6 @@ bool test_machine(machine &m, const code_block &block, const std::vector<int> &e
 		std::cout << std::endl;
 	}
 	return fail;
-}
-
-template<typename ...T>
-constexpr std::array<int, sizeof...(T)> int_array_of(T ...arr) {
-    return std::array<int, sizeof...(T)>({ arr... });
 }
 
 int main() {

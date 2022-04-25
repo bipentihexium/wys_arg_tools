@@ -85,7 +85,7 @@ namespace {
 		case code::codetype::WHILENOT:{
 			auto block = std::unique_ptr<code>(new code_block(inst_type));
 			generate_block(random_engine, *(code_block *)block.get(), depth);
-			return std::move(block);
+			return block;
 		}
 		case code::codetype::LAST:
 			return std::unique_ptr<code>(nullptr);
