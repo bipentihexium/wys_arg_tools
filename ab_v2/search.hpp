@@ -93,8 +93,8 @@ void try_keys(const std::vector<std::vector<int>> &preprocessed_keys,
 		code_block block = generate_code(rand);
 		mach.run(block);
 		if (!mach.res.empty()) {
-			std::string message = resolve_permutation(data, mach.res.data(), mach.res.size());
-			std::string message_inv = resolve_inverse_permutation(data, mach.res.data(), mach.res.size());
+			std::string message = resolve_permutation(data, mach.res);
+			std::string message_inv = resolve_inverse_permutation(data, mach.res);
 			if (is_message(message)) {
 				found(mach, block, current_keys, message);
 			}

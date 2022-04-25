@@ -31,17 +31,17 @@ OTHER DEALINGS IN THE SOFTWARE.
 #include <string>
 #include <thread>
 
-std::string resolve_permutation(const std::string &data, int *permutation, size_t permutation_len) {
+std::string resolve_permutation(const std::string &data, const std::vector<int> &permutation) {
 	std::string res;
-	res.reserve(permutation_len);
-	for (size_t i = 0; i < permutation_len; ++i) {
-		res.push_back(data[permutation[i]]);
+	res.reserve(permutation.size());
+	for (const auto &i : permutation) {
+		res.push_back(data[i]);
 	}
 	return res;
 }
-std::string resolve_inverse_permutation(const std::string &data, int *permutation, size_t permutation_len) {
-	std::string res(permutation_len, '-');
-	for (size_t i = 0; i < permutation_len; ++i) {
+std::string resolve_inverse_permutation(const std::string &data, const std::vector<int> &permutation) {
+	std::string res(data.size(), '-');
+	for (size_t i = 0; i < permutation.size(); ++i) {
 		res[permutation[i]] = data[i];
 	}
 	return res;

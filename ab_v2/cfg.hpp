@@ -56,7 +56,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 #define SEARCH_INFO_FORMAT "\t{searched: " << (searched/1000) << "k; "\
 		"time: " << std::fixed << std::setprecision(3) << secs_elapsed << "s; "\
 		"average search speed: " << std::fixed << std::setprecision(4) << (searched/secs_elapsed/1000) << "k/s}"
-	constexpr long int search_count_for_info = 1000;
+	constexpr long int search_count_for_info = 10000;
 
 // ----------------------------------- GLOBAL ------------------------------------------------------
 	// count of keys algorithm uses - minimum 0, recommended maximum 2

@@ -33,6 +33,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 #include "../codegen.hpp"
 
 bool test_code(code *c) {
+	if (c == nullptr)
+		return true;
 	switch (c->type) {
 	case code::codetype::SWITCH_REG:{
 		reg_op *r = dynamic_cast<reg_op *>(c);
@@ -69,11 +71,11 @@ bool test_code(code *c) {
 		code_block *block = dynamic_cast<code_block *>(c);
 		if (block == nullptr)
 			return true;
-		bool fail = false;
 		for (const auto &i : block->instructions) {
-			fail |= test_code(i.get());
+			if (test_code(i.get()))
+				return true;
 		}
-		return fail;
+		return false;
 	}
 	};
 	return true;
@@ -90,7 +92,7 @@ bool test_codegen(const std::string &msg) {
 }
 
 int main() {
-	for (size_t i = 0; i < 10000; ++i) {
+	for (size_t i = 0; i < 40000; ++i) {
 		if (test_codegen("codegen test " + std::to_string(i)))
 			return 1;
 	}
