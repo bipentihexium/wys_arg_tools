@@ -118,7 +118,7 @@ void search() {
 	size_t datalen = strlen(data);
 	std::vector<std::vector<int>> preprocessed_keys = preprocess_keys();
 	while (do_search) {
-		std::vector<const std::vector<int> *> current_keys;
+		std::vector<const std::vector<int> *> current_keys(KEY_COUNT);
 		try_keys(preprocessed_keys, current_keys, mach, rand, datalen);
 		if (++searched % search_count_for_info == 0) {
 			std::chrono::high_resolution_clock::time_point curr_time = std::chrono::high_resolution_clock::now();
