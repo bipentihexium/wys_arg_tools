@@ -61,7 +61,9 @@ int main() {
 				new binary_op(code::codetype::ADD, binary_op::value_type::VALUE, 1),
 				new reg_op(code::codetype::SWITCH_REG, 0),
 				new code(code::codetype::PUSH_RES),
+#ifndef PUSH_RES_REMOVES
 				new code(code::codetype::REMOVE_DATA),
+#endif
 			})
 		}),
 		{ { 1, 2, 3 } },
@@ -76,7 +78,9 @@ int main() {
 				new binary_op(code::codetype::ADD, binary_op::value_type::VALUE, 1),
 				new reg_op(code::codetype::SWITCH_REG, 0),
 				new code(code::codetype::PUSH_RES),
+#ifndef PUSH_RES_REMOVES
 				new code(code::codetype::REMOVE_DATA),
+#endif
 			})
 		}),
 		{ { 8, 21, 13, 1, 14, 19, 3, 1, 14, 20, 19, 15, 12, 22, 5, 20, 8, 9, 19, 19, 15, 2, 5, 20, 20, 5, 18, 19, 20, 15, 16, 8, 5, 18, 5 } },

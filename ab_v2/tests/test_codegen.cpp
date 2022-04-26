@@ -61,7 +61,9 @@ bool test_code(code *c) {
 		return true;
 	}
 	case code::codetype::PUSH_RES:
+#ifndef PUSH_RES_REMOVES
 	case code::codetype::REMOVE_DATA:
+#endif
 		return dynamic_cast<binary_op *>(c) != nullptr || dynamic_cast<code_block *>(c) != nullptr || dynamic_cast<reg_op *>(c) != nullptr;
 	case code::codetype::IF:
 	case code::codetype::WHILE:

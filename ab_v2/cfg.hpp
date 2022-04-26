@@ -73,10 +73,12 @@ OTHER DEALINGS IN THE SOFTWARE.
 	constexpr int max_instrs = 10000;
 	// number of registers a machine has; should be at least KEY_COUNT + 1, or else some keys will be unused
 	constexpr int register_count = 5;
+	// remove character from data on PUSH_RES instruction?
+#define PUSH_RES_REMOVES
 
 // ----------------------------------- CODE GENERATION ---------------------------------------------
 	// range of binary operation rhs range is [value_min; value_max]
-	constexpr int value_min = -20;
-	constexpr int value_max = 20;
+	constexpr int value_min = -10;
+	constexpr int value_max = 10;
 
 #endif

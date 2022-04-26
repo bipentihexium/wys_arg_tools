@@ -114,15 +114,19 @@ private:
 #undef RUN_BINARY
 		case code::codetype::PUSH_RES: { // terminate when res is full
 			int i = reg[0] % data.size();
-			res.push_back(data[i < 0 ? i + data.size() : i]);
+			if (i < 0) i += data.size();
+			res.push_back(data[i]);
 			if (res.size() > fulldatalen) {
 				instrcount = max_instrs;
 			}
+#ifndef PUSH_RES_REMOVES
 			break;
 		}
 		case code::codetype::REMOVE_DATA:{
 			int i = reg[0] % data.size();
-			data.erase(data.begin() + (i < 0 ? i + data.size() : i));
+			if (i < 0) i += data.size();
+#endif
+			data.erase(data.begin() + i);
 			if (data.size() < 1) { // terminate when data is empty
 				instrcount = max_instrs;
 			}

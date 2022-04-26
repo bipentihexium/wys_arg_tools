@@ -71,7 +71,9 @@ namespace {
 			return std::unique_ptr<code>(new binary_op(inst_type, rhs_type, rhs_val));
 		}
 		case code::codetype::PUSH_RES:
+#ifndef PUSH_RES_REMOVES
 		case code::codetype::REMOVE_DATA:
+#endif
 			return std::unique_ptr<code>(new code(inst_type));
 		case code::codetype::TEST_GT:
 		case code::codetype::TEST_EQ:{
@@ -95,7 +97,10 @@ namespace {
 
 	template<typename R_T>
 	inline void generate_block(R_T &random_engine, code_block &block, int depth) {
-		int instrs = std::uniform_int_distribution<int>(depth ? 0 : 2, 7-depth)(random_engine);
+		static const int instr_count_mins[] = { 1, 5, 1, 1, 1 };
+		static const int instr_count_maxs[] = { 6, 8, 3, 2, 1 };
+
+		int instrs = std::uniform_int_distribution<int>(instr_count_mins[depth], instr_count_maxs[depth])(random_engine);
 		block.instructions.reserve(instrs);
 		for (int i = 0; i < instrs; ++i) {
 			block.instructions.push_back(std::move(generate_instr(random_engine, depth + 1)));

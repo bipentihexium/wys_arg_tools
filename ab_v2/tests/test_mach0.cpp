@@ -53,7 +53,9 @@ int main() {
 		code_block(code::codetype::LAST, {
 			new code_block(code::codetype::WHILENOT, {
 				new code(code::codetype::PUSH_RES),
+#ifndef PUSH_RES_REMOVES
 				new code(code::codetype::REMOVE_DATA),
+#endif
 			})
 		}),
 		{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 }, "~{ < # } - keep");
@@ -63,7 +65,9 @@ int main() {
 				new binary_op(code::codetype::ADD, binary_op::value_type::VALUE, 1),
 				new binary_op(code::codetype::MOD, binary_op::value_type::DATALEN, 0),
 				new code(code::codetype::PUSH_RES),
+#ifndef PUSH_RES_REMOVES
 				new code(code::codetype::REMOVE_DATA),
+#endif
 			})
 		}),
 		{ 1, 3, 5, 7, 9, 11, 13, 15, 2, 6, 10, 14, 4, 12, 8, 0 }, "~{ +1 %. < # } - dontbother1");
