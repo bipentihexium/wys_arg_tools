@@ -48,7 +48,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 	// printed on start - use like this: "text " << <varialbe> << "text2"
 #define CONFIG_INFO_FORMAT "[Welcome to algortihm bruteforcer v2]\nthreads: " << no_threads <<\
 		"\nalgorithm key count: " << KEY_COUNT << "\nregister count: " << register_count <<\
-		"\ninstructions before termination: " << max_instrs << "\n[Good luck!]"
+		"\ninstructions before termination: " << max_instrs << "\ndata: " << data << "\n[Good luck!]"
 	// printed after searching search_count_for_info algortihms - use like this: "text " << <varialbe> << "text2"
 	// variables avaliable:
 	//     searched - number of searched algorithms
@@ -72,7 +72,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 	// count of instructions that are run before the algorithm is terminated
 	constexpr int max_instrs = 10000;
 	// number of registers a machine has; should be at least KEY_COUNT + 1, or else some keys will be unused
-	constexpr int register_count = 5;
+	constexpr int register_count = 3;
 	// remove character from data on PUSH_RES instruction?
 #define PUSH_RES_REMOVES
 
@@ -80,5 +80,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 	// range of binary operation rhs range is [value_min; value_max]
 	constexpr int value_min = -10;
 	constexpr int value_max = 10;
+	// used codegen function
+#define CODEGEN_FUNC generate_code_restricted_for_HCSTSBSH
 
 #endif

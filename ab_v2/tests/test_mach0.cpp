@@ -34,7 +34,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 bool test_machine(machine &m, const code_block &block, const std::vector<int> &expected, const std::string &msg) {
 	m.reset(expected.size(), { });
-	m.run(block);
+	m.run_code(block);
 	bool fail = m.res.size() != expected.size() || !std::equal(m.res.begin(), m.res.end(), expected.begin());
 	if (fail) {
 		std::cout << "[TEST-MACHINE-0-KEYS::FAIL]: " << msg << "\n\tcode:\n" << block.to_str() << "\n\tresult:\n\t\t";
@@ -51,24 +51,20 @@ int main() {
 	machine m;
 	fail |= test_machine(m,
 		code_block(code::codetype::LAST, {
-			new code_block(code::codetype::WHILENOT, {
-				new code(code::codetype::PUSH_RES),
+			new code(code::codetype::PUSH_RES),
 #ifndef PUSH_RES_REMOVES
-				new code(code::codetype::REMOVE_DATA),
+			new code(code::codetype::REMOVE_DATA),
 #endif
-			})
 		}),
 		{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 }, "~{ < # } - keep");
 	fail |= test_machine(m,
 		code_block(code::codetype::LAST, {
-			new code_block(code::codetype::WHILENOT, {
-				new binary_op(code::codetype::ADD, binary_op::value_type::VALUE, 1),
-				new binary_op(code::codetype::MOD, binary_op::value_type::DATALEN, 0),
-				new code(code::codetype::PUSH_RES),
+			new binary_op(code::codetype::ADD, binary_op::value_type::VALUE, 1),
+			new binary_op(code::codetype::MOD, binary_op::value_type::DATALEN, 0),
+			new code(code::codetype::PUSH_RES),
 #ifndef PUSH_RES_REMOVES
-				new code(code::codetype::REMOVE_DATA),
+			new code(code::codetype::REMOVE_DATA),
 #endif
-			})
 		}),
 		{ 1, 3, 5, 7, 9, 11, 13, 15, 2, 6, 10, 14, 4, 12, 8, 0 }, "~{ +1 %. < # } - dontbother1");
 	return fail;

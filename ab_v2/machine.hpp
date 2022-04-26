@@ -82,12 +82,10 @@ public:
 	inline void reset(size_t datalen, const std::initializer_list<std::vector<int>> &ks) {
 		reset(datalen, ks.begin(), ks.end());
 	}
-	inline void run(const code_block &block) {
-		for (auto i = block.instructions.begin(); i != block.instructions.end() && instrcount < max_instrs; ++i) {
-			run(i->get());
-			++instrcount;
+	inline void run_code(const code_block &block) {
+		while (instrcount < max_instrs) {
+			run(block);
 		}
-		++instrcount;
 	}
 private:
 	int reg[register_count];
@@ -142,6 +140,13 @@ private:
 		case code::codetype::WHILENOT: while (!flag && instrcount < max_instrs) { run(*((code_block *)c)); } break;
 		case code::codetype::LAST: break;
 		}
+	}
+	inline void run(const code_block &block) {
+		for (auto i = block.instructions.begin(); i != block.instructions.end() && instrcount < max_instrs; ++i) {
+			run(i->get());
+			++instrcount;
+		}
+		++instrcount;
 	}
 	inline int get_binary_rhs_value(binary_op *c) const {
 		switch (c->rhs_type) {

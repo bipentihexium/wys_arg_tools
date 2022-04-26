@@ -97,8 +97,8 @@ namespace {
 
 	template<typename R_T>
 	inline void generate_block(R_T &random_engine, code_block &block, int depth) {
-		static const int instr_count_mins[] = { 1, 5, 1, 1, 1 };
-		static const int instr_count_maxs[] = { 6, 8, 3, 2, 1 };
+		static const int instr_count_mins[] = { 3, 1, 1, 1, 1 };
+		static const int instr_count_maxs[] = { 9, 4, 3, 2, 1 };
 
 		int instrs = std::uniform_int_distribution<int>(instr_count_mins[depth], instr_count_maxs[depth])(random_engine);
 		block.instructions.reserve(instrs);
@@ -110,6 +110,12 @@ namespace {
 
 template<typename R_T>
 inline code_block generate_code(R_T &random_engine) {
+	code_block out(code::codetype::LAST);
+	generate_block(random_engine, out, 0);
+	return out;
+}
+template<typename R_T>
+inline code_block generate_code_restricted_for_HCSTSBSH(R_T &random_engine) {
 	code_block out(code::codetype::LAST);
 	generate_block(random_engine, out, 0);
 	return out;

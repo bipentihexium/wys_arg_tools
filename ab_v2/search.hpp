@@ -90,8 +90,8 @@ void try_keys(const std::vector<std::vector<int>> &preprocessed_keys,
 	std::mt19937 &rand, size_t datalen, size_t depth=0) {
 	if (depth >= KEY_COUNT) {
 		mach.reset_key_ptrs(datalen, current_keys.begin(), current_keys.end());
-		code_block block = generate_code(rand);
-		mach.run(block);
+		code_block block = CODEGEN_FUNC(rand);
+		mach.run_code(block);
 		if (!mach.res.empty()) {
 			std::string message = resolve_permutation(data, mach.res);
 			std::string message_inv = resolve_inverse_permutation(data, mach.res);
