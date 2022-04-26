@@ -53,10 +53,10 @@ OTHER DEALINGS IN THE SOFTWARE.
 	// variables avaliable:
 	//     searched - number of searched algorithms
 	//     secs_elapsed - seconds since start
-#define SEARCH_INFO_FORMAT "\t{searched: " << (searched/1000) << "k; "\
+#define SEARCH_INFO_FORMAT "\t{searched: " << std::fixed << std::setprecision(1) << (searched/1000000.f) << "m; "\
 		"time: " << std::fixed << std::setprecision(3) << secs_elapsed << "s; "\
-		"average search speed: " << std::fixed << std::setprecision(4) << (searched/secs_elapsed/1000) << "k/s}"
-	constexpr long int search_count_for_info = 10000;
+		"average search speed: " << std::fixed << std::setprecision(4) << (searched/secs_elapsed/(1000000/60)) << "m/min}"
+	constexpr long int search_count_for_info = 100000;
 
 // ----------------------------------- GLOBAL ------------------------------------------------------
 	// count of keys algorithm uses - minimum 0, recommended maximum 2
