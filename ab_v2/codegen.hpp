@@ -95,7 +95,7 @@ namespace {
 
 	template<typename R_T>
 	inline void generate_block(R_T &random_engine, code_block &block, int depth) {
-		int instrs = std::uniform_int_distribution<int>((9-depth)/3, 9-depth)(random_engine);
+		int instrs = std::uniform_int_distribution<int>(depth ? 0 : 2, 7-depth)(random_engine);
 		block.instructions.reserve(instrs);
 		for (int i = 0; i < instrs; ++i) {
 			block.instructions.push_back(std::move(generate_instr(random_engine, depth + 1)));

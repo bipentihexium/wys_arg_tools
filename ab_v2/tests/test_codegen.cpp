@@ -91,7 +91,13 @@ bool test_codegen(const std::string &msg) {
 	return fail;
 }
 
-int main() {
+int main(int argc, char **argv) {
+	if (argc > 1 && std::string(argv[1]) == "print") {
+		std::random_device rd;
+		std::mt19937 rand(rd());
+		std::cout << generate_code(rand).to_str() << std::endl;
+		return 0;
+	}
 	for (size_t i = 0; i < 40000; ++i) {
 		if (test_codegen("codegen test " + std::to_string(i)))
 			return 1;

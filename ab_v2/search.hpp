@@ -73,7 +73,7 @@ void found(const machine &mach, const code_block &block,
 		"inverted: " << inverse <<
 		"\tcode:\n" << block.to_str() <<
 		"\tmessage:\n\t\t" << message <<
-		"\tkeys:\n\t\t";
+		"\n\tkeys:\n\t\t";
 	for (const auto &i : current_keys) {
 		for (const auto &j : *i) {
 			std::cout << static_cast<char>(j + 'A' - 1);
