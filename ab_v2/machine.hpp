@@ -29,6 +29,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 #include <algorithm>
 #include <array>
 #include <initializer_list>
+#include <limits>
 #include <numeric>
 #include <vector>
 #include "cfg.hpp"
@@ -105,7 +106,7 @@ private:
 		case code::codetype::ADD: RUN_BINARY(+) break;
 		case code::codetype::SUB: RUN_BINARY(-) break;
 		case code::codetype::MUL: RUN_BINARY(*) break;
-#define RUN_DIV(op) { int v = get_binary_rhs_value((binary_op *)c); if (v != 0) *activereg op ## = v; }
+#define RUN_DIV(op) { int v = get_binary_rhs_value((binary_op *)c); if (v != 0 && (v != -1 || *activereg != std::numeric_limits<int>::min())) *activereg op ## = v; }
 		case code::codetype::DIV: RUN_DIV(/) break;
 		case code::codetype::MOD: RUN_DIV(%) break;
 #undef RUN_DIV
