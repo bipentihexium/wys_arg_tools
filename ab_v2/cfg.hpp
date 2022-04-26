@@ -39,7 +39,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 // ----------------------------------- KEYS --------------------------------------------------------
 	// used keys
 	constexpr const char *keys[] = {
-		//"DLIHCREHTONMAITUBREHTOMYMSIEHS", "SHEISMYMOTHERBUTIAMNOTHERCHILD",
+		"DLIHCREHTONMAITUBREHTOMYMSIEHS", "SHEISMYMOTHERBUTIAMNOTHERCHILD",
 		"HUMANSCANTSOLVETHISSOBETTERSTOPHERE",// "EREHPOTSRETTEBOSSIHTEVLOSTNACSNAMUH",
 		//"STEPMOTHER"
 	};
@@ -67,10 +67,12 @@ OTHER DEALINGS IN THE SOFTWARE.
 	constexpr const char *message_identifier = "passed";
 	// thread count - usually used CPU cores
 	constexpr size_t no_threads = 2;
+	// filter algorithms?
+//#define DO_FILTER
 
 // ----------------------------------- MACHINE -----------------------------------------------------
 	// count of instructions that are run before the algorithm is terminated
-	constexpr int max_instrs = 10000;
+	constexpr int max_instrs = 7500;
 	// number of registers a machine has; should be at least KEY_COUNT + 1, or else some keys will be unused
 	constexpr int register_count = 3;
 	// remove character from data on PUSH_RES instruction?

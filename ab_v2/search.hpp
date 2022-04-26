@@ -33,6 +33,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 #include <string>
 #include "cfg.hpp"
 #include "codegen.hpp"
+#include "filter.hpp"
 #include "machine.hpp"
 #include "util.hpp"
 
@@ -87,10 +88,9 @@ void found(const machine &mach, const code_block &block,
 
 void try_keys(const std::vector<std::vector<int>> &preprocessed_keys,
 	std::vector<const std::vector<int> *> &current_keys, machine &mach,
-	std::mt19937 &rand, size_t datalen, size_t depth=0) {
+	const code_block &block, std::mt19937 &rand, size_t datalen, size_t depth=0) {
 	if (depth >= KEY_COUNT) {
 		mach.reset_key_ptrs(datalen, current_keys.begin(), current_keys.end());
-		code_block block = CODEGEN_FUNC(rand);
 		mach.run_code(block);
 		if (!mach.res.empty()) {
 			std::string message = resolve_permutation(data, mach.res);
@@ -105,7 +105,7 @@ void try_keys(const std::vector<std::vector<int>> &preprocessed_keys,
 	} else {
 		for (const auto &key : preprocessed_keys) {
 			current_keys[depth] = &key;
-			try_keys(preprocessed_keys, current_keys, mach, rand, datalen, depth + 1);
+			try_keys(preprocessed_keys, current_keys, mach, block, rand, datalen, depth + 1);
 		}
 	}
 }
@@ -118,8 +118,13 @@ void search() {
 	size_t datalen = strlen(data);
 	std::vector<std::vector<int>> preprocessed_keys = preprocess_keys();
 	while (do_search) {
+		code_block block = CODEGEN_FUNC(rand);
+#ifdef DO_FILTER
+		if (filter_out(block))
+			continue;
+#endif
 		std::vector<const std::vector<int> *> current_keys(KEY_COUNT);
-		try_keys(preprocessed_keys, current_keys, mach, rand, datalen);
+		try_keys(preprocessed_keys, current_keys, mach, block, rand, datalen);
 		if (++searched % search_count_for_info == 0) {
 			std::chrono::high_resolution_clock::time_point curr_time = std::chrono::high_resolution_clock::now();
 			float elapsed_secs = std::chrono::duration_cast<std::chrono::microseconds>(curr_time - search_start).count() * 0.000001f;

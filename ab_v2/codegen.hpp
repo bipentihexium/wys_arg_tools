@@ -117,7 +117,23 @@ inline code_block generate_code(R_T &random_engine) {
 template<typename R_T>
 inline code_block generate_code_restricted_for_HCSTSBSH(R_T &random_engine) {
 	code_block out(code::codetype::LAST);
-	generate_block(random_engine, out, 0);
+
+	out.instructions.reserve(12);
+	int instrs = std::uniform_int_distribution<int>(0, 3)(random_engine);
+	for (int i = 0; i < instrs; ++i) {
+		out.instructions.push_back(std::move(generate_instr(random_engine, 1)));
+	}
+	out.instructions.emplace_back(new reg_op(code::codetype::SWITCH_REG, 1));
+	instrs = std::uniform_int_distribution<int>(0, 3)(random_engine);
+	for (int i = 0; i < instrs; ++i) {
+		out.instructions.push_back(std::move(generate_instr(random_engine, 1)));
+	}
+	out.instructions.emplace_back(new reg_op(code::codetype::SWITCH_REG, 0));
+	instrs = std::uniform_int_distribution<int>(0, 3)(random_engine);
+	for (int i = 0; i < instrs; ++i) {
+		out.instructions.push_back(std::move(generate_instr(random_engine, 1)));
+	}
+	out.instructions.emplace_back(new code(code::codetype::PUSH_RES));
 	return out;
 }
 
