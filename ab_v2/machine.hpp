@@ -110,14 +110,14 @@ private:
 #undef RUN_DIV
 		case code::codetype::MOV: RUN_BINARY() break;
 #undef RUN_BINARY
-		case code::codetype::PUSH_RES: { // terminate when res is full
+		case code::codetype::PUSH_RES:{
 			int i = reg[0] % data.size();
 			if (i < 0) i += data.size();
 			res.push_back(data[i]);
-			if (res.size() > fulldatalen) {
-				instrcount = max_instrs;
-			}
 #ifndef PUSH_RES_REMOVES
+			if (res.size() > fulldatalen) {
+				instrcount = max_instrs; // terminate when res is full
+			}
 			break;
 		}
 		case code::codetype::REMOVE_DATA:{
@@ -125,8 +125,8 @@ private:
 			if (i < 0) i += data.size();
 #endif
 			data.erase(data.begin() + i);
-			if (data.size() < 1) { // terminate when data is empty
-				instrcount = max_instrs;
+			if (data.empty()) {
+				instrcount = max_instrs; // terminate when data is empty
 			}
 			break;
 		}
