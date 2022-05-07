@@ -97,8 +97,8 @@ namespace {
 
 	template<typename R_T>
 	inline void generate_block(R_T &random_engine, code_block &block, int depth) {
-		static const int instr_count_mins[] = { 1, 5, 1, 1, 1 };
-		static const int instr_count_maxs[] = { 6, 8, 3, 2, 1 };
+		static const int instr_count_mins[] = { 3, 1, 1, 1, 1 };
+		static const int instr_count_maxs[] = { 9, 4, 3, 2, 1 };
 
 		int instrs = std::uniform_int_distribution<int>(instr_count_mins[depth], instr_count_maxs[depth])(random_engine);
 		block.instructions.reserve(instrs);
@@ -112,6 +112,43 @@ template<typename R_T>
 inline code_block generate_code(R_T &random_engine) {
 	code_block out(code::codetype::LAST);
 	generate_block(random_engine, out, 0);
+	return out;
+}
+template<typename R_T>
+inline code_block generate_code_restricted_for_HCSTSBSH(R_T &random_engine) {
+	code_block out(code::codetype::LAST);
+
+	out.instructions.reserve(12);
+	int instrs = std::uniform_int_distribution<int>(0, 3)(random_engine);
+	for (int i = 0; i < instrs; ++i) {
+		out.instructions.push_back(std::move(generate_instr(random_engine, 1)));
+	}
+	out.instructions.emplace_back(new reg_op(code::codetype::SWITCH_REG, 2));
+	instrs = std::uniform_int_distribution<int>(0, 3)(random_engine);
+	for (int i = 0; i < instrs; ++i) {
+		out.instructions.push_back(std::move(generate_instr(random_engine, 1)));
+	}
+	out.instructions.emplace_back(new reg_op(code::codetype::SWITCH_REG, 3));
+	instrs = std::uniform_int_distribution<int>(0, 3)(random_engine);
+	for (int i = 0; i < instrs; ++i) {
+		out.instructions.push_back(std::move(generate_instr(random_engine, 1)));
+	}
+	out.instructions.emplace_back(new reg_op(code::codetype::SWITCH_REG, 4));
+	instrs = std::uniform_int_distribution<int>(0, 3)(random_engine);
+	for (int i = 0; i < instrs; ++i) {
+		out.instructions.push_back(std::move(generate_instr(random_engine, 1)));
+	}
+	out.instructions.emplace_back(new reg_op(code::codetype::SWITCH_REG, 1));
+	instrs = std::uniform_int_distribution<int>(0, 3)(random_engine);
+	for (int i = 0; i < instrs; ++i) {
+		out.instructions.push_back(std::move(generate_instr(random_engine, 1)));
+	}
+	out.instructions.emplace_back(new reg_op(code::codetype::SWITCH_REG, 0));
+	instrs = std::uniform_int_distribution<int>(0, 3)(random_engine);
+	for (int i = 0; i < instrs; ++i) {
+		out.instructions.push_back(std::move(generate_instr(random_engine, 1)));
+	}
+	out.instructions.emplace_back(new code(code::codetype::PUSH_RES));
 	return out;
 }
 

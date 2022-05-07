@@ -37,7 +37,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 bool test_machine(machine &m, const code_block &block, const std::initializer_list<std::vector<int>> &keys,
 	const std::vector<int> &expected, const std::string &msg) {
 	m.reset(expected.size(), keys);
-	m.run(block);
+	m.run_code(block);
 	bool fail = m.res.size() != expected.size() || !std::equal(m.res.begin(), m.res.end(), expected.begin());
 	if (fail) {
 		std::cout << "[TEST-MACHINE-1-KEY::FAIL]: " << msg << "\n\tcode:\n" << block.to_str() << "\n\tresult:\n\t\t";
@@ -54,34 +54,30 @@ int main() {
 	machine m;
 	fail |= test_machine(m,
 		code_block(code::codetype::LAST, {
-			new code_block(code::codetype::WHILENOT, {
-				new binary_op(code::codetype::ADD, binary_op::value_type::KEY, 0),
-				new binary_op(code::codetype::MOD, binary_op::value_type::DATALEN, 0),
-				new reg_op(code::codetype::SWITCH_REG, 1),
-				new binary_op(code::codetype::ADD, binary_op::value_type::VALUE, 1),
-				new reg_op(code::codetype::SWITCH_REG, 0),
-				new code(code::codetype::PUSH_RES),
+			new binary_op(code::codetype::ADD, binary_op::value_type::KEY, 0),
+			new binary_op(code::codetype::MOD, binary_op::value_type::DATALEN, 0),
+			new reg_op(code::codetype::SWITCH_REG, 1),
+			new binary_op(code::codetype::ADD, binary_op::value_type::VALUE, 1),
+			new reg_op(code::codetype::SWITCH_REG, 0),
+			new code(code::codetype::PUSH_RES),
 #ifndef PUSH_RES_REMOVES
-				new code(code::codetype::REMOVE_DATA),
+			new code(code::codetype::REMOVE_DATA),
 #endif
-			})
 		}),
 		{ { 1, 2, 3 } },
 		{ 1, 4, 8, 10, 13, 2, 5, 9, 15, 3, 11, 6, 12, 7, 0, 14 },
 		"~{ +B %. b +1 a < # } - humanscantsolvethissobetterstophere - simpler");
 	fail |= test_machine(m,
 		code_block(code::codetype::LAST, {
-			new code_block(code::codetype::WHILENOT, {
-				new binary_op(code::codetype::ADD, binary_op::value_type::KEY, 0),
-				new binary_op(code::codetype::MOD, binary_op::value_type::DATALEN, 0),
-				new reg_op(code::codetype::SWITCH_REG, 1),
-				new binary_op(code::codetype::ADD, binary_op::value_type::VALUE, 1),
-				new reg_op(code::codetype::SWITCH_REG, 0),
-				new code(code::codetype::PUSH_RES),
+			new binary_op(code::codetype::ADD, binary_op::value_type::KEY, 0),
+			new binary_op(code::codetype::MOD, binary_op::value_type::DATALEN, 0),
+			new reg_op(code::codetype::SWITCH_REG, 1),
+			new binary_op(code::codetype::ADD, binary_op::value_type::VALUE, 1),
+			new reg_op(code::codetype::SWITCH_REG, 0),
+			new code(code::codetype::PUSH_RES),
 #ifndef PUSH_RES_REMOVES
-				new code(code::codetype::REMOVE_DATA),
+			new code(code::codetype::REMOVE_DATA),
 #endif
-			})
 		}),
 		{ { 8, 21, 13, 1, 14, 19, 3, 1, 14, 20, 19, 15, 12, 22, 5, 20, 8, 9, 19, 19, 15, 2, 5, 20, 20, 5, 18, 19, 20, 15, 16, 8, 5, 18, 5 } },
 		{ 8, 30, 44, 46, 61, 81, 85, 87, 102, 123, 143, 159, 172, 195, 201, 222, 231, 241, 261, 281, 297, 300,
