@@ -22,6 +22,24 @@ This script counts characters in data variable, replace the string assigned to d
 
 This script will find all occurences of characters inside string and will print them in a table. It will ask you for data and string at runtime.
 
+### wys_test.py
+
+This scripts is for testing keys/methods on data. For configuring this script, take a look at the lines with
+
+```python
+test_methods = [humanscantsolvethis_decrypt]
+autotest_keys = ["DLIHCREHTONMAITUBREHTOMYMSIEHS"]
+test_modifications = [pass_mod, reverse_mod]
+def is_message(msg):
+	return "passed; "in msg # "DATA(" in msg
+```
+
+There you can add/change methods, keys, modifications and message filter. It will ask you for more keys at runtime, use "EXIT" to end the script.
+
 ### algo_bruteforce
 
 Check out [it's own readme :)](algo_bruteforce/README.md)
+
+### ab_v2
+
+It has no readme :/

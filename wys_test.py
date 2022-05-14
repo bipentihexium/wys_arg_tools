@@ -51,8 +51,9 @@ def test_key(key):
 	for method in test_methods:
 		for key_mod in test_modifications:
 			for data_mod in test_modifications:
+				unmodified_res = method(data_mod(data), key_mod(key))
 				for result_mod in test_modifications:
-					res = result_mod(method(data_mod(data), key_mod(key)))
+					res = result_mod(unmodified_res)
 					if is_message(res):
 						print("--------------------- MESSAGE ------------------------")
 						print(res)
