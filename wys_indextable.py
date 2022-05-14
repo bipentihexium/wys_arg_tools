@@ -26,10 +26,18 @@ OTHER DEALINGS IN THE SOFTWARE.
 import sys
 
 def printIndices(data, string, key=lambda n:n):
+	keys = [("", 0)]
 	indices = []
 	for char in string:
 		# find all occurences of char in data
 		indices.append([i for i, c in enumerate(data) if c == char])
+	for i in range(len(string)):
+		ii = indices[i]
+		for j, k in reversed(list(enumerate(keys))):
+			opts = [x for x in ii if k[1] < x and x - k[1] < 27]
+			keys.pop(j)
+			for o in opts:
+				keys.append((k[0]+chr(64+o-k[1]), o))
 	# pad " " lists inside indices to make the 2d array rectangular
 	ilen = max([len(x) for x in indices])
 	for i in indices:
@@ -49,6 +57,9 @@ def printIndices(data, string, key=lambda n:n):
 			else:
 				print(" " * max_index_width, end=" ")
 		print()
+	print(" ------------------------------------------------ ")
+	for i in keys:
+		print(i)
 def findWord(data, string, key):
 	indices = []
 	for char in string:
