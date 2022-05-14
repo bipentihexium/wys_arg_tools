@@ -26,7 +26,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 import sys
 
 def printIndices(data, string, key=lambda n:n):
-	keys = [("", 0)]
+	keys = [("", i) for i in range(300)]
 	indices = []
 	for char in string:
 		# find all occurences of char in data
@@ -37,7 +37,16 @@ def printIndices(data, string, key=lambda n:n):
 			opts = [x for x in ii if k[1] < x and x - k[1] < 27]
 			keys.pop(j)
 			for o in opts:
-				keys.append((k[0]+chr(64+o-k[1]), o))
+				nk = k[0]+chr(64+o-k[1])
+				if len(nk) > 2 and nk[-3] == nk[-2] and nk[-2] == nk[-1]:
+					continue
+				if len(nk) > 6:
+					for vowel in "AEIOUY":
+						if vowel in nk[-6:]:
+							break
+					else:
+						continue
+				keys.append((nk, o))
 	# pad " " lists inside indices to make the 2d array rectangular
 	ilen = max([len(x) for x in indices])
 	for i in indices:
@@ -59,7 +68,7 @@ def printIndices(data, string, key=lambda n:n):
 		print()
 	print(" ------------------------------------------------ ")
 	for i in keys:
-		print(i)
+		print(i[0], end="; ")
 def findWord(data, string, key):
 	indices = []
 	for char in string:
