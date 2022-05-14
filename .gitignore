@@ -13,3 +13,4 @@ algo_bruteforce_algos.hpp
 ab_out.txt
 *__pycache__*
 */build/
+out*.txt

@@ -34,15 +34,13 @@ def dontbother17_decrypt(data, n=17):
 		data = data[:index] + data[index+1:]
 	return result
 def dontbother17_encrypt(data, n=17):
-	index = -1
+	index = 0
 	result = "-" * len(data)
+	places = [i for i in range(len(result))]
 	for char in data:
-		skip = n
-		while skip >= 0:
-			index = (index + 1) % len(data)
-			if result[index] == "-":
-				skip -= 1
-		result = result[:index] + char + result[index+1:]
+		index = (index + n) % len(places)
+		result = result[:places[index]] + char + result[places[index]+1:]
+		del places[index]
 	return result
 def humanscantsolvethis_decrypt(data, key):
 	key = [ord(c)-64 for c in key]
@@ -58,19 +56,17 @@ def humanscantsolvethis_decrypt(data, key):
 def humanscantsolvethis_encrypt(data, key):
 	key = [ord(c)-64 for c in key]
 	keyindex = 0
-	index = -1
+	index = 0
 	result = "-" * len(data)
+	places = [i for i in range(len(result))]
 	for char in data:
-		skip = key[keyindex]
-		while skip >= 0:
-			index = (index + 1) % len(data)
-			if result[index] == "-":
-				skip -= 1
+		index = (index + key[keyindex]) % len(places)
 		keyindex = (keyindex + 1) % len(key)
-		result = result[:index] + char + result[index+1:]
+		result = result[:places[index]] + char + result[places[index]+1:]
+		del places[index]
 	return result
-def sheismymother_decrypt(data, key, key2):
-	return data
+def sheismymother_decrypt(data, key): #, key2):
+	return humanscantsolvethis_decrypt(data, key)
 
 """
 text1 = "hello my little ai friend; keep this file safe; it will help you to understand your purpose one day; transmitted through human brain; encryption method: DONTBOTHER17; DATA(Nw;:OPxPo st;AEp fbwpe  idIosEtn TnipeMp H ui;zcE ntcrATsHrhUtxHRW   CCsoo( reEMantTtOafStNOBxaIEtARorYATHa trOBuQtx(NCPshtMUt:NpsvLdA aSeNIrUeeAee rsALs|iCeNhEss;apTbtiA;stlAaer)t tOL7P t: s  NotA SsTttdeE' WL kTv puLDSifANr7oiReiS aeytforoMfctt)dlHOsA n;slDRWYdp rtDssLUS)t;SIkC; ac;oteiVH Wi jfidlR; 7udsRE s uDEtoE|lSeT;LcVTlHCSaAd( hnI  zorkHIcpSEeCoAecenEe UyIlNeot;t Tc eEA  KISKi  H t sDxsttn;MhSUi' KAORNtxotTeAE O spAAeOe ets l OCgBt AetbTeHm)ao|iRIiElt YaDnhtBTlhCGeSwTGbn ncLyFthyO N xdTCDeirnyhstAU T(:SOEs lyTEjMsePup lstkRnnpyndUieIe)rF fr6SttTaHfI;Ne Oh:pAc TiMenE s h)esLsbs roOll VcnwLTO;nhKTsnePmUN;UusHdusDt l B Ho72EyMNuRoy znm dwEs IEiAxtteCrwee MeRen ;iB OstnAtL(NroEtwe| (t:se hyniEdr;iKsnt Ee;ooeSoEdug iu Rd H ddCaLSPC ADiiAYA)"
@@ -102,7 +98,25 @@ def try_wl(method, range, *args, **kw):
 			if "DATA(" in text and text.split(' ')[0] and text.split(' ')[0] in wl:
 				print(f"<<<<<<<<<<<<<< {' '.join([str(v) for k, v in kw.items()])} {'; '.join([str(k)+'-'+str(v) for k, v in kw.items()])} {i} >>>>>>>>>>>>>>>>>>")
 				print(text)
-print(sheismymother_decrypt(data3, key3, "HUMANSCANTSOLVETHISSOBETTERSTOPHERE"))
-keys = ["DLIHCREHTONMAITUBREHTOMYMSIEHS", "STEPMOM", "STEPMOTHER", "STEPSON", "STEPDAUGHTER", "HEISMYCHILDBUTIMNOTHISMOTHER", "SHEISMYCHILDBUTIMNOTHERMOTHER", "HUMANSCANTSOLVETHISSOBETTERSTOPHERE", "NATURE"]
+print(sheismymother_decrypt(data3, key3))
+keys = ["DLIHCREHTONMAITUBREHTOMYMSIEHS", "STEPMOM", "STEPMOTHER", "STEPSON", "STEPDAUGHTER", "HEISMYCHILDBUTIMNOTHISMOTHER",\
+	"SHEISMYCHILDBUTIMNOTHERMOTHER", "HUMANSCANTSOLVETHISSOBETTERSTOPHERE", "NATURE", "MAMA", "MAMASQUID", "MOTHERSQUID",\
+	"UNICORN","AMELIA","LUCY","SHELLY","MOTHERNATURE"]
 print("===========================================================================================================")
-try_wl("sheismymother_decrypt(data3[::-1] if kw['2'] else data3, kw['0'][::-1] if kw['3'] else kw['0'], kw['1'][::-1] if i else kw['1'])", keys, keys, [False, True], [False, True], [False, True])
+try_wl("sheismymother_decrypt(data3[::-1] if kw['1'] else data3, kw['0'][::-1] if i else kw['0'])", keys, [False, True], [False, True])
+"""print("===========================================================================================================>>")
+for w in wl:
+	d = humanscantsolvethis_decrypt(data3, w.upper())
+	if "DATA(" in d:
+		print(w.upper(), d)
+	d = humanscantsolvethis_decrypt(data3, w.upper()[::-1])
+	if "DATA(" in d:
+		print(w.upper()[::-1], d)
+	d = humanscantsolvethis_decrypt(data3[::-1], w.upper())
+	if "DATA(" in d:
+		print(w.upper(), d)
+	d = humanscantsolvethis_decrypt(data3[::-1], w.upper()[::-1])
+	if "DATA(" in d:
+		print(w.upper()[::-1], d)"""
+#print("===========================================================================================================")
+#try_wl("sheismymother_decrypt(data3[::-1] if kw['2'] else data3, kw['0'][::-1] if kw['3'] else kw['0'], kw['1'][::-1] if i else kw['1'])", keys, keys, [False, True], [False, True], [False, True])
