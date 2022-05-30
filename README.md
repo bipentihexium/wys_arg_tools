@@ -2,6 +2,19 @@
 
 Warning: WYS spoilers ahead :)
 
+- [WYS "ARG" tools](#wys-arg-tools)
+	- [What is this?](#what-is-this)
+	- [How to use?](#how-to-use)
+		- [wys_freq.py](#wys_freqpy)
+		- [wys_indextable.py](#wys_indextablepy)
+		- [wys_test.py](#wys_testpy)
+		- [wys_lib.py](#wys_libpy)
+		- [wys_playground.py](#wys_playgroundpy)
+		- [algo_bruteforce](#algo_bruteforce)
+		- [ab_v2](#ab_v2)
+	- [deprecated, but with historical significance](#deprecated-but-with-historical-significance)
+		- [wys_decrypt.py (replaced by wys_lib.py and wys_playground.py)](#wys_decryptpy-replaced-by-wys_libpy-and-wys_playgroundpy)
+
 ## What is this?
 
 There is a game called "Will you snail?" (WYS) by Jonas Tyroller. If you go to the Squid's presentation room after fixing him, there is some binary, which turned out to be a puzzle, and is being solved on [WYS Discord (\#WYS binary decrypting (read pinned))](https://discord.gg/6Kk2FUHmgf). For more information look at the [doc](https://docs.google.com/document/d/1e_nOhSkTh9cchh8n5yDadvf-pnoi8CBZnHwZE0dsbcI/edit#).
