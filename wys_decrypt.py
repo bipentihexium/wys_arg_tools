@@ -78,8 +78,10 @@ text3 = humanscantsolvethis_decrypt(data2, key2)
 key3 = text3[len("second test passed; next test: "):len("second test passed; next test: DLIHCREHTONMAITUBREHTOMYMSIEHS")]
 data3 = text3[len("second test passed; next test: DLIHCREHTONMAITUBREHTOMYMSIEHS; DATA("):-1]
 """
-key3 = "DLIHCREHTONMAITUBREHTOMYMSIEHS"
+key3 = "EILLE"
 data3 = "AtniotoMK;hHLt hOT(NSCCiMs  aEeMifpCesul)t: su|'yhlRtsW ;tFpb7t actt lbA  L|c  Ar:SlihA7Eof kh rK;LSPrfdswdrBrHekblUytasxKsnc 7uAROslOyELt SSUC;G Amu snOaACtrutyreebN;TPx thNIteelset;seis;  drs  nDdEpdltueUc And o c dyS7tdTlwFcA TItiePoA:(slpr(ltefKaIeeR  EdN;AvtetEE psottTCTEaCoAa IyYfsnouotsbUti sAkSetL;iui hNpnedped nIhcetx ;ttAeN lsytTnhKtD EeiaexRELityHU'Uux )e UMVr NVhtYiHc  rj Blu;Oe rN e pdsYNHIDo6NeS: D OOAlnn aC TC f So RPoGMsntsan EI LtE anoOiEeP    wDThxdt;CLp)eoEHo arS;wrwgiABeRzwAsue evirjOotiimo;L L( NEwros|oIpNiWeisoin;AiOAit2EQnyUlzsR TWRn rfCAeBEO ks PTW in|sngscthezHt eD)"
+key4 = "PROCESSINGPOWER"
+data4 = "IvTuitn tat  eHenoEi pgvi IATf nAOiM pLl ssyGnelnu l(Eeo seIthHNc;YARsL oeeoEilnBst( elth dylarxtlSAPa YbSpNR'UrslCPth;B LiyROsoMpsF SrasCIssn KNEALhATih o  atowrstzCnisuhcAHKAm  ecIREftNsUMiNnan HeosirhHSs;AdtuuNpodpEo;pey r6T )rs(isg tyAi;sse;tFeCtutEj Soewuoe tMNR B Sedcl C KxeeCOxai; tnitLlLy tetncU OO ijwEiC:b7O;eUithx VOodAr )Tu xbsc:onD Nn tpsot KSeo;ae)DMEw2z tf EyfotdanrAeetwu7dIeB ;mnh:bA slu t WL ketAtlDnk;rNlU ILWeW7 iiDwUlnrTeEiolttdYT OtwEeDbUe i h HNfrAfc dVQdk ArzTOLarA if kye; tN sTLys oTd"
 #"""
 
 try:
@@ -99,9 +101,10 @@ def try_wl(method, range, *args, **kw):
 				print(f"<<<<<<<<<<<<<< {' '.join([str(v) for k, v in kw.items()])} {'; '.join([str(k)+'-'+str(v) for k, v in kw.items()])} {i} >>>>>>>>>>>>>>>>>>")
 				print(text)
 print(sheismymother_decrypt(data3, key3))
-keys = ["DLIHCREHTONMAITUBREHTOMYMSIEHS", "STEPMOM", "STEPMOTHER", "STEPSON", "STEPDAUGHTER", "HEISMYCHILDBUTIMNOTHISMOTHER",\
-	"SHEISMYCHILDBUTIMNOTHERMOTHER", "HUMANSCANTSOLVETHISSOBETTERSTOPHERE", "NATURE", "MAMA", "MAMASQUID", "MOTHERSQUID",\
-	"UNICORN","AMELIA","LUCY","SHELLY","MOTHERNATURE"]
+keys = [#"DLIHCREHTONMAITUBREHTOMYMSIEHS", "STEPMOM", "STEPMOTHER", "STEPSON", "STEPDAUGHTER", "HEISMYCHILDBUTIMNOTHISMOTHER",\
+	#"SHEISMYCHILDBUTIMNOTHERMOTHER", "HUMANSCANTSOLVETHISSOBETTERSTOPHERE", "NATURE", "MAMA", "MAMASQUID", "MOTHERSQUID",\
+	#"UNICORN","AMELIA","LUCY","SHELLY","MOTHERNATURE"
+	]
 print("===========================================================================================================")
 try_wl("sheismymother_decrypt(data3[::-1] if kw['1'] else data3, kw['0'][::-1] if i else kw['0'])", keys, [False, True], [False, True])
 """print("===========================================================================================================>>")

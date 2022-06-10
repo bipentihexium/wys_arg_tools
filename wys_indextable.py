@@ -24,9 +24,10 @@ OTHER DEALINGS IN THE SOFTWARE.
 """
 
 import sys
+from wys_lib import data4
 
-def printIndices(data, string, key=lambda n:n):
-	keys = [("", i) for i in range(300)]
+def printIndices(data, string, key=lambda n:n, genkeys=False):
+	keys = [("", i) for i in range(200 if genkeys else 0)]
 	indices = []
 	for char in string:
 		# find all occurences of char in data
@@ -40,12 +41,12 @@ def printIndices(data, string, key=lambda n:n):
 				nk = k[0]+chr(64+o-k[1])
 				if len(nk) > 2 and nk[-3] == nk[-2] and nk[-2] == nk[-1]:
 					continue
-				if len(nk) > 6:
-					for vowel in "AEIOUY":
-						if vowel in nk[-6:]:
-							break
-					else:
-						continue
+				#if len(nk) > 6:
+				#	for vowel in "AEIOUY":
+				#		if vowel in nk[-6:]:
+				#			break
+				#	else:
+				#		continue
 				keys.append((nk, o))
 	# pad " " lists inside indices to make the 2d array rectangular
 	ilen = max([len(x) for x in indices])
@@ -83,17 +84,18 @@ def findWord(data, string, key):
 	dfs(indices, key)
 
 if __name__ == "__main__":
-	data = "AtniotoMK;hHLt hOT(NSCCiMs  aEeMifpCesul)t: su|'yhlRtsW ;tFpb7t actt lbA  L|c  Ar:SlihA7Eof kh rK;LSPrfdswdrBrHekblUytasxKsnc 7uAROslOyELt SSUC;G Amu snOaACtrutyreebN;TPx thNIteelset;seis;  drs  nDdEpdltueUc And o c dyS7tdTlwFcA TItiePoA:(slpr(ltefKaIeeR  EdN;AvtetEE psottTCTEaCoAa IyYfsnouotsbUti sAkSetL;iui hNpnedped nIhcetx ;ttAeN lsytTnhKtD EeiaexRELityHU'Uux )e UMVr NVhtYiHc  rj Blu;Oe rN e pdsYNHIDo6NeS: D OOAlnn aC TC f So RPoGMsntsan EI LtE anoOiEeP    wDThxdt;CLp)eoEHo arS;wrwgiABeRzwAsue evirjOotiimo;L L( NEwros|oIpNiWeisoin;AiOAit2EQnyUlzsR TWRn rfCAeBEO ks PTW in|sngscthezHt eD)"
-	datainput = input("Data (default lvl3 data)>")
+	data = data4
+	datainput = input("Data (default lvl4 data)>")
 	if datainput:
 		data = datainput
 	string = input("String you want to find >")
+	genkeys = False
 	if len(sys.argv) > 1:
 		if sys.argv[1] == "usekey":
 			key = input("Key function >")
-			printIndices(data, string, key=eval(key))
+			printIndices(data, string, key=eval(key), genkeys)
 			sys.exit(0)
 		elif sys.argv[1] == "index1": # indices start at 1 instead of 0
-			printIndices(data, string, key=lambda n: n+1)
+			printIndices(data, string, key=lambda n: n+1, genkeys)
 			sys.exit(0)
 	printIndices(data, string)
