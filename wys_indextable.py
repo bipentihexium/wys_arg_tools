@@ -27,7 +27,7 @@ import sys
 from wys_lib import data4
 
 def printIndices(data, string, key=lambda n:n, genkeys=False):
-	keys = [("", i) for i in range(200 if genkeys else 0)]
+	keys = [("", i) for i in range(300 if genkeys else 0)]
 	indices = []
 	for char in string:
 		# find all occurences of char in data
@@ -89,7 +89,7 @@ if __name__ == "__main__":
 	if datainput:
 		data = datainput
 	string = input("String you want to find >")
-	genkeys = False
+	genkeys = True
 	if len(sys.argv) > 1:
 		if sys.argv[1] == "usekey":
 			key = input("Key function >")
@@ -98,4 +98,4 @@ if __name__ == "__main__":
 		elif sys.argv[1] == "index1": # indices start at 1 instead of 0
 			printIndices(data, string, lambda n: n+1, genkeys)
 			sys.exit(0)
-	printIndices(data, string)
+	printIndices(data, string, lambda n:n, genkeys)
