@@ -35,10 +35,10 @@ def printIndices(data, string, key=lambda n:n, genkeys=False):
 	for i in range(len(string)):
 		ii = indices[i]
 		for j, k in reversed(list(enumerate(keys))):
-			opts = [x for x in ii if k[1] <= x and x - k[1] < 26]
+			opts = [x for x in ii if x - k[1] > 1 and x - k[1] < 28]
 			keys.pop(j)
 			for o in opts:
-				nk = k[0]+chr(64+o-k[1]-1)
+				nk = k[0]+chr(63+o-k[1])
 				if len(nk) > 2 and nk[-3] == nk[-2] and nk[-2] == nk[-1]:
 					continue
 				#if len(nk) > 6:
