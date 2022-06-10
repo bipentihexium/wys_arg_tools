@@ -93,9 +93,9 @@ if __name__ == "__main__":
 	if len(sys.argv) > 1:
 		if sys.argv[1] == "usekey":
 			key = input("Key function >")
-			printIndices(data, string, key=eval(key), genkeys)
+			printIndices(data, string, eval(key), genkeys)
 			sys.exit(0)
 		elif sys.argv[1] == "index1": # indices start at 1 instead of 0
-			printIndices(data, string, key=lambda n: n+1, genkeys)
+			printIndices(data, string, lambda n: n+1, genkeys)
 			sys.exit(0)
 	printIndices(data, string)
