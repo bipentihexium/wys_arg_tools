@@ -38,7 +38,7 @@ extern "C" {
 #endif
 
 void removechar(char *arr, unsigned int len, unsigned int i) {
-	char *end = arr + len;
+	char *end = arr + len - 1;
 	for (char *it = arr + i; it != end; it++) {
 		*it = it[1];
 	}
