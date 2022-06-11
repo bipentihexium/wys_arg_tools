@@ -14,3 +14,4 @@ ab_out.txt
 *__pycache__*
 */build/
 out*.txt
+*.so

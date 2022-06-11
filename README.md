@@ -8,7 +8,7 @@ Warning: WYS spoilers ahead :)
 		- [wys_freq.py](#wys_freqpy)
 		- [wys_indextable.py](#wys_indextablepy)
 		- [wys_test.py](#wys_testpy)
-		- [wys_lib.py](#wys_libpy)
+		- [wys_lib.py and wys_lib.c](#wys_libpy-and-wys_libc)
 		- [wys_playground.py](#wys_playgroundpy)
 		- [algo_bruteforce](#algo_bruteforce)
 		- [ab_v2](#ab_v2)
@@ -46,10 +46,11 @@ def is_message(msg):
 
 There you can add/change methods, keys, modifications and message filter. It will ask you for more keys at runtime, use "EXIT" to end the script.
 
-### wys_lib.py
+### wys_lib.py and wys_lib.c
 
-It's a python module containing methods used to decrypt/encrypt previous levels as well as texts and data, there is also a bit of stuff for working with premutations.
+`wys_lib.py` is a python module containing methods used to decrypt/encrypt previous levels as well as texts and data, there is also a bit of stuff for working with premutations.
 Use it as any other python module - just import it and then use it.
+`wys_lib.c` is an optional part of it. If you have a c/c++ compiler, compile it into c_wys_lib.so (on UNIX) or c_wys_lib.dll (on Windows). `wys_lib.py` will load it and use the c functions instead of the python ones. `wys_lib.py` will also "complain" when the .so/.dll file is not found.
 
 ### wys_playground.py
 

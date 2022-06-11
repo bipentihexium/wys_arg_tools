@@ -205,3 +205,44 @@ def humanscantsolvethis_keys_from_condition(data:str, cond, length:int, offsets=
 #
 # stuff for experiments:
 #
+
+#
+# load so/dll for faster execution if avaliable
+#
+import ctypes
+import platform
+import sys
+
+c_wys_lib_path = "./c_wys_lib.dll" if platform.system() == "Windows" else "./c_wys_lib.so"
+try:
+	c_wys_lib = ctypes.cdll.LoadLibrary(c_wys_lib_path)
+except OSError:
+	c_wys_lib = None
+	sys.stderr.write("Could not find " + c_wys_lib_path + ". Using Python implementations...")
+if c_wys_lib is not None:
+	def cl1_decrypt(data:str, n:int=17) -> str:
+		databuff = ctypes.create_string_buffer(data.encode("ascii"), len(data))
+		outbuff = ctypes.create_string_buffer(len(data))
+		c_wys_lib.dontbother17_decrypt(databuff, len(data), outbuff, n)
+		return outbuff.raw.decode("ascii")
+	def cl1_encrypt(data:str, n:int=17) -> str:
+		databuff = ctypes.create_string_buffer(data.encode("ascii"), len(data))
+		outbuff = ctypes.create_string_buffer(len(data))
+		c_wys_lib.dontbother17_encrypt(databuff, len(data), outbuff, n)
+		return outbuff.raw.decode("ascii")
+	def cl2_decrypt(data:str, key:str="HUMANSCANTSOLVETHISSOBETTERSTOPHERE") -> str:
+		databuff = ctypes.create_string_buffer(data.encode("ascii"), len(data))
+		keybuff = (ctypes.c_char * len(key))(*key.encode("ascii"))
+		outbuff = ctypes.create_string_buffer(len(data))
+		c_wys_lib.humanscantsolvethis_decrypt(databuff, len(data), keybuff, len(key), outbuff)
+		return outbuff.raw.decode("ascii")
+	def cl2_encrypt(data:str, key:str="HUMANSCANTSOLVETHISSOBETTERSTOPHERE") -> str:
+		databuff = ctypes.create_string_buffer(data.encode("ascii"), len(data))
+		keybuff = (ctypes.c_char * len(key))(*key.encode("ascii"))
+		outbuff = ctypes.create_string_buffer(len(data))
+		c_wys_lib.humanscantsolvethis_encrypt(databuff, len(data), keybuff, len(key), outbuff)
+		return outbuff.raw.decode("ascii")
+	dontbother17_decrypt = cl1_decrypt
+	dontbother17_encrypt = cl1_encrypt
+	humanscantsolvethis_decrypt = cl2_decrypt
+	humanscantsolvethis_encrypt = cl2_encrypt
