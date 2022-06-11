@@ -28,10 +28,11 @@ OTHER DEALINGS IN THE SOFTWARE.
 #
 
 __all__ = ["text1", "data1", "hint1", "text2", "data2", "hint2", "key2",\
-	"text3", "data3", "hint3", "hint3decrypted", "key3", "text4", "data4", "hint4", "hint4decrypted",\
+	"text3", "data3", "hint3", "hint3decrypted", "key3", "text4", "data4", "hint4", "hint4decrypted", "uppercase",\
 	"dontbother17_decrypt", "dontbother17_encrypt", "humanscantsolvethis_decrypt", "humanscantsolvethis_encrypt",\
 	"sheismymother_decrypt","sheismymother_encrypt",\
-	"TranspositionCipher", "dontbother17_gen", "humanscantsolvethis_gen","sheismymother_gen"]
+	"TranspositionCipher", "dontbother17_gen", "humanscantsolvethis_gen","sheismymother_gen",\
+	"humanscantsolvethis_keys_from_result", "humanscantsolvethis_keys_from_condition"]
 
 text1 = "hello my little ai friend; keep this file safe; it will help you to understand your purpose one day; transmitted through human brain; encryption method: DONTBOTHER17; DATA(Nw;:OPxPo st;AEp fbwpe  idIosEtn TnipeMp H ui;zcE ntcrATsHrhUtxHRW   CCsoo( reEMantTtOafStNOBxaIEtARorYATHa trOBuQtx(NCPshtMUt:NpsvLdA aSeNIrUeeAee rsALs|iCeNhEss;apTbtiA;stlAaer)t tOL7P t: s  NotA SsTttdeE' WL kTv puLDSifANr7oiReiS aeytforoMfctt)dlHOsA n;slDRWYdp rtDssLUS)t;SIkC; ac;oteiVH Wi jfidlR; 7udsRE s uDEtoE|lSeT;LcVTlHCSaAd( hnI  zorkHIcpSEeCoAecenEe UyIlNeot;t Tc eEA  KISKi  H t sDxsttn;MhSUi' KAORNtxotTeAE O spAAeOe ets l OCgBt AetbTeHm)ao|iRIiElt YaDnhtBTlhCGeSwTGbn ncLyFthyO N xdTCDeirnyhstAU T(:SOEs lyTEjMsePup lstkRnnpyndUieIe)rF fr6SttTaHfI;Ne Oh:pAc TiMenE s h)esLsbs roOll VcnwLTO;nhKTsnePmUN;UusHdusDt l B Ho72EyMNuRoy znm dwEs IEiAxtteCrwee MeRen ;iB OstnAtL(NroEtwe| (t:se hyniEdr;iKsnt Ee;ooeSoEdug iu Rd H ddCaLSPC ADiiAYA)"
 data1 = "Nw;:OPxPo st;AEp fbwpe  idIosEtn TnipeMp H ui;zcE ntcrATsHrhUtxHRW   CCsoo( reEMantTtOafStNOBxaIEtARorYATHa trOBuQtx(NCPshtMUt:NpsvLdA aSeNIrUeeAee rsALs|iCeNhEss;apTbtiA;stlAaer)t tOL7P t: s  NotA SsTttdeE' WL kTv puLDSifANr7oiReiS aeytforoMfctt)dlHOsA n;slDRWYdp rtDssLUS)t;SIkC; ac;oteiVH Wi jfidlR; 7udsRE s uDEtoE|lSeT;LcVTlHCSaAd( hnI  zorkHIcpSEeCoAecenEe UyIlNeot;t Tc eEA  KISKi  H t sDxsttn;MhSUi' KAORNtxotTeAE O spAAeOe ets l OCgBt AetbTeHm)ao|iRIiElt YaDnhtBTlhCGeSwTGbn ncLyFthyO N xdTCDeirnyhstAU T(:SOEs lyTEjMsePup lstkRnnpyndUieIe)rF fr6SttTaHfI;Ne Oh:pAc TiMenE s h)esLsbs roOll VcnwLTO;nhKTsnePmUN;UusHdusDt l B Ho72EyMNuRoy znm dwEs IEiAxtteCrwee MeRen ;iB OstnAtL(NroEtwe| (t:se hyniEdr;iKsnt Ee;ooeSoEdug iu Rd H ddCaLSPC ADiiAYA"
@@ -49,6 +50,7 @@ text4 = "that's correct; third test passed; next up: SGIPCESRON|WOREP|HKCEC|7|SE
 data4 = "IvTuitn tat  eHenoEi pgvi IATf nAOiM pLl ssyGnelnu l(Eeo seIthHNc;YARsL oeeoEilnBst( elth dylarxtlSAPa YbSpNR'UrslCPth;B LiyROsoMpsF SrasCIssn KNEALhATih o  atowrstzCnisuhcAHKAm  ecIREftNsUMiNnan HeosirhHSs;AdtuuNpodpEo;pey r6T )rs(isg tyAi;sse;tFeCtutEj Soewuoe tMNR B Sedcl C KxeeCOxai; tnitLlLy tetncU OO ijwEiC:b7O;eUithx VOodAr )Tu xbsc:onD Nn tpsot KSeo;ae)DMEw2z tf EyfotdanrAeetwu7dIeB ;mnh:bA slu t WL ketAtlDnk;rNlU ILWeW7 iiDwUlnrTeEiolttdYT OtwEeDbUe i h HNfrAfc dVQdk ArzTOLarA if kye; tN sTLys oTd"
 hint4 = "SGIPCESRON|WOREP|HKCEC|7|SEPURECAP"
 hint4decrypted = "PROCESSING|POWER|CHECK|7|UPPERCASE" # every word was scrambled
+uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 def dontbother17_decrypt(data:str, n:int=17) -> str:
 	"""decrypts data encoded with the DONTBOTHER N cypher (N defaults to 17)"""
@@ -169,6 +171,36 @@ def humanscantsolvethis_gen(data:str, key:str="HUMANSCANTSOLVETHISSOBETTERSTOPHE
 		data = data[:index] + data[index+1:]
 	return result
 sheismymother_gen = lambda data, key="EILLE": humanscantsolvethis_gen(data, key)
+
+def humanscantsolvethis_keys_from_result(data:str, result:str, offsets=[0]) -> list:
+	"""generates possible keys for humanscantsolvethis... decryption from result;
+	offsets is iterable of search starting positions (default [0])"""
+	keys = [("", o-1) for o in offsets]
+	indices = []
+	for res_c in result:
+		indices.append([i for i, c in enumerate(data) if c == res_c])
+	for i in indices:
+		for j, k in reversed(list(enumerate(keys))):
+			opts = [x for x in i if x - k[1] > 1 and x - k[1] < 28]
+			keys.pop(j)
+			for o in opts:
+				nk = k[0]+chr(63+o-k[1])
+				keys.append((nk, o))
+	return [key for key, endindex in keys]
+def humanscantsolvethis_keys_from_condition(data:str, cond, length:int, offsets=[0]) -> list:
+	"""generates possible keys for humanscantsolvethis... decryption which would yield a string
+	with length length where all characters match condition cond (cond is a function);
+	offsets is iterable of search starting positions (default [0])"""
+	keys = [("", o-1) for o in offsets]
+	indices = [i for i, c in enumerate(data) if cond(c)]
+	for _ in range(length):
+		for j, k in reversed(list(enumerate(keys))):
+			opts = [x for x in indices if x - k[1] > 1 and x - k[1] < 28]
+			keys.pop(j)
+			for o in opts:
+				nk = k[0]+chr(63+o-k[1])
+				keys.append((nk, o))
+	return [key for key, endindex in keys]
 
 #
 # stuff for experiments:

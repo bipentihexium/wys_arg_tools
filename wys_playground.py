@@ -38,3 +38,6 @@ from wys_lib import *
 #tc3 = TranspositionCipher(data3, sheismymother_gen)
 #print(tc3.apply())
 #print((~tc3).apply_on(tc3.apply()))
+
+#print(" ".join(humanscantsolvethis_keys_from_result(data2, "second")))
+#print(" ".join(humanscantsolvethis_keys_from_result(data3, "that's")))
