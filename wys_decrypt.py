@@ -1,3 +1,7 @@
+#
+# USE wys_lib.py AND wys_playground.py NOW! THIS SCRIPT WILL NOT BE UPDATED!
+#
+
 """
 Copyright (c) 2022 bipentihexium
 
