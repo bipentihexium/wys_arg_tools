@@ -218,7 +218,7 @@ try:
 	c_wys_lib = ctypes.cdll.LoadLibrary(c_wys_lib_path)
 except OSError:
 	c_wys_lib = None
-	sys.stderr.write("Could not find " + c_wys_lib_path + ". Using Python implementations...")
+	sys.stderr.write("Could not find " + c_wys_lib_path + ". Using Python implementations...\n")
 if c_wys_lib is not None:
 	def cl1_decrypt(data:str, n:int=17) -> str:
 		databuff = ctypes.create_string_buffer(data.encode("ascii"), len(data))
@@ -246,3 +246,63 @@ if c_wys_lib is not None:
 	dontbother17_encrypt = cl1_encrypt
 	humanscantsolvethis_decrypt = cl2_decrypt
 	humanscantsolvethis_encrypt = cl2_encrypt
+	class cTCipher:
+		def __init__(self, data_or_inner, generator=None, *args) -> None:
+			if type(data_or_inner) == str: # data
+				data = data_or_inner
+				databuff = (ctypes.c_char * len(data))(*data.encode("ascii"))
+				self.inner = c_wys_lib.TranspositionCipher_new(databuff, len(data))
+				perm = self.identity_perm() if generator is None else generator(data, *args)
+				permbuff = (ctypes.c_uint * len(perm))(*perm)
+				c_wys_lib.TranspositionCipher_setPerm(self.inner, permbuff, len(perm))
+			else:
+				self.inner = data_or_inner
+		@classmethod
+		def from_perm(cls, data, perm):
+			return cls(data, lambda _, perm=perm: perm)
+		def __del__(self):
+			c_wys_lib.TranspositionCipher_delete(self.inner)
+		@property
+		def data(self):
+			buff = ctypes.create_string_buffer(self.len)
+			c_wys_lib.TranspositionCipher_data(self.inner, buff)
+			return buff.raw.decode("ascii")
+		@property
+		def len(self):
+			return c_wys_lib.TranspositionCipher_len(self.inner)
+		@property
+		def perm(self):
+			buff = (ctypes.c_uint * self.len)()
+			c_wys_lib.TranspositionCipher_perm(self.inner, buff)
+			return buff[:]
+		def identity_perm(self):
+			return list(range(self.len))
+		def identity(self):
+			return TranspositionCipher(self.data)
+		def __mul__(self, cipher_b):
+			return cTCipher(c_wys_lib.TranspositionCipher_mul(self.inner, cipher_b.inner))
+		def __pow__(self, n:int):
+			return cTCipher(c_wys_lib.TranspositionCipher_pow(self.inner, n))
+		def __invert__(self):
+			return cTCipher(c_wys_lib.TranspositionCipher_inv(self.inner))
+		def apply_on(self, arr):
+			l = self.len
+			if len(arr) != l:
+				raise ValueError(f"length of arr ({len(arr)}) must be equal to size of the transposition ({l})")
+			if type(arr) == str:
+				inbuff = (ctypes.c_char * l)(*arr.encode("ascii"))
+				outbuff = ctypes.create_string_buffer(l)
+				c_wys_lib.TranspositionCipher_apply_char(self.inner, inbuff, l, outbuff)
+				return outbuff.raw.decode("ascii")
+			elif type(arr[0]) == int:
+				inbuff = (ctypes.c_int * l)(*arr)
+				outbuff = (ctypes.c_int * l)()
+				c_wys_lib.TranspositionCipher_apply_int(self.inner, inbuff, l, outbuff)
+				return list(outbuff)
+			else:
+				return [arr[p] for p in self.perm]
+		def apply(self):
+			outbuff = ctypes.create_string_buffer(self.len)
+			c_wys_lib.TranspositionCipher_apply(self.inner, outbuff)
+			return outbuff.raw.decode("ascii")
+	TranspositionCipher = cTCipher
