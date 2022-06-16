@@ -48,6 +48,6 @@ std::string resolve_inverse_permutation(const std::string &data, const std::vect
 }
 
 template<typename T, size_t N>
-constexpr size_t static_arrlen(T (&arr)[N]) { return N; }
+constexpr size_t static_arrlen(T (&arr)[N]) { (void)arr; return N; }
 
 #endif
