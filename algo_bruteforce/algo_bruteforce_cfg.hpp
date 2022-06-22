@@ -39,7 +39,7 @@ constexpr unsigned search_speed_precision = 3;
 // string that is searched for when checking if result is message
 constexpr const char *message_string = "; DATA(";
 // put your data here
-constexpr const char data[] = "IvTuitn tat  eHenoEi pgvi IATf nAOiM pLl ssyGnelnu l(Eeo seIthHNc;YARsL oeeoEilnBst( elth dylarxtlSAPa YbSpNR'UrslCPth;B LiyROsoMpsF SrasCIssn KNEALhATih o  atowrstzCnisuhcAHKAm  ecIREftNsUMiNnan HeosirhHSs;AdtuuNpodpEo;pey r6T )rs(isg tyAi;sse;tFeCtutEj Soewuoe tMNR B Sedcl C KxeeCOxai; tnitLlLy tetncU OO ijwEiC:b7O;eUithx VOodAr )Tu xbsc:onD Nn tpsot KSeo;ae)DMEw2z tf EyfotdanrAeetwu7dIeB ;mnh:bA slu t WL ketAtlDnk;rNlU ILWeW7 iiDwUlnrTeEiolttdYT OtwEeDbUe i h HNfrAfc dVQdk ArzTOLarA if kye; tN sTLys oTd";
+constexpr const char data[] = "e;R cNsRtOs;;eE OanYti tieSCC Kd eNTT oxShNsteL emeif;pnlO Ka u TnAtTfdLe UTI;o irf lr EuytwHtte onirruEoLh yeltztl  OHSinpstUwA As L AfiMiNBlwsvnRrpTeEM:tyiIaNNsLUeeOTidPon  p DQt; i6inbADNeNFHAloltA BoieScney MI;EoEn otnoBDkWosB udtL lAs OEn yCogVrHnbsAwt  YrpOed s;oaIilteb7klaauL hsiW loFdUen))YsLOU aE  R tsIAdWes;esA tltopAyhr:bKyt( e hMiePaHAacShiRzSA rSsv umteTswe(Mn fVDNUtUwOtshrACh";
 // uncomment this line if you want to check for ')' at the end when checking message
 //#define CHECK_CLOSING_PAREN
 // put name of used algorithm here  vvvvvvvv (keep other stuff!!)
@@ -59,7 +59,8 @@ constexpr const char *keys[] = {
 	//"HUMANSCANTSOLVETHISSOBETTERSTOPHERE", "EREHPOTSRETTEBOSSIHTEVLOSTNACSNAMUH",
 	//"STEPMOTHER", "REHTOMPETS", "MATERFAMILIAS", "SAILIMAFRETAM", "MATRIARCH", "HCRAIRTAM",
 	//"ELLIE", "EILLE",
-	"PROCESSINGPOWER", "PROCESSINGPOWERCHECK"
+	//"PROCESSINGPOWER", "PROCESSINGPOWERCHECK",
+	"NOKEYHERE"
 };
 
 /*
