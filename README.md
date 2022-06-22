@@ -12,8 +12,6 @@ Warning: WYS spoilers ahead :)
 		- [wys_test.py](#wys_testpy)
 		- [algo_bruteforce](#algo_bruteforce)
 		- [ab_v2](#ab_v2)
-	- [deprecated, but with historical significance](#deprecated-but-with-historical-significance)
-		- [wys_decrypt.py (replaced by wys_lib.py and wys_playground.py)](#wys_decryptpy-replaced-by-wys_libpy-and-wys_playgroundpy)
 
 ## What is this?
 
@@ -93,11 +91,4 @@ Check out [it's own readme :)](algo_bruteforce/README.md)
 
 ### ab_v2
 
-It has no readme :/
-
-## deprecated, but with historical significance
-
-### wys_decrypt.py (replaced by wys_lib.py and wys_playground.py)
-
-DO NOT USE THIS NOW (IT'S OUTDATED)! USE wys_lib.py AND wys_playground.py!
-This is a script containing functions to solve the solved part of the cypher. You can modify it to test new ideas, hopefully getting to next level! Use it as any other python3 script.
+Check out [it's own readme :)](ab_v2/README.md) (warning! It's unfinished!)
