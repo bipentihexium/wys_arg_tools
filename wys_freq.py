@@ -24,9 +24,9 @@ OTHER DEALINGS IN THE SOFTWARE.
 """
 
 from collections import Counter
-from wys_lib import data4
+from wys_lib import data5
 
-data = data4
+data = data5
 counter = Counter(data)
 counts = [(counter[char], char) for char in counter]
 for count, char in reversed(sorted(counts)):

@@ -24,9 +24,9 @@ OTHER DEALINGS IN THE SOFTWARE.
 """
 
 import os
-from wys_lib import data3, key3, data4, humanscantsolvethis_decrypt, humanscantsolvethis_encrypt
+from wys_lib import data5, humanscantsolvethis_decrypt, humanscantsolvethis_encrypt
 
-data = data4#data3
+data = data5#data3
 
 print_all = False
 

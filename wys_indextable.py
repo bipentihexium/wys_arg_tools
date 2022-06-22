@@ -24,7 +24,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 """
 
 import sys
-from wys_lib import data4
+from wys_lib import data5
 
 def printIndices(data, string, key=lambda n:n, genkeys=False):
 	keys = [("", i) for i in range(200 if genkeys else 0)]
@@ -84,8 +84,8 @@ def findWord(data, string, key):
 	dfs(indices, key)
 
 if __name__ == "__main__":
-	data = data4
-	datainput = input("Data (default lvl4 data)>")
+	data = data5
+	datainput = input("Data (default lvl5 data)>")
 	if datainput:
 		data = datainput
 	string = input("String you want to find >")
