@@ -24,9 +24,9 @@ OTHER DEALINGS IN THE SOFTWARE.
 """
 
 import os
-from wys_lib import data5, humanscantsolvethis_decrypt, humanscantsolvethis_encrypt
+from wys_lib import data3, humanscantsolvethis_decrypt, humanscantsolvethis_encrypt
 
-data = data5#data3
+data = data3
 
 print_all = False
 
@@ -34,7 +34,7 @@ pass_mod = lambda x: x
 reverse_mod = lambda x: x[::-1]
 
 test_methods = [humanscantsolvethis_decrypt, humanscantsolvethis_encrypt]
-autotest_keys = []#key3]
+autotest_keys = []
 test_modifications = [pass_mod, reverse_mod]
 
 def is_message(msg):
