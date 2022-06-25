@@ -19,7 +19,7 @@ There is a lot of tools. The main part is [wys arg decrypting toolkit :)](wys_li
 
 ### scripts
 
-Scripts include [frequency analyzer](scripts/wys_freq.py) ([doc](scripts/doc/wys_freq.md)), [key tester](scripts/wys_test.py) ([doc](scripts/doc/wys_test.md)) and [index table with L2 key finder](scripts/wys_indextable.py) ([doc](scripts/doc/wys_indextable.md)).
+Scripts include [key tester](scripts/wys_test.py) ([doc](scripts/doc/wys_test.md)) and [index table with L2 key finder](scripts/wys_indextable.py) ([doc](scripts/doc/wys_indextable.md)).
 
 ### algorithm bruteforcers
 
