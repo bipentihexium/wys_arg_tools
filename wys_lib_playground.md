@@ -80,17 +80,29 @@ and here are some examples of what you can do with `wys_lib` :)
 ```python
 from wys_lib import *
 
-for i in range(len(data5)): # bruteforce of all dontbothers on data5
+# bruteforce of all dontbothers on data5
+for i in range(len(data5)):
 	d = dontbother17_decrypt(data5, i)
 	if "DATA" in d:
 		print(d)
 
-# TODO: add more examples :D
+# key bruteforcer - length 5, data3
+# it's python, so it's slow; but it should be viable with the help of wys_lib.c (it's doc us just under this)
+alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+for a in alpha:
+	for b in alpha:
+		for c in alpha:
+			for d in alpha:
+				for e in alpha:
+					decrypted = humanscantsolvethis_decrypt(data3, a+b+c+d+e)
+					if "; DATA(" in decrypted:
+						print(a+b+c+d+e, decrypted)
 ```
 
 ## wys_lib.c
 
 `wys_lib.c` is an **optional** part of `wys_lib.py`. If you have a c/c++ compiler, compile it into `c_wys_lib.so` (on UNIX) or `c_wys_lib.dll` (on Windows). `wys_lib.py` will load it and use the c functions instead of the python ones. `wys_lib.py` will also "complain" when the .so/.dll file is not found. It should make most functions faster, but not all functions are implemented in `wys_lib.c` for now.
+
 For compilation on Linux with `g++`, I'd recommend this command: `g++ -Wall -O3 -march=native -o c_wys_lib.so wys_lib.c`. (`-Wall` - all warning levels; `-O3` - optimize for speed; `-march=native` - compile for current architecture (makes the `.so` less cross-platform, but faster); `-o` - output file)
 
 ## all data
@@ -147,7 +159,26 @@ Note that the power operation is pretty fast - it uses the square and multiply a
 
 ## L2A key finding
 
-TODO: L2A key finding doc
+Sometimes we want to try to reverse engineer the keys for the L2 algorithm. There is a function which does that too. `humanscantsolvethis_keys_from_result` takes data and a result, and it will return list of keys which will give you result at the beginning when L2A is used on data. There's also a third argument - offsets. It's an iterable of offsets at which it should start the search; it defaults to `[0]`, which is the beggining mentioned before.
+
+```python
+from wys_lib import *
+
+print(humanscantsolvethis_keys_from_result(data2, "second"))
+# prints ['UHMANA', 'UHMANS', 'UILANA', 'UILANS', 'UQDANA', 'UQDANS', 'HDKJXA', 'HDKJXS', 'HDKTNA', 'HDKTNS', 'HUMANA', 'HUMANS', 'HVLANA', 'HVLANS']
+
+print(humanscantsolvethis_keys_from_result(data4, "just kidd", [305]))
+# prints ['DYOYOYMOY', 'DYOYOYNNY', 'DYOYOYXDY', 'DYOYOQUOY', 'DYOYOQVNY', 'DYOYWQMOY', 'DYOYWQNNY', 'DYOYWQXDY', 'DYOYWIUOY', 'DYOYWIVNY', 'DYORVYMOY', 'DYORVYNNY', 'DYORVYXDY', 'DYORVQUOY', 'DYORVQVNY']
+```
+Note that it can't handle wrapping around the data.
+
+`humanscantsolvethis_keys_from_condition` does the same thing, but instead of result, it gets a condition (function taking a character and returning `True`/`False`) and length. It tends to make a lot of keys, so I'll not put the result here.
+
+```python
+from wys_lib import *
+
+print(humanscantsolvethis_keys_from_condition(data2, lambda c: c.isupper(), 4, range(10))) # all keys which produce 4-letter long uppercase starting at any index between 0 and 9 (both inclusive)
+```
 
 ## bonus functions
 
