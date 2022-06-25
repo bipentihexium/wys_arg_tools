@@ -26,7 +26,9 @@ Scripts include [key tester](scripts/wys_test.py) ([doc](scripts/doc/wys_test.md
 ### algorithm bruteforcers
 
 There are two algortihm bruteforces, niether of them has good documentation :/. Each one has it's own folder and readme.
+
 [algo_bruteforce's readme](algo_bruteforce/README.md) - algo_bruteforce tries random expressions and checks if it makes a valid message.
+
 [ab_v2's readme](ab_v2/README.md) - ab_v2 tries random instructions and checks if it makes a valid message.
 
 ### key bruteforcers
