@@ -80,7 +80,7 @@ and here are some examples of what you can do with `wys_lib` :)
 ```python
 from wys_lib import *
 
-# bruteforce of all dontbothers on data5
+# bruteforce of all(?) dontbothers on data5
 for i in range(len(data5)):
 	d = dontbother17_decrypt(data5, i)
 	if "DATA" in d:

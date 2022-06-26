@@ -5,7 +5,7 @@ For each key you give it (at runtime + everyting in `autotest_keys` variable), i
 If you use `PRINTALL` as a key, it'll show you every message it got (there's a lot of them). If you use `EXIT`, the script will terminate.
 example input/output (with level3 data, `[humanscantsolvethis_decrypt, humanscantsolvethis_encrypt]` as `test_methods` and `[pass_mod, reverse_mod]` as `test_modifications`):
 ```
-$ python3 wys_test.md
+$ python3 wys_test.py
 Could not find ./c_wys_lib.so. Using Python implementations...
 another key (auto-capitalized)>amelia
 Didn't find anything with key AMELIA

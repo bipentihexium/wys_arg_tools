@@ -45,8 +45,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 		//"HUMANSCANTSOLVETHISSOBETTERSTOPHERE",// "EREHPOTSRETTEBOSSIHTEVLOSTNACSNAMUH",
 		//"STEPMOTHER".
 		//"ELLIE", "EILLE",
-		//"XDYOYOY",
-		"NOKEYHERE"
+		"XDYOYOY",
+		"INTELLIGENCECHECK"
 	};
 
 // ----------------------------------- OUTPUT ------------------------------------------------------
@@ -61,7 +61,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 #define SEARCH_INFO_FORMAT "\t{searched: " << std::fixed << std::setprecision(1) << (searched/1000000.f) << "m; "\
 		"time: " << std::fixed << std::setprecision(3) << secs_elapsed << "s; "\
 		"average search speed: " << std::fixed << std::setprecision(4) << (searched/secs_elapsed/(1000000/60)) << "m/min}"
-	constexpr long int search_count_for_info = 100000;
+	constexpr long int search_count_for_info = 1000000;
 
 // ----------------------------------- GLOBAL ------------------------------------------------------
 	// count of keys algorithm uses - minimum 0, recommended maximum 2
@@ -69,7 +69,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 // ----------------------------------- SEARCH ------------------------------------------------------
 	// if string contains this, then it's considered message
-	constexpr const char *message_identifier = "test passed; ";
+	constexpr const char *message_identifier = "; DATA(";
 	// thread count - usually used CPU cores
 	constexpr size_t no_threads = 3;
 	// filter algorithms?
@@ -77,7 +77,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 // ----------------------------------- MACHINE -----------------------------------------------------
 	// count of instructions that are run before the algorithm is terminated
-	constexpr int max_instrs = 2000; // start is enough :)
+	constexpr int max_instrs = 5000;
 	// number of registers a machine has; should be at least KEY_COUNT + 1, or else some keys will be unused
 	constexpr int register_count = 5;
 	// remove character from data on PUSH_RES instruction?
