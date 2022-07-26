@@ -222,8 +222,31 @@ def frequency(data:str):
 #
 
 #
+# copy python impls:
+#
+
+py_dontbother17_decrypt = dontbother17_decrypt
+py_dontbother17_encrypt = dontbother17_encrypt
+py_dontbother17_gen = dontbother17_gen
+py_humanscantsolvethis_decrypt = humanscantsolvethis_decrypt
+py_humanscantsolvethis_encrypt = humanscantsolvethis_encrypt
+py_humanscantsolvethis_gen = humanscantsolvethis_gen
+py_sheismymother_decrypt = sheismymother_decrypt
+py_sheismymother_encrypt = sheismymother_encrypt
+py_sheismymother_gen = sheismymother_gen
+py_processingpowercheck_decrypt = processingpowercheck_decrypt
+py_processingpowercheck_encrypt = processingpowercheck_encrypt
+py_processingpowercheck_gen = processingpowercheck_gen
+py_TranspositionCipher = TranspositionCipher
+py_humanscantsolvethis_keys_from_result = humanscantsolvethis_keys_from_result
+py_humanscantsolvethis_keys_from_condition = humanscantsolvethis_keys_from_condition
+py_mask_data = mask_data
+py_frequency = frequency
+
+#
 # load so/dll for faster execution if avaliable
 #
+
 import ctypes
 import platform
 import sys

@@ -13,7 +13,7 @@ The core of this toolkit (and also of some scripts) is the `wys_lib`. It's made 
 
 ## Quick start
 
-If you know python (at least a bit) this section should be enough to get you started with main utilities in `wys_lib`. (note: you can try these examples in `wys_playground.py`, which already includes `wys_lib` import :)  )
+If you know python (at least a bit) this section should be enough to get you started with main utilities in `wys_lib`. (note: you can try these examples in `wys_playground.py`, which already includes `wys_lib` import :)  ) I'd recommend trying out all the stuff here yourself, you'll learn how to use it better :)  .
 The most basic things `wys_lib` provides is the data we got at various levels:
 
 ```python
@@ -80,7 +80,7 @@ and here are some examples of what you can do with `wys_lib` :)
 ```python
 from wys_lib import *
 
-# bruteforce of all(?) dontbothers on data5
+# bruteforce of dontbothers on data5 up to dontbother len(data5)
 for i in range(len(data5)):
 	d = dontbother17_decrypt(data5, i)
 	if "DATA" in d:
@@ -103,7 +103,9 @@ for a in alpha:
 
 `wys_lib.c` is an **optional** part of `wys_lib.py`. If you have a c/c++ compiler, compile it into `c_wys_lib.so` (on UNIX) or `c_wys_lib.dll` (on Windows). `wys_lib.py` will load it and use the c functions instead of the python ones. `wys_lib.py` will also "complain" when the .so/.dll file is not found. It should make most functions faster, but not all functions are implemented in `wys_lib.c` for now.
 
-For compilation on Linux with `g++`, I'd recommend this command: `g++ -Wall -O3 -march=native -o c_wys_lib.so wys_lib.c`. (`-Wall` - all warning levels; `-O3` - optimize for speed; `-march=native` - compile for current architecture (makes the `.so` less cross-platform, but faster); `-o` - output file)
+For compilation on Linux with `g++`, I'd recommend this command: `g++ -Wall -O3 -march=native -o c_wys_lib.so wys_lib.c`. (`-Wall` - all warning levels; `-O3` - optimize for speed; `-march=native` - compile for current architecture (makes the `.so` less cross-platform, but faster); `-o` - output file).
+
+When you are using `c_wys_lib.so`/`c_wys_lob.dll`, you can still use the python versions of those functions (for example when you need to do dontbother with really big numbers) by prefixing the name of the function with `py_` (like `py_dontbother17_decrypt(data5, 90321812343133523243524123901375431232)`). Note that those funtions are not imported by `from wys_lib import *`, so you need to import them explicitly or through importing `wys_lib` directly.
 
 ## all data
 
