@@ -4,6 +4,7 @@ Warning: WYS spoilers ahead :)
 
 - [WYS "ARG" tools](#wys-arg-tools)
 	- [What is this?](#what-is-this)
+	- [Setup](#setup)
 	- [How to use?](#how-to-use)
 		- [scripts](#scripts)
 		- [algorithm bruteforcers](#algorithm-bruteforcers)
@@ -14,6 +15,10 @@ Warning: WYS spoilers ahead :)
 There is a game called "Will you snail?" (WYS) by Jonas Tyroller. If you go to the Squid's presentation room after fixing him, there is some binary, which turned out to be a puzzle, and is being solved on [WYS Discord (\#WYS binary decrypting (read pinned))](https://discord.gg/6Kk2FUHmgf). For more information look at the [doc](https://docs.google.com/document/d/1e_nOhSkTh9cchh8n5yDadvf-pnoi8CBZnHwZE0dsbcI/edit#).
 
 **[wys arg decrypting toolkit](wys_lib_playground.md)** is probably the part that you came here for - the other stuff are small scripts and bruteforcers.
+
+## Setup
+
+Take a look at the [setup manual](setup.md) :) .
 
 ## How to use?
 
