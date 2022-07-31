@@ -173,9 +173,11 @@ print(humanscantsolvethis_keys_from_result(data2, "second"))
 print(humanscantsolvethis_keys_from_result(data4, "just kidd", [305]))
 # prints ['DYOYOYMOY', 'DYOYOYNNY', 'DYOYOYXDY', 'DYOYOQUOY', 'DYOYOQVNY', 'DYOYWQMOY', 'DYOYWQNNY', 'DYOYWQXDY', 'DYOYWIUOY', 'DYOYWIVNY', 'DYORVYMOY', 'DYORVYNNY', 'DYORVYXDY', 'DYORVQUOY', 'DYORVQVNY']
 ```
-Note that it can't handle wrapping around the data.
 
-`humanscantsolvethis_keys_from_condition` does the same thing, but instead of result, it gets a condition (function taking a character and returning `True`/`False`) and length. It tends to make a lot of keys, so I'll not put the result here.
+It can handle wrapping around now :) .
+
+TODO: document this part better
+When it cannot find anything, it returns a tuple like this: `(last_letter_index, [(key1, position1), ...])`.
 
 ```python
 from wys_lib import *

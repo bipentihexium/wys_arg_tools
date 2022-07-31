@@ -188,16 +188,28 @@ def humanscantsolvethis_keys_from_result(data:str, result:str, offsets=[0]) -> l
 	indices = []
 	for res_c in result:
 		indices.append([i for i, c in enumerate(data) if c == res_c])
-	for i in indices:
+	pk = keys
+	for chari, i in enumerate(indices):
 		for j, k in reversed(list(enumerate(keys))):
-			opts = [x for x in i if x - k[1] > 1 and x - k[1] < 28]
+			opts = [x for x in i if x - k[1] > 1 and x - k[1] < 29]
+			optswrap = [x for x in i if x - k[1] + len(data) > 1 and x - k[1] + len(data) < 29]
 			keys.pop(j)
 			for o in opts:
 				nk = k[0]+chr(63+o-k[1])
 				keys.append((nk, o))
+			for o in optswrap:
+				nk = k[0]+chr(63+o-k[1]+len(data))
+				keys.append((nk, o))
+		if len(result) > 15:
+			sys.stderr.write(f"[key rev]: {chari+1} letters done ({result[chari]}); {len(keys)} results\n")
+		if not keys and pk:
+			return (chari, pk)
+		pk = list(keys)
 	return [key for key, endindex in keys]
 def humanscantsolvethis_keys_from_condition(data:str, cond, length:int, offsets=[0]) -> list:
-	"""generates possible keys for humanscantsolvethis... decryption which would yield a string
+	"""DEPRECATED
+	
+	generates possible keys for humanscantsolvethis... decryption which would yield a string
 	with length length where all characters match condition cond (cond is a function);
 	offsets is iterable of search starting positions (default [0])"""
 	keys = [("", o-1) for o in offsets]
