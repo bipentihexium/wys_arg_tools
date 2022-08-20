@@ -37,13 +37,13 @@ constexpr unsigned search_time_precision = 2;
 // precision of "...avg search speed Nm/s"
 constexpr unsigned search_speed_precision = 3;
 // string that is searched for when checking if result is message
-constexpr const char *message_string = "; DATA(";
+constexpr const char *message_string = "passed;";
 // put your data here
 constexpr const char data[] = "e;R cNsRtOs;;eE OanYti tieSCC Kd eNTT oxShNsteL emeif;pnlO Ka u TnAtTfdLe UTI;o irf lr EuytwHtte onirruEoLh yeltztl  OHSinpstUwA As L AfiMiNBlwsvnRrpTeEM:tyiIaNNsLUeeOTidPon  p DQt; i6inbADNeNFHAloltA BoieScney MI;EoEn otnoBDkWosB udtL lAs OEn yCogVrHnbsAwt  YrpOed s;oaIilteb7klaauL hsiW loFdUen))YsLOU aE  R tsIAdWes;esA tltopAyhr:bKyt( e hMiePaHAacShiRzSA rSsv umteTswe(Mn fVDNUtUwOtshrACh";
 // uncomment this line if you want to check for ')' at the end when checking message
 //#define CHECK_CLOSING_PAREN
 // put name of used algorithm here  vvvvvvvv (keep other stuff!!)
-#define ALGO_INDET_GEN(F) F ## _ ## two_key
+#define ALGO_INDET_GEN(F) F ## _ ## modk
 // comment this line if you want to disable expression optimizations (I reccommend to keep this uncommented)
 #define EXPR_OPTI
 // uncomment this line of you want to save output to a file; you can also set the filename here
@@ -51,8 +51,8 @@ constexpr const char data[] = "e;R cNsRtOs;;eE OanYti tieSCC Kd eNTT oxShNsteL e
 // how much "algos searched" prints are skipped in file (when 10, then writes every 10th "algos searched" into the file)
 constexpr int filesearchprintmodifier = 50;
 
-// comment the line below to disable usage of two kys (will speed up the search if the generator uses only 1 jey)
-#define USE_TWO_KEYS
+// comment the line below to disable usage of two kys (will speed up the search if the generator uses only 1 key)
+//#define USE_TWO_KEYS
 // put your keys here
 constexpr const char *keys[] = {
 	//"DLIHCREHTONMAITUBREHTOMYMSIEHS", "SHEISMYMOTHERBUTIAMNOTHERCHILD",
@@ -60,7 +60,7 @@ constexpr const char *keys[] = {
 	//"STEPMOTHER", "REHTOMPETS", "MATERFAMILIAS", "SAILIMAFRETAM", "MATRIARCH", "HCRAIRTAM",
 	//"ELLIE", "EILLE",
 	//"PROCESSINGPOWER", "PROCESSINGPOWERCHECK",
-	"NOKEYHERE"
+	"XDYOYOY", "INTELLIGENCECHECK"
 };
 
 /*

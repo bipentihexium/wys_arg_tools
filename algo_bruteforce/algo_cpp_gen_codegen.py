@@ -160,6 +160,7 @@ class CodeGenerator:
 		self.macros["extern"]["% ii i"] = "($0%$1)"
 		self.macros["extern"]["+ ii i"] = "($0+$1)"
 		self.macros["extern"]["+ ci c"] = "($0+$1)"
+		self.macros["extern"]["+ ic i"] = "($0+$1)"
 		self.macros["extern"]["+ ss s"] = "($0+$1)"
 		self.macros["extern"]["- ii i"] = "($0-$1)"
 		self.macros["extern"]["- ci c"] = "($0-$1)"
@@ -184,6 +185,7 @@ class CodeGenerator:
 		self.macros["extern"][", ss s"] = "($0,$1)"
 		self.macros["extern"]["len s i"] = None
 		self.macros["extern"]["rot0 ii v"] = None
+		self.macros["chr"]["ctor i c"] = None
 		self.macros["str"]["ctor i s"] = None
 		self.macros["str"]["ctor ic s"] = None
 		self.macros["str"]["[] i c"] = "($0[$1])"
@@ -227,7 +229,7 @@ class CodeGenerator:
 					argtypes += self.get_expr_type(a)
 				if expr.emacro.etype == "identifier":
 					if expr.emacro.eidentifier in self.types:
-						return {"int":"i","char":"c","str":"s"}[expr.emacro.eidentifier]
+						return {"int":"i","chr":"c","str":"s"}[expr.emacro.eidentifier]
 					return self.findmacro(self.macros["extern"], expr.emacro.eidentifier, argtypes)[-1]
 				elif expr.emacro.etype == ".":
 					pt = self.get_expr_type(expr.emacro.eparent)
@@ -479,6 +481,7 @@ class CppCodeGenerator(CodeGenerator):
 		self.macros["extern"]["unarynot i i"] = "(!$0)"
 		self.macros["extern"]["len s i"] = "($0.size())"
 		self.macros["extern"]["rot0 ii v"] = "$0 %= $1; if ($0 < 0) $0 += $1"
+		self.macros["chr"]["ctor i c"] = "static_cast<char>($0)"
 		self.macros["str"]["ctor i s"] = "reserving_string_constr($0)"
 		self.macros["str"]["ctor ic s"] = "std::string($0, $1)"
 		self.macros["str"]["[] i c"] = "($0[$1])"
@@ -509,6 +512,7 @@ class PyCodeGenerator(CodeGenerator):
 		self.macros["extern"][", ss s"] = "($0,$1)[-1]"
 		self.macros["extern"]["len s i"] = "len($0)"
 		self.macros["extern"]["rot0 ii v"] = "$0 %= $1; if $0 < 0: $0 += $1"
+		self.macros["chr"]["ctor i c"] = "chr($0)"
 		self.macros["str"]["ctor i s"] = "\\\"\\\""
 		self.macros["str"]["ctor ic s"] = "$1 * $0"
 		self.macros["str"]["del[] i v"] = "$0 = $0[:$1] + $0[$1+1:]"
