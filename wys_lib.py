@@ -35,7 +35,8 @@ __all__ = ["text1", "data1", "hint1", "text2", "data2", "hint2", "key2",\
 	"dontbother17_decrypt", "dontbother17_encrypt", "humanscantsolvethis_decrypt", "humanscantsolvethis_encrypt",\
 	"sheismymother_decrypt","sheismymother_encrypt", "processingpowercheck_decrypt","processingpowercheck_encrypt",\
 	"TranspositionCipher", "dontbother17_gen", "humanscantsolvethis_gen","sheismymother_gen", "processingpowercheck_gen",\
-	"humanscantsolvethis_keys_from_result", "humanscantsolvethis_keys_from_condition", "mask_data", "frequency"]
+	"humanscantsolvethis_keys_from_result", "humanscantsolvethis_keys_from_condition",\
+	"mask_data", "frequency", "frequency_categories", "min_remove"]
 
 text1 = "hello my little ai friend; keep this file safe; it will help you to understand your purpose one day; transmitted through human brain; encryption method: DONTBOTHER17; DATA(Nw;:OPxPo st;AEp fbwpe  idIosEtn TnipeMp H ui;zcE ntcrATsHrhUtxHRW   CCsoo( reEMantTtOafStNOBxaIEtARorYATHa trOBuQtx(NCPshtMUt:NpsvLdA aSeNIrUeeAee rsALs|iCeNhEss;apTbtiA;stlAaer)t tOL7P t: s  NotA SsTttdeE' WL kTv puLDSifANr7oiReiS aeytforoMfctt)dlHOsA n;slDRWYdp rtDssLUS)t;SIkC; ac;oteiVH Wi jfidlR; 7udsRE s uDEtoE|lSeT;LcVTlHCSaAd( hnI  zorkHIcpSEeCoAecenEe UyIlNeot;t Tc eEA  KISKi  H t sDxsttn;MhSUi' KAORNtxotTeAE O spAAeOe ets l OCgBt AetbTeHm)ao|iRIiElt YaDnhtBTlhCGeSwTGbn ncLyFthyO N xdTCDeirnyhstAU T(:SOEs lyTEjMsePup lstkRnnpyndUieIe)rF fr6SttTaHfI;Ne Oh:pAc TiMenE s h)esLsbs roOll VcnwLTO;nhKTsnePmUN;UusHdusDt l B Ho72EyMNuRoy znm dwEs IEiAxtteCrwee MeRen ;iB OstnAtL(NroEtwe| (t:se hyniEdr;iKsnt Ee;ooeSoEdug iu Rd H ddCaLSPC ADiiAYA)"
 data1 = "Nw;:OPxPo st;AEp fbwpe  idIosEtn TnipeMp H ui;zcE ntcrATsHrhUtxHRW   CCsoo( reEMantTtOafStNOBxaIEtARorYATHa trOBuQtx(NCPshtMUt:NpsvLdA aSeNIrUeeAee rsALs|iCeNhEss;apTbtiA;stlAaer)t tOL7P t: s  NotA SsTttdeE' WL kTv puLDSifANr7oiReiS aeytforoMfctt)dlHOsA n;slDRWYdp rtDssLUS)t;SIkC; ac;oteiVH Wi jfidlR; 7udsRE s uDEtoE|lSeT;LcVTlHCSaAd( hnI  zorkHIcpSEeCoAecenEe UyIlNeot;t Tc eEA  KISKi  H t sDxsttn;MhSUi' KAORNtxotTeAE O spAAeOe ets l OCgBt AetbTeHm)ao|iRIiElt YaDnhtBTlhCGeSwTGbn ncLyFthyO N xdTCDeirnyhstAU T(:SOEs lyTEjMsePup lstkRnnpyndUieIe)rF fr6SttTaHfI;Ne Oh:pAc TiMenE s h)esLsbs roOll VcnwLTO;nhKTsnePmUN;UusHdusDt l B Ho72EyMNuRoy znm dwEs IEiAxtteCrwee MeRen ;iB OstnAtL(NroEtwe| (t:se hyniEdr;iKsnt Ee;ooeSoEdug iu Rd H ddCaLSPC ADiiAYA"
@@ -222,16 +223,61 @@ def humanscantsolvethis_keys_from_condition(data:str, cond, length:int, offsets=
 				nk = k[0]+chr(63+o-k[1])
 				keys.append((nk, o))
 	return [key for key, endindex in keys]
-def mask_data(data:str, shown_chars:str, mask_char:str='.'):
+def mask_data(data:str, shown_chars:str, mask_char:str='.') -> str:
+	"""replaces all characters that aren't in shown__hars with mask_char"""
 	return "".join([c if c in shown_chars else mask_char for c in data])
-def frequency(data:str):
+def frequency(data:str) -> str:
+	"""generates a formatted string with character frequencies in data (it's the format used in the doc)"""
 	counter = Counter(sorted(data))
 	counts = [(counter[char], char) for char in counter]
 	return " ".join([('⎵' if char == ' ' else char) + "-" + str(count) for count, char in reversed(sorted(counts))])
-
-#
-# stuff for experiments:
-#
+def frequency_categories(data:str, categories:list=["abcdefghijklmnopqrstuvwxyz","ABCDEFGHIJKLMNOPQRSTUVWXYZ","0123456789","();|:,"," "],
+		category_names:list=["lower","upper","numbers","special/splitters","space"]) -> str:
+	"""generates a formatted string with character frequencies in data, but characters are clumped into categories
+	(format from doc for this, so far only in L5 - DATA properties)"""
+	result = {cat:0 for cat in categories}
+	result["*"] = 0
+	category_names.append("other")
+	for c in data:
+		for k in result:
+			if c in k:
+				result[k] += 1
+				break
+		else:
+			result["*"] += 1
+	neat_out = [category_names[i] + "-" + str(result[k]) for i, k in enumerate(result)]
+	return "\n".join(neat_out)
+def min_remove(data:str, result:str) -> int:
+	"""finds out the amount of used up characters requied in order to make the result appear for the first time
+	(note that this function can be pretty resource intensive (exponentially), use with short results, which contain nonfrequent characters)"""
+	all_indices = []
+	for resc in result:
+		all_indices.append([i for i, c in enumerate(data) if c == resc])
+	def calc_remove(path:list) -> int:
+		delta = [x-path[i-1] for i, x in list(enumerate(path))[1:]]
+		delta = [x+len(data) if x < 0 else x for x in delta]
+		rem_needed = [max(x-27, 0) for x in delta]
+		return sum(rem_needed)
+	min_remove_yet = len(data)
+	path = []
+	def search(depth:int=0):
+		nonlocal path
+		if depth >= len(all_indices) - 1:
+			nonlocal min_remove_yet
+			for i in all_indices[depth]:
+				rem = calc_remove([*path, i])
+				if rem < min_remove_yet:
+					min_remove_yet = rem
+		else:
+			for i in all_indices[depth]:
+				if i not in path:
+					path.append(i)
+					search(depth + 1)
+					path.pop()
+				if min_remove_yet == 0:
+					break # early exit
+	search()
+	return min_remove_yet
 
 #
 # copy python impls:
@@ -254,6 +300,8 @@ py_humanscantsolvethis_keys_from_result = humanscantsolvethis_keys_from_result
 py_humanscantsolvethis_keys_from_condition = humanscantsolvethis_keys_from_condition
 py_mask_data = mask_data
 py_frequency = frequency
+py_frequency_categories = frequency_categories
+py_min_remove = min_remove
 
 #
 # load so/dll for faster execution if avaliable

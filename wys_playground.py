@@ -41,3 +41,5 @@ from wys_lib import *
 
 #print(" ".join(humanscantsolvethis_keys_from_result(data2, "second")))
 #print(" ".join(humanscantsolvethis_keys_from_result(data3, "that's")))
+
+#print(frequency(data5))

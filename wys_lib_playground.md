@@ -9,7 +9,8 @@ The core of this toolkit (and also of some scripts) is the `wys_lib`. It's made 
 	- [decrypt and encrypt functions](#decrypt-and-encrypt-functions)
 	- [permutations](#permutations)
 	- [L2A key finding](#l2a-key-finding)
-	- [bonus functions](#bonus-functions)
+	- [character frequency](#character-frequency)
+	- [mask, first possible occurence](#mask-first-possible-occurence)
 
 ## Quick start
 
@@ -185,7 +186,7 @@ from wys_lib import *
 print(humanscantsolvethis_keys_from_condition(data2, lambda c: c.isupper(), 4, range(10))) # all keys which produce 4-letter long uppercase starting at any index between 0 and 9 (both inclusive)
 ```
 
-## bonus functions
+## character frequency
 
 `wys_lib` contains some utilies for getting properties of data. There is frequency function which returns counts of all characters in the string you give it; they are separated by spaces in a format `char-count`, and space is replaced by `⎵`.
 
@@ -201,6 +202,26 @@ gives
 ⎵-47 t-25 e-25 s-19 i-17 o-15 n-15 A-15 l-12 r-10 a-9 O-9 N-9 ;-9 h-8 T-8 L-8 E-8 y-7 d-7 U-7 S-7 w-6 u-6 p-6 f-5 R-5 M-5 I-5 H-5 b-4 D-4 C-4 B-4 c-3 Y-3 W-3 K-3 z-2 v-2 m-2 k-2 V-2 P-2 F-2 :-2 )-2 (-2 x-1 g-1 Q-1 7-1 6-1
 ```
 
+Sometimes it's useful to group the characters in groups - `frequency_categories(data, categories, category_names)` does that! The categories argument is a list of iterables of chars (usually list of strings), which each category contains. It's default value is `["abcdefghijklmnopqrstuvwxyz","ABCDEFGHIJKLMNOPQRSTUVWXYZ","0123456789","();|:,"," "]`. The category_names is just a name for each category (default: `["lower","upper","numbers","special/splitters","space"]`). So let's take a look at an example!
+
+```python
+from wys_lib import *
+
+print(frequency_categories(data5))
+```
+
+prints
+
+```
+lower-209
+upper-119
+numbers-2
+special/splitters-15
+space-47
+```
+
+## mask, first possible occurence
+
 There's also a `mask_data(data, shown_chars, mask_char='.')` function. It replaces all characters which are not in `shown_chars` with `mask_char`.
 
 ```python
@@ -214,3 +235,13 @@ prints
 ```
 ...................................TT...........................T.A.T......T...................................................A.A....A..............T.................T.........D.........AD.....A....A........................D............A................A..........................................................A.......A......A........(..........A........A..........T...(.....D..........A..
 ```
+
+As one can notice, you'd need to use up a pretty big chunk of the data in order to make `DATA(`. `wys_lib` actually contains a function which calculates minimum amount of used up characters needed to make a desired result - it's `min_remove(data, result)`!
+
+```python
+from wys_lib import *
+
+print(min_remove(data5, "DATA("))
+```
+
+gives you `243` - my handmade calculation I made a while ago said `244`. I might have made a little error in my calculation, but still take the result with a grain of salt :) .
