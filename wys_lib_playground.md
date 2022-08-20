@@ -244,4 +244,4 @@ from wys_lib import *
 print(min_remove(data5, "DATA("))
 ```
 
-gives you `243` - my handmade calculation I made a while ago said `244`. I might have made a little error in my calculation, but still take the result with a grain of salt :) .
+gives you `243` - my handmade calculation I made a while ago said `244`. I have probably made a little error in my calculation, but still take the result with a grain of salt :) .
