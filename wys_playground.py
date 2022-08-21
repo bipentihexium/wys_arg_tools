@@ -21,6 +21,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 """
 
 from wys_lib import *
+import wys_lib
 
 #print(dontbother17_decrypt(data1))
 #print(dontbother17_encrypt(dontbother17_decrypt(data1)))

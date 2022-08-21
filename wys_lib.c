@@ -201,6 +201,112 @@ EXPORT TranspositionCipher *TranspositionCipher_pow(TranspositionCipher *a, int 
 	}
 }
 
+
+typedef struct LinkedNode {
+	char *key;
+	unsigned int off;
+	LinkedNode *next;
+} LinkedNode;
+LinkedNode *make_linked_node(unsigned int keysize) {
+	LinkedNode *ln = (LinkedNode *)malloc(sizeof(LinkedNode));
+	ln->key = (char *)malloc(sizeof(char) * keysize);
+	memset(ln->key, 0, sizeof(char) * keysize);
+	ln->off = 0;
+	ln->next = NULL;
+	return ln;
+}
+LinkedNode *cpy_linked_node(LinkedNode *ln, unsigned int keysize) {
+	LinkedNode *ln2 = (LinkedNode *)malloc(sizeof(LinkedNode));
+	ln2->key = (char *)malloc(sizeof(char) * keysize);
+	memcpy(ln2->key, ln->key, sizeof(char) * keysize);
+	ln2->off = ln->off;
+	ln2->next = ln->next;
+	return ln2;
+}
+LinkedNode *advance_linked_node(LinkedNode *ln, unsigned int keysize, unsigned int keypos, unsigned int skip, unsigned int datalen) {
+	LinkedNode *ln2 = (LinkedNode *)malloc(sizeof(LinkedNode));
+	ln2->key = (char *)malloc(sizeof(char) * keysize);
+	memcpy(ln2->key, ln->key, sizeof(char) * keysize);
+	ln2->key[keypos] = skip + ('A'-2);
+	ln2->off = ln->off + skip % datalen;
+	ln2->next = NULL;
+	return ln2;
+}
+void delete_linked_node(LinkedNode *ln) {
+	free(ln->key);
+	free(ln);
+}
+EXPORT LinkedNode *pop_linked_node(LinkedNode *ln) {
+	LinkedNode *retval = ln->next;
+	delete_linked_node(ln);
+	return retval;
+}
+EXPORT int hasnext_linked_node(LinkedNode *ln) {
+	return ln->next != NULL;
+}
+EXPORT char *getkey_linked_node(LinkedNode *ln) {
+	return ln->key;
+}
+EXPORT unsigned int getoff_linked_node(LinkedNode *ln) {
+	return ln->off;
+}
+void delete_linked_list(LinkedNode *ln) {
+	while (ln != NULL) {
+		free(ln->key);
+		LinkedNode *next = ln->next;
+		free(ln);
+		ln = next;
+	}
+}
+LinkedNode *linked_list_deep_copy(LinkedNode *list, LinkedNode **cpy, unsigned int keysize) {
+	*cpy = cpy_linked_node(list, keysize);
+	LinkedNode *cpyit = *cpy;
+	for (LinkedNode *it = list->next; it != NULL; it = it->next) {
+		cpyit->next = cpy_linked_node(it, keysize);
+		cpyit = cpyit->next;
+	}
+	return cpyit;
+}
+EXPORT unsigned int humanscantsolvethis_keys_from_result(const char *data, unsigned int datalen, const char *result, unsigned int resultlen,
+	unsigned int *offsets, unsigned int offsetslen, LinkedNode **out) {
+	LinkedNode *list = make_linked_node(resultlen);
+	list->off = offsets[0] - 1;
+	LinkedNode *list_last = list;
+	LinkedNode *list_cpy = NULL;
+	unsigned int *offsets_end = offsets + offsetslen;
+	for (unsigned int *i = offsets + 1; i != offsets_end; i++) {
+		list_last->next = make_linked_node(resultlen);
+		list_last = list_last->next;
+		list_last->off = *i - 1;
+	}
+	unsigned int prev_gen = offsetslen;
+	for (unsigned int ri = 0; ri < resultlen; ri++) {
+		unsigned int gen = 0;
+		linked_list_deep_copy(list, &list_cpy, resultlen);
+		for (unsigned int counter = 0; counter < prev_gen; list = pop_linked_node(list), counter++) {
+			for (unsigned int skip = 2; skip <= 28; skip++) {
+				if (data[(list->off + skip) % datalen] == result[ri]) {
+					list_last->next = advance_linked_node(list, resultlen, ri, skip, datalen);
+					list_last = list_last->next;
+					gen++;
+				}
+			}
+		}
+		if (resultlen > 15) {
+			fprintf(stderr, "[key rev]: %u letters done (%c); %u results\n", ri+1, result[ri], gen);
+		}
+		if (gen == 0) {
+			delete_linked_list(list);
+			*out = list_cpy;
+			return ri;
+		}
+		prev_gen = gen;
+		delete_linked_list(list_cpy);
+	}
+	*out = list;
+	return resultlen;
+}
+
 #ifdef __cplusplus
 }
 #endif

@@ -318,6 +318,49 @@ except OSError:
 	c_wys_lib = None
 	sys.stderr.write("Could not find " + c_wys_lib_path + ". Using Python implementations...\n")
 if c_wys_lib is not None:
+	c_wys_lib.dontbother17_decrypt.argtypes = [ctypes.c_char_p, ctypes.c_uint, ctypes.c_char_p, ctypes.c_uint]
+	c_wys_lib.dontbother17_encrypt.argtypes = [ctypes.c_char_p, ctypes.c_uint, ctypes.c_char_p, ctypes.c_uint]
+	c_wys_lib.humanscantsolvethis_decrypt.argtypes = [ctypes.c_char_p, ctypes.c_uint, ctypes.c_char_p, ctypes.c_uint, ctypes.c_char_p]
+	c_wys_lib.humanscantsolvethis_encrypt.argtypes = [ctypes.c_char_p, ctypes.c_uint, ctypes.c_char_p, ctypes.c_uint, ctypes.c_char_p]
+	c_wys_lib.TranspositionCipher_new.argtypes = [ctypes.c_char_p, ctypes.c_uint]
+	c_wys_lib.TranspositionCipher_setPerm.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_uint), ctypes.c_uint]
+	c_wys_lib.TranspositionCipher_delete.argtypes = [ctypes.c_void_p]
+	c_wys_lib.TranspositionCipher_data.argtypes = [ctypes.c_void_p, ctypes.c_char_p]
+	c_wys_lib.TranspositionCipher_len.argtypes = [ctypes.c_void_p]
+	c_wys_lib.TranspositionCipher_perm.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_uint)]
+	c_wys_lib.TranspositionCipher_mul.argtypes = [ctypes.c_void_p, ctypes.c_void_p]
+	c_wys_lib.TranspositionCipher_pow.argtypes = [ctypes.c_void_p, ctypes.c_int]
+	c_wys_lib.TranspositionCipher_inv.argtypes = [ctypes.c_void_p]
+	c_wys_lib.TranspositionCipher_apply_char.argtypes = [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_uint, ctypes.c_char_p]
+	c_wys_lib.TranspositionCipher_apply_int.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_int), ctypes.c_uint, ctypes.POINTER(ctypes.c_int)]
+	c_wys_lib.TranspositionCipher_apply.argtypes = [ctypes.c_void_p, ctypes.c_char_p]
+	c_wys_lib.humanscantsolvethis_keys_from_result.argtypes = [ctypes.c_char_p, ctypes.c_uint, ctypes.c_char_p, ctypes.c_uint, ctypes.POINTER(ctypes.c_uint), ctypes.c_uint, ctypes.POINTER(ctypes.c_void_p)]
+	c_wys_lib.hasnext_linked_node.argtypes = [ctypes.c_void_p]
+	c_wys_lib.pop_linked_node.argtypes = [ctypes.c_void_p]
+	c_wys_lib.getkey_linked_node.argtypes = [ctypes.c_void_p]
+	c_wys_lib.getoff_linked_node.argtypes = [ctypes.c_void_p]
+
+	c_wys_lib.dontbother17_decrypt.restype = None
+	c_wys_lib.dontbother17_encrypt.restype = None
+	c_wys_lib.humanscantsolvethis_decrypt.restype = None
+	c_wys_lib.humanscantsolvethis_encrypt.restype = None
+	c_wys_lib.TranspositionCipher_new.restype = ctypes.c_void_p
+	c_wys_lib.TranspositionCipher_setPerm.restype = None
+	c_wys_lib.TranspositionCipher_delete.restype = None
+	c_wys_lib.TranspositionCipher_data.restype = None
+	c_wys_lib.TranspositionCipher_len.restype = ctypes.c_uint
+	c_wys_lib.TranspositionCipher_perm.restype = None
+	c_wys_lib.TranspositionCipher_mul.restype = ctypes.c_void_p
+	c_wys_lib.TranspositionCipher_pow.restype = ctypes.c_void_p
+	c_wys_lib.TranspositionCipher_inv.restype = ctypes.c_void_p
+	c_wys_lib.TranspositionCipher_apply_char.restype = None
+	c_wys_lib.TranspositionCipher_apply_int.restype = None
+	c_wys_lib.TranspositionCipher_apply.restype = None
+	c_wys_lib.humanscantsolvethis_keys_from_result.restype = ctypes.c_uint
+	c_wys_lib.hasnext_linked_node.restype = ctypes.c_int
+	c_wys_lib.pop_linked_node.restype = ctypes.c_void_p
+	c_wys_lib.getkey_linked_node.restype = ctypes.c_char_p
+	c_wys_lib.getoff_linked_node.restype = ctypes.c_uint
 	def cl1_decrypt(data:str, n:int=17) -> str:
 		databuff = ctypes.create_string_buffer(data.encode("ascii"), len(data))
 		outbuff = ctypes.create_string_buffer(len(data))
@@ -404,3 +447,28 @@ if c_wys_lib is not None:
 			c_wys_lib.TranspositionCipher_apply(self.inner, outbuff)
 			return outbuff.raw.decode("ascii")
 	TranspositionCipher = cTCipher
+	def cl2_keys_from_result(data:str, result:str, offsets=[0]) -> list:
+		if not offsets or not result or not data:
+			raise ValueError(f"any of data, result or offsets can't be empty!")
+		databuff = ctypes.create_string_buffer(data.encode("ascii"), len(data))
+		resultbuff = ctypes.create_string_buffer(result.encode("ascii"), len(result))
+		offsetsbuff = (ctypes.c_uint * len(offsets))(*offsets)
+		outbuff = ctypes.c_void_p()
+		res = c_wys_lib.humanscantsolvethis_keys_from_result(databuff, len(data), resultbuff, len(result), offsetsbuff, len(offsets), ctypes.byref(outbuff))
+		if res < len(result):
+			out = []
+			while True:
+				out.append((c_wys_lib.getkey_linked_node(outbuff).decode("ascii"), c_wys_lib.getoff_linked_node(outbuff)))
+				if c_wys_lib.hasnext_linked_node(outbuff) == 0:
+					break
+				outbuff = c_wys_lib.pop_linked_node(outbuff)
+			return (res, out)
+		else:
+			out = []
+			while True:
+				out.append(c_wys_lib.getkey_linked_node(outbuff).decode("ascii"))
+				if c_wys_lib.hasnext_linked_node(outbuff) == 0:
+					break
+				outbuff = c_wys_lib.pop_linked_node(outbuff)
+			return out
+	humanscantsolvethis_keys_from_result = cl2_keys_from_result
