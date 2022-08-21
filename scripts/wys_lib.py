@@ -23,7 +23,9 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 """
 
-# copy because the some scripts use it
+# copy because some scripts use it
+
+from collections import Counter
 
 #
 # This is a library with utilities for decrypting the ARG :)
@@ -35,7 +37,8 @@ __all__ = ["text1", "data1", "hint1", "text2", "data2", "hint2", "key2",\
 	"dontbother17_decrypt", "dontbother17_encrypt", "humanscantsolvethis_decrypt", "humanscantsolvethis_encrypt",\
 	"sheismymother_decrypt","sheismymother_encrypt", "processingpowercheck_decrypt","processingpowercheck_encrypt",\
 	"TranspositionCipher", "dontbother17_gen", "humanscantsolvethis_gen","sheismymother_gen", "processingpowercheck_gen",\
-	"humanscantsolvethis_keys_from_result", "humanscantsolvethis_keys_from_condition", "mask_data"]
+	"humanscantsolvethis_keys_from_result", "humanscantsolvethis_keys_from_condition",\
+	"mask_data", "frequency", "frequency_categories", "min_remove"]
 
 text1 = "hello my little ai friend; keep this file safe; it will help you to understand your purpose one day; transmitted through human brain; encryption method: DONTBOTHER17; DATA(Nw;:OPxPo st;AEp fbwpe  idIosEtn TnipeMp H ui;zcE ntcrATsHrhUtxHRW   CCsoo( reEMantTtOafStNOBxaIEtARorYATHa trOBuQtx(NCPshtMUt:NpsvLdA aSeNIrUeeAee rsALs|iCeNhEss;apTbtiA;stlAaer)t tOL7P t: s  NotA SsTttdeE' WL kTv puLDSifANr7oiReiS aeytforoMfctt)dlHOsA n;slDRWYdp rtDssLUS)t;SIkC; ac;oteiVH Wi jfidlR; 7udsRE s uDEtoE|lSeT;LcVTlHCSaAd( hnI  zorkHIcpSEeCoAecenEe UyIlNeot;t Tc eEA  KISKi  H t sDxsttn;MhSUi' KAORNtxotTeAE O spAAeOe ets l OCgBt AetbTeHm)ao|iRIiElt YaDnhtBTlhCGeSwTGbn ncLyFthyO N xdTCDeirnyhstAU T(:SOEs lyTEjMsePup lstkRnnpyndUieIe)rF fr6SttTaHfI;Ne Oh:pAc TiMenE s h)esLsbs roOll VcnwLTO;nhKTsnePmUN;UusHdusDt l B Ho72EyMNuRoy znm dwEs IEiAxtteCrwee MeRen ;iB OstnAtL(NroEtwe| (t:se hyniEdr;iKsnt Ee;ooeSoEdug iu Rd H ddCaLSPC ADiiAYA)"
 data1 = "Nw;:OPxPo st;AEp fbwpe  idIosEtn TnipeMp H ui;zcE ntcrATsHrhUtxHRW   CCsoo( reEMantTtOafStNOBxaIEtARorYATHa trOBuQtx(NCPshtMUt:NpsvLdA aSeNIrUeeAee rsALs|iCeNhEss;apTbtiA;stlAaer)t tOL7P t: s  NotA SsTttdeE' WL kTv puLDSifANr7oiReiS aeytforoMfctt)dlHOsA n;slDRWYdp rtDssLUS)t;SIkC; ac;oteiVH Wi jfidlR; 7udsRE s uDEtoE|lSeT;LcVTlHCSaAd( hnI  zorkHIcpSEeCoAecenEe UyIlNeot;t Tc eEA  KISKi  H t sDxsttn;MhSUi' KAORNtxotTeAE O spAAeOe ets l OCgBt AetbTeHm)ao|iRIiElt YaDnhtBTlhCGeSwTGbn ncLyFthyO N xdTCDeirnyhstAU T(:SOEs lyTEjMsePup lstkRnnpyndUieIe)rF fr6SttTaHfI;Ne Oh:pAc TiMenE s h)esLsbs roOll VcnwLTO;nhKTsnePmUN;UusHdusDt l B Ho72EyMNuRoy znm dwEs IEiAxtteCrwee MeRen ;iB OstnAtL(NroEtwe| (t:se hyniEdr;iKsnt Ee;ooeSoEdug iu Rd H ddCaLSPC ADiiAYA"
@@ -188,16 +191,28 @@ def humanscantsolvethis_keys_from_result(data:str, result:str, offsets=[0]) -> l
 	indices = []
 	for res_c in result:
 		indices.append([i for i, c in enumerate(data) if c == res_c])
-	for i in indices:
+	pk = keys
+	for chari, i in enumerate(indices):
 		for j, k in reversed(list(enumerate(keys))):
-			opts = [x for x in i if x - k[1] > 1 and x - k[1] < 28]
+			opts = [x for x in i if x - k[1] > 1 and x - k[1] < 29]
+			optswrap = [x for x in i if x - k[1] + len(data) > 1 and x - k[1] + len(data) < 29]
 			keys.pop(j)
 			for o in opts:
 				nk = k[0]+chr(63+o-k[1])
 				keys.append((nk, o))
+			for o in optswrap:
+				nk = k[0]+chr(63+o-k[1]+len(data))
+				keys.append((nk, o))
+		if len(result) > 15:
+			sys.stderr.write(f"[key rev]: {chari+1} letters done ({result[chari]}); {len(keys)} results\n")
+		if not keys and pk:
+			return (chari, pk)
+		pk = list(keys)
 	return [key for key, endindex in keys]
 def humanscantsolvethis_keys_from_condition(data:str, cond, length:int, offsets=[0]) -> list:
-	"""generates possible keys for humanscantsolvethis... decryption which would yield a string
+	"""DEPRECATED
+	
+	generates possible keys for humanscantsolvethis... decryption which would yield a string
 	with length length where all characters match condition cond (cond is a function);
 	offsets is iterable of search starting positions (default [0])"""
 	keys = [("", o-1) for o in offsets]
@@ -210,16 +225,90 @@ def humanscantsolvethis_keys_from_condition(data:str, cond, length:int, offsets=
 				nk = k[0]+chr(63+o-k[1])
 				keys.append((nk, o))
 	return [key for key, endindex in keys]
-def mask_data(data:str, shown_chars:str, mask_char:str='.'):
+def mask_data(data:str, shown_chars:str, mask_char:str='.') -> str:
+	"""replaces all characters that aren't in shown__hars with mask_char"""
 	return "".join([c if c in shown_chars else mask_char for c in data])
+def frequency(data:str) -> str:
+	"""generates a formatted string with character frequencies in data (it's the format used in the doc)"""
+	counter = Counter(sorted(data))
+	counts = [(counter[char], char) for char in counter]
+	return " ".join([('⎵' if char == ' ' else char) + "-" + str(count) for count, char in reversed(sorted(counts))])
+def frequency_categories(data:str, categories:list=["abcdefghijklmnopqrstuvwxyz","ABCDEFGHIJKLMNOPQRSTUVWXYZ","0123456789","();|:,"," "],
+		category_names:list=["lower","upper","numbers","special/splitters","space"]) -> str:
+	"""generates a formatted string with character frequencies in data, but characters are clumped into categories
+	(format from doc for this, so far only in L5 - DATA properties)"""
+	result = {cat:0 for cat in categories}
+	result["*"] = 0
+	category_names.append("other")
+	for c in data:
+		for k in result:
+			if c in k:
+				result[k] += 1
+				break
+		else:
+			result["*"] += 1
+	neat_out = [category_names[i] + "-" + str(result[k]) for i, k in enumerate(result)]
+	return "\n".join(neat_out)
+def min_remove(data:str, result:str) -> int:
+	"""finds out the amount of used up characters requied in order to make the result appear for the first time
+	(note that this function can be pretty resource intensive (exponentially), use with short results, which contain nonfrequent characters)"""
+	all_indices = []
+	for resc in result:
+		all_indices.append([i for i, c in enumerate(data) if c == resc])
+	def calc_remove(path:list) -> int:
+		delta = [x-path[i-1] for i, x in list(enumerate(path))[1:]]
+		delta = [x+len(data) if x < 0 else x for x in delta]
+		rem_needed = [max(x-27, 0) for x in delta]
+		return sum(rem_needed)
+	min_remove_yet = len(data)
+	path = []
+	def search(depth:int=0):
+		nonlocal path
+		if depth >= len(all_indices) - 1:
+			nonlocal min_remove_yet
+			for i in all_indices[depth]:
+				rem = calc_remove([*path, i])
+				if rem < min_remove_yet:
+					min_remove_yet = rem
+		else:
+			for i in all_indices[depth]:
+				if i not in path:
+					path.append(i)
+					search(depth + 1)
+					path.pop()
+				if min_remove_yet == 0:
+					break # early exit
+	search()
+	return min_remove_yet
 
 #
-# stuff for experiments:
+# copy python impls:
 #
+
+py_dontbother17_decrypt = dontbother17_decrypt
+py_dontbother17_encrypt = dontbother17_encrypt
+py_dontbother17_gen = dontbother17_gen
+py_humanscantsolvethis_decrypt = humanscantsolvethis_decrypt
+py_humanscantsolvethis_encrypt = humanscantsolvethis_encrypt
+py_humanscantsolvethis_gen = humanscantsolvethis_gen
+py_sheismymother_decrypt = sheismymother_decrypt
+py_sheismymother_encrypt = sheismymother_encrypt
+py_sheismymother_gen = sheismymother_gen
+py_processingpowercheck_decrypt = processingpowercheck_decrypt
+py_processingpowercheck_encrypt = processingpowercheck_encrypt
+py_processingpowercheck_gen = processingpowercheck_gen
+py_TranspositionCipher = TranspositionCipher
+py_humanscantsolvethis_keys_from_result = humanscantsolvethis_keys_from_result
+py_humanscantsolvethis_keys_from_condition = humanscantsolvethis_keys_from_condition
+py_mask_data = mask_data
+py_frequency = frequency
+py_frequency_categories = frequency_categories
+py_min_remove = min_remove
 
 #
 # load so/dll for faster execution if avaliable
 #
+
 import ctypes
 import platform
 import sys
@@ -231,6 +320,49 @@ except OSError:
 	c_wys_lib = None
 	sys.stderr.write("Could not find " + c_wys_lib_path + ". Using Python implementations...\n")
 if c_wys_lib is not None:
+	c_wys_lib.dontbother17_decrypt.argtypes = [ctypes.c_char_p, ctypes.c_uint, ctypes.c_char_p, ctypes.c_uint]
+	c_wys_lib.dontbother17_encrypt.argtypes = [ctypes.c_char_p, ctypes.c_uint, ctypes.c_char_p, ctypes.c_uint]
+	c_wys_lib.humanscantsolvethis_decrypt.argtypes = [ctypes.c_char_p, ctypes.c_uint, ctypes.c_char_p, ctypes.c_uint, ctypes.c_char_p]
+	c_wys_lib.humanscantsolvethis_encrypt.argtypes = [ctypes.c_char_p, ctypes.c_uint, ctypes.c_char_p, ctypes.c_uint, ctypes.c_char_p]
+	c_wys_lib.TranspositionCipher_new.argtypes = [ctypes.c_char_p, ctypes.c_uint]
+	c_wys_lib.TranspositionCipher_setPerm.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_uint), ctypes.c_uint]
+	c_wys_lib.TranspositionCipher_delete.argtypes = [ctypes.c_void_p]
+	c_wys_lib.TranspositionCipher_data.argtypes = [ctypes.c_void_p, ctypes.c_char_p]
+	c_wys_lib.TranspositionCipher_len.argtypes = [ctypes.c_void_p]
+	c_wys_lib.TranspositionCipher_perm.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_uint)]
+	c_wys_lib.TranspositionCipher_mul.argtypes = [ctypes.c_void_p, ctypes.c_void_p]
+	c_wys_lib.TranspositionCipher_pow.argtypes = [ctypes.c_void_p, ctypes.c_int]
+	c_wys_lib.TranspositionCipher_inv.argtypes = [ctypes.c_void_p]
+	c_wys_lib.TranspositionCipher_apply_char.argtypes = [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_uint, ctypes.c_char_p]
+	c_wys_lib.TranspositionCipher_apply_int.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_int), ctypes.c_uint, ctypes.POINTER(ctypes.c_int)]
+	c_wys_lib.TranspositionCipher_apply.argtypes = [ctypes.c_void_p, ctypes.c_char_p]
+	c_wys_lib.humanscantsolvethis_keys_from_result.argtypes = [ctypes.c_char_p, ctypes.c_uint, ctypes.c_char_p, ctypes.c_uint, ctypes.POINTER(ctypes.c_uint), ctypes.c_uint, ctypes.POINTER(ctypes.c_void_p)]
+	c_wys_lib.hasnext_linked_node.argtypes = [ctypes.c_void_p]
+	c_wys_lib.pop_linked_node.argtypes = [ctypes.c_void_p]
+	c_wys_lib.getkey_linked_node.argtypes = [ctypes.c_void_p]
+	c_wys_lib.getoff_linked_node.argtypes = [ctypes.c_void_p]
+
+	c_wys_lib.dontbother17_decrypt.restype = None
+	c_wys_lib.dontbother17_encrypt.restype = None
+	c_wys_lib.humanscantsolvethis_decrypt.restype = None
+	c_wys_lib.humanscantsolvethis_encrypt.restype = None
+	c_wys_lib.TranspositionCipher_new.restype = ctypes.c_void_p
+	c_wys_lib.TranspositionCipher_setPerm.restype = None
+	c_wys_lib.TranspositionCipher_delete.restype = None
+	c_wys_lib.TranspositionCipher_data.restype = None
+	c_wys_lib.TranspositionCipher_len.restype = ctypes.c_uint
+	c_wys_lib.TranspositionCipher_perm.restype = None
+	c_wys_lib.TranspositionCipher_mul.restype = ctypes.c_void_p
+	c_wys_lib.TranspositionCipher_pow.restype = ctypes.c_void_p
+	c_wys_lib.TranspositionCipher_inv.restype = ctypes.c_void_p
+	c_wys_lib.TranspositionCipher_apply_char.restype = None
+	c_wys_lib.TranspositionCipher_apply_int.restype = None
+	c_wys_lib.TranspositionCipher_apply.restype = None
+	c_wys_lib.humanscantsolvethis_keys_from_result.restype = ctypes.c_uint
+	c_wys_lib.hasnext_linked_node.restype = ctypes.c_int
+	c_wys_lib.pop_linked_node.restype = ctypes.c_void_p
+	c_wys_lib.getkey_linked_node.restype = ctypes.c_char_p
+	c_wys_lib.getoff_linked_node.restype = ctypes.c_uint
 	def cl1_decrypt(data:str, n:int=17) -> str:
 		databuff = ctypes.create_string_buffer(data.encode("ascii"), len(data))
 		outbuff = ctypes.create_string_buffer(len(data))
@@ -317,3 +449,28 @@ if c_wys_lib is not None:
 			c_wys_lib.TranspositionCipher_apply(self.inner, outbuff)
 			return outbuff.raw.decode("ascii")
 	TranspositionCipher = cTCipher
+	def cl2_keys_from_result(data:str, result:str, offsets=[0]) -> list:
+		if not offsets or not result or not data:
+			raise ValueError(f"any of data, result or offsets can't be empty!")
+		databuff = ctypes.create_string_buffer(data.encode("ascii"), len(data))
+		resultbuff = ctypes.create_string_buffer(result.encode("ascii"), len(result))
+		offsetsbuff = (ctypes.c_uint * len(offsets))(*offsets)
+		outbuff = ctypes.c_void_p()
+		res = c_wys_lib.humanscantsolvethis_keys_from_result(databuff, len(data), resultbuff, len(result), offsetsbuff, len(offsets), ctypes.byref(outbuff))
+		if res < len(result):
+			out = []
+			while True:
+				out.append((c_wys_lib.getkey_linked_node(outbuff).decode("ascii"), c_wys_lib.getoff_linked_node(outbuff)))
+				if c_wys_lib.hasnext_linked_node(outbuff) == 0:
+					break
+				outbuff = c_wys_lib.pop_linked_node(outbuff)
+			return (res, out)
+		else:
+			out = []
+			while True:
+				out.append(c_wys_lib.getkey_linked_node(outbuff).decode("ascii"))
+				if c_wys_lib.hasnext_linked_node(outbuff) == 0:
+					break
+				outbuff = c_wys_lib.pop_linked_node(outbuff)
+			return out
+	humanscantsolvethis_keys_from_result = cl2_keys_from_result
