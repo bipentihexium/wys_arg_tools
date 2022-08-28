@@ -6,11 +6,12 @@ word_list.txt
 algo_bruteforce_algos.hpp
 ab_out.txt
 *__pycache__*
-bruteforcers/ab_v2/build/*
+/bruteforcers/ab_v2/build/*
 out*.txt
 *.so
 *.dll
-bruteforcers/key_bruteforce/kbf
-bruteforcers/key_bruteforce/kbf2
-bruteforcers/key_bruteforce/key_bruteforce
-bruteforcers/key_bruteforce/key_bruteforcer
+/bruteforcers/key_bruteforce/kbf
+/bruteforcers/key_bruteforce/kbf2
+/bruteforcers/key_bruteforce/key_bruteforce
+/bruteforcers/key_bruteforce/key_bruteforcer
+/cpp/playground
