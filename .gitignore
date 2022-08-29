@@ -3,6 +3,7 @@ algo
 algo_test
 in.txt
 word_list.txt
+word_list_big.txt
 algo_bruteforce_algos.hpp
 ab_out.txt
 *__pycache__*

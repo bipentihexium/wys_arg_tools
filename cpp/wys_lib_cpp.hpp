@@ -100,9 +100,21 @@ inline std::string humanscantsolvethis_encrypt(const std::string &data, const st
 	}
 	return out;
 }
-inline std::string sheismymother_decrypt(const std::string &data, const std::string &key=key3) { return std::move(humanscantsolvethis_decrypt(data, key)); }
-inline std::string sheismymother_encrypt(const std::string &data, const std::string &key=key3) { return std::move(humanscantsolvethis_encrypt(data, key)); }
-inline std::string processingpowercheck_decrypt(const std::string &data, const std::string &key=key4) { return std::move(humanscantsolvethis_decrypt(data, key)); }
-inline std::string processingpowercheck_encrypt(const std::string &data, const std::string &key=key4) { return std::move(humanscantsolvethis_encrypt(data, key)); }
+inline std::string sheismymother_decrypt(const std::string &data, const std::string &key=key3) { return humanscantsolvethis_decrypt(data, key); }
+inline std::string sheismymother_encrypt(const std::string &data, const std::string &key=key3) { return humanscantsolvethis_encrypt(data, key); }
+inline std::string processingpowercheck_decrypt(const std::string &data, const std::string &key=key4) { return humanscantsolvethis_decrypt(data, key); }
+inline std::string processingpowercheck_encrypt(const std::string &data, const std::string &key=key4) { return humanscantsolvethis_encrypt(data, key); }
+
+inline std::string humanscantsolvethis_decrypt_partial(const std::string &data, const std::string &key=key2, unsigned int length=100) {
+	std::string datacpy(data);
+	std::string out;
+	out.reserve(datacpy.size());
+	for (unsigned int index = 0, keyindex = 0, counter = 0; counter < length && !datacpy.empty(); keyindex = (keyindex + 1) % key.size(), counter++) {
+		index = (index + key[keyindex] - 64) % datacpy.size();
+		out.push_back(datacpy[index]);
+		datacpy.erase(datacpy.begin() + index);
+	}
+	return out;
+}
 
 #endif
