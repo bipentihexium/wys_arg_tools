@@ -202,11 +202,12 @@ EXPORT TranspositionCipher *TranspositionCipher_pow(TranspositionCipher *a, int 
 }
 
 
-typedef struct LinkedNode {
+typedef struct LinkedNode LinkedNode;
+struct LinkedNode {
 	char *key;
 	unsigned int off;
 	LinkedNode *next;
-} LinkedNode;
+};
 LinkedNode *make_linked_node(unsigned int keysize) {
 	LinkedNode *ln = (LinkedNode *)malloc(sizeof(LinkedNode));
 	ln->key = (char *)malloc(sizeof(char) * keysize);
