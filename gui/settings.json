@@ -1,0 +1,23 @@
+{
+	"colors":{
+		"bg":"#17202b",
+		"fg":"#eee",
+		"border":"#4f7dab",
+		"status_bg":"#2e4257",
+		"status_fg":"#eee",
+		"menu_bg":"#2e4257",
+		"menu_fg":"#eee",
+		"active_bg":"#8bf",
+		"inactive_bg":"#26c",
+		"inactive_bg2":"#7af",
+		"keywords":"#8cf",
+		"builtinfuncs":"#ffa",
+		"wys_lib_stuff":"#aaf",
+		"data_and_key":"#faa",
+		"numbers":"#faf",
+		"strings":"#afa",
+		"comments":"#888",
+		"stdout":"#afa",
+		"stderr":"#f88"
+	}
+}
