@@ -23,7 +23,7 @@ When it detects `gcc` or `clang` and no compiled version of `wys_lib.c` is found
 
 ### Orientation in the GUI
 
-![guide image](/doc_images/orientation.png "guide image")
+![guide image](/gui/doc_images/orientation.png "guide image")
 
 Double-clicking on the things in the tree will load them into the apprpriate spots.
 
