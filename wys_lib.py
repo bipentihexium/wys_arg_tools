@@ -34,7 +34,9 @@ __all__ = ["text1", "data1", "hint1", "text2", "data2", "hint2", "key2",\
 	"text5", "data5", "hint5",\
 	"dontbother17_decrypt", "dontbother17_encrypt", "humanscantsolvethis_decrypt", "humanscantsolvethis_encrypt",\
 	"sheismymother_decrypt","sheismymother_encrypt", "processingpowercheck_decrypt","processingpowercheck_encrypt",\
+	"intelligencecheck_decrypt", "intelligencecheck_encrypt",\
 	"TranspositionCipher", "dontbother17_gen", "humanscantsolvethis_gen","sheismymother_gen", "processingpowercheck_gen",\
+	"intelligencecheck_gen",\
 	"humanscantsolvethis_keys_from_result", "humanscantsolvethis_keys_from_condition",\
 	"mask_data", "frequency", "frequency_categories", "min_remove"]
 
@@ -107,6 +109,29 @@ sheismymother_decrypt = lambda data, key="EILLE": humanscantsolvethis_decrypt(da
 sheismymother_encrypt = lambda data, key="EILLE": humanscantsolvethis_encrypt(data, key)
 processingpowercheck_decrypt = lambda data, key="XDYOYOY": humanscantsolvethis_decrypt(data, key)
 processingpowercheck_encrypt = lambda data, key="XDYOYOY": humanscantsolvethis_encrypt(data, key)
+def intelligencecheck_decrypt(data:str, key:list) -> str:
+	"""decrypts data encoded with the L5 algorithm"""
+	index = 0
+	keyindex = 0
+	result = ""
+	while data:
+		index = ((index + key[keyindex]) % len(data) + len(data)) % len(data)
+		keyindex = (keyindex + 1) % len(key)
+		result += data[index]
+		data = data[:index] + data[index+1:]
+	return result
+def intelligencecheck_encrypt(data:str, key:list) -> str:
+	"""encrypts data using the L5 algorithm"""
+	keyindex = 0
+	index = 0
+	result = "-" * len(data)
+	places = [i for i in range(len(result))]
+	for char in data:
+		index = ((index + key[keyindex]) % len(places) + len(places)) % len(places)
+		keyindex = (keyindex + 1) % len(key)
+		result = result[:places[index]] + char + result[places[index]+1:]
+		del places[index]
+	return result
 
 class TranspositionCipher:
 	"""holds a permutation of the text, has some useful utilities"""
@@ -181,6 +206,18 @@ def humanscantsolvethis_gen(data:str, key:str="HUMANSCANTSOLVETHISSOBETTERSTOPHE
 	return result
 sheismymother_gen = lambda data, key="EILLE": humanscantsolvethis_gen(data, key)
 processingpowercheck_gen = lambda data, key="XDYOYOY": humanscantsolvethis_gen(data, key)
+def intelligencecheck_gen(data:str, key:list) -> list:
+	"""generates permutation with transposition using the L5 algorithm"""
+	keyindex = 0
+	index = 0
+	data = list(range(len(data)))
+	result = []
+	while data:
+		index = ((index + key[keyindex]) % len(data) + len(data)) % len(data)
+		keyindex = (keyindex + 1) % len(key)
+		result.append(data[index])
+		data = data[:index] + data[index+1:]
+	return result
 
 def humanscantsolvethis_keys_from_result(data:str, result:str, offsets=[0]) -> list:
 	"""generates possible keys for humanscantsolvethis... decryption from result;
@@ -295,6 +332,9 @@ py_sheismymother_gen = sheismymother_gen
 py_processingpowercheck_decrypt = processingpowercheck_decrypt
 py_processingpowercheck_encrypt = processingpowercheck_encrypt
 py_processingpowercheck_gen = processingpowercheck_gen
+py_intelligencecheck_decrypt = intelligencecheck_decrypt
+py_intelligencecheck_encrypt = intelligencecheck_encrypt
+py_intelligencecheck_gen = intelligencecheck_gen
 py_TranspositionCipher = TranspositionCipher
 py_humanscantsolvethis_keys_from_result = humanscantsolvethis_keys_from_result
 py_humanscantsolvethis_keys_from_condition = humanscantsolvethis_keys_from_condition

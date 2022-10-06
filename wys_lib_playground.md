@@ -3,6 +3,7 @@
 The core of this toolkit (and also of some scripts) is the `wys_lib`. It's made in python, so you'll need python 3 to run it (not sure what version is needed, but 3.6+ should work fine). It is a module containing data and useful functions. Apart from `wys_lib.py`, there's also `wys_playground.py`. `wys_playground.py` imports `wys_lib.py` and is meant for experimenting.
 
 - [wys arg decrypting toolkit](#wys-arg-decrypting-toolkit)
+	- [Stuff for testing](#stuff-for-testing)
 	- [Quick start](#quick-start)
 	- [wys_lib.c](#wys_libc)
 	- [all data](#all-data)
@@ -11,6 +12,16 @@ The core of this toolkit (and also of some scripts) is the `wys_lib`. It's made 
 	- [L2A key finding](#l2a-key-finding)
 	- [character frequency](#character-frequency)
 	- [mask, first possible occurence](#mask-first-possible-occurence)
+
+## Stuff for testing
+
+As we got new hints, we found out that L5 uses rather numbers than the text, so I made `intelligencecheck_decrypt` (and `intelligencecheck_encrypt`, `intelligencecheck_gen`). It's same as the L2 algorithm, but it accepts list numbers instead of string key (negative numbers are supported :) ).
+
+```py
+from wys_lib import *
+
+print(intelligencecheck_decrypt(data2, [ord(c)-64 for c in key2])) # decrypts L2
+```
 
 ## Quick start
 

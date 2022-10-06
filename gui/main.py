@@ -345,6 +345,14 @@ def l2a_checked(func, data, key):
 	if any(c not in "ABCDEFGHIJKLMNOPQRSTUVWXYZ[" for c in key):
 		return "invalid key!"
 	return func(data, key)
+def l5a_checked(func, data, key):
+	if any(c not in "0123456789-," for c in key):
+		return "invalid key!"
+	k = key.split(',')
+	if any(not s.isdigit() and not (s.startswith('-') and s[1:].isdigit()) for s in k):
+		return "invalid key!"
+	k = [int(i) for i in k]
+	return func(data, k)
 def run_crypt_function_checked(checker, func, *args):
 	data = datawidget.get("1.0", END)
 	if '\n' in data:
@@ -440,6 +448,10 @@ dontbother_encrypt_button = Button(commandframe, text="encrypt with L1 algorithm
 hcstsbsh_decrypt_button = Button(commandframe, text="decrypt with L2 algorithm", command=lambda: run_crypt_function_checked(l2a_checked, humanscantsolvethis_decrypt),
 	activebackground=colors.active_bg, background=colors.bg, relief=FLAT, highlightbackground=colors.border, highlightthickness=1, fg=colors.fg)
 hcstsbsh_encrypt_button = Button(commandframe, text="encrypt with L2 algorithm", command=lambda: run_crypt_function_checked(l2a_checked, humanscantsolvethis_encrypt),
+	activebackground=colors.active_bg, background=colors.bg, relief=FLAT, highlightbackground=colors.border, highlightthickness=1, fg=colors.fg)
+hcstsbsh_decrypt_button = Button(commandframe, text="decrypt with L5 algorithm", command=lambda: run_crypt_function_checked(l5a_checked, intelligencecheck_decrypt),
+	activebackground=colors.active_bg, background=colors.bg, relief=FLAT, highlightbackground=colors.border, highlightthickness=1, fg=colors.fg)
+hcstsbsh_encrypt_button = Button(commandframe, text="encrypt with L5 algorithm", command=lambda: run_crypt_function_checked(l5a_checked, intelligencecheck_encrypt),
 	activebackground=colors.active_bg, background=colors.bg, relief=FLAT, highlightbackground=colors.border, highlightthickness=1, fg=colors.fg)
 key_reverse_button = Button(commandframe, text="find keys for L2 algorithm", command=lambda: run_data_key_function_checked(lambda d, k: humanscantsolvethis_keys_from_result(d, k)),
 	activebackground=colors.active_bg, background=colors.bg, relief=FLAT, highlightbackground=colors.border, highlightthickness=1, fg=colors.fg)
