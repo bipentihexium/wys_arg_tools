@@ -16,3 +16,4 @@ out*.txt
 /bruteforcers/key_bruteforce/key_bruteforce
 /bruteforcers/key_bruteforce/key_bruteforcer
 /cpp/playground
+/gui/saved/scripts/*
