@@ -449,9 +449,9 @@ hcstsbsh_decrypt_button = Button(commandframe, text="decrypt with L2 algorithm",
 	activebackground=colors.active_bg, background=colors.bg, relief=FLAT, highlightbackground=colors.border, highlightthickness=1, fg=colors.fg)
 hcstsbsh_encrypt_button = Button(commandframe, text="encrypt with L2 algorithm", command=lambda: run_crypt_function_checked(l2a_checked, humanscantsolvethis_encrypt),
 	activebackground=colors.active_bg, background=colors.bg, relief=FLAT, highlightbackground=colors.border, highlightthickness=1, fg=colors.fg)
-hcstsbsh_decrypt_button = Button(commandframe, text="decrypt with L5 algorithm", command=lambda: run_crypt_function_checked(l5a_checked, intelligencecheck_decrypt),
+intelligencecheck_decrypt_button = Button(commandframe, text="decrypt with L5 algorithm", command=lambda: run_crypt_function_checked(l5a_checked, intelligencecheck_decrypt),
 	activebackground=colors.active_bg, background=colors.bg, relief=FLAT, highlightbackground=colors.border, highlightthickness=1, fg=colors.fg)
-hcstsbsh_encrypt_button = Button(commandframe, text="encrypt with L5 algorithm", command=lambda: run_crypt_function_checked(l5a_checked, intelligencecheck_encrypt),
+intelligencecheck_encrypt_button = Button(commandframe, text="encrypt with L5 algorithm", command=lambda: run_crypt_function_checked(l5a_checked, intelligencecheck_encrypt),
 	activebackground=colors.active_bg, background=colors.bg, relief=FLAT, highlightbackground=colors.border, highlightthickness=1, fg=colors.fg)
 key_reverse_button = Button(commandframe, text="find keys for L2 algorithm", command=lambda: run_data_key_function_checked(lambda d, k: humanscantsolvethis_keys_from_result(d, k)),
 	activebackground=colors.active_bg, background=colors.bg, relief=FLAT, highlightbackground=colors.border, highlightthickness=1, fg=colors.fg)
@@ -468,6 +468,8 @@ dontbother_decrypt_button.pack(fill=X)
 dontbother_encrypt_button.pack(fill=X)
 hcstsbsh_decrypt_button.pack(fill=X)
 hcstsbsh_encrypt_button.pack(fill=X)
+intelligencecheck_decrypt_button.pack(fill=X)
+intelligencecheck_encrypt_button.pack(fill=X)
 key_reverse_button.pack(fill=X)
 frequency_button.pack(fill=X)
 frequency_categories_button.pack(fill=X)
