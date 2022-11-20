@@ -85,7 +85,7 @@ def save_script_as():
 	try:
 		codefile = f
 		with open(codefile, "w") as f:
-			f.write(codewidget.get("1.0", END))
+			f.write(codewidget.get("1.0", "end-1c"))
 		statuslabel.config(text="[" + status_timestamp() + "] Written script to " + codefile)
 		reload_scripts()
 	except IOError:
@@ -98,7 +98,7 @@ def save_script():
 	if codefile:
 		try:
 			with open(codefile, "w") as f:
-				f.write(codewidget.get("1.0", END))
+				f.write(codewidget.get("1.0", "end-1c"))
 			statuslabel.config(text="[" + status_timestamp() + "] Written script to " + codefile)
 		except IOError:
 			statuslabel.config(text="[" + status_timestamp() + "] Failed to write script to " + codefile)
