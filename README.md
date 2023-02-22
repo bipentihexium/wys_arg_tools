@@ -4,33 +4,33 @@ Warning: WYS spoilers ahead :)
 
 - [WYS "ARG" tools](#wys-arg-tools)
 	- [What is this?](#what-is-this)
+	- [WYS lib](#wys-lib)
 	- [Setup](#setup)
-	- [How to use?](#how-to-use)
-		- [scripts](#scripts)
+	- [Scripts](#scripts)
 		- [algorithm bruteforcers](#algorithm-bruteforcers)
 		- [key bruteforcers](#key-bruteforcers)
 
 ## What is this?
 
-There is a game called "Will you snail?" (WYS) by Jonas Tyroller. If you go to the Squid's presentation room after fixing him, there is some binary, which turned out to be a puzzle, and is being solved on [WYS Discord (\#WYS binary decrypting (read pinned))](https://discord.gg/6Kk2FUHmgf). For more information look at the [doc](https://docs.google.com/document/d/1e_nOhSkTh9cchh8n5yDadvf-pnoi8CBZnHwZE0dsbcI/edit#).
+If you're here, you have probably played the game "Will you snail?" made by Jonas Tytoller. When you go into Squid's presentation room after completing alternative ending, you're met with some binary data. It turned out to be a multi-level puzzle, and we are currently on level 5 out of 7 levels. If you are interested, you can read a bit [about how we get to the point where we are](history.md), or [about solutions to levels we solved already](solutions.md) (which is highly recommended if you want to help us). You can join us on [WYS Discord (\#WYS binary decrypting (read pinned))](https://discord.gg/6Kk2FUHmgf). You can also take a look at the [google doc](https://docs.google.com/document/d/1e_nOhSkTh9cchh8n5yDadvf-pnoi8CBZnHwZE0dsbcI/edit#) we use to collect all that we know.
 
-**[wys arg decrypting toolkit](wys_lib_playground.md)** is probably the part that you came here for - the other stuff are small scripts and bruteforcers.
+There are multiple tools. Most importantly there's wys_lib, but there are some scripts and multiple bruteforcers I wrote while trying to decrypt the message. You can also find raw texts and data for each level in the [data](data/) subfolder.
+
+## WYS lib
+
+`wys_lib.py` is a Python library which contains some data and functions to aid you with solving. Check out [it's own documentation](wys_lib_py.md) to learn more! `wys_playground.py` is just a script which imports `wys_lib` and contains a few examples on how you could use it. `wys_lib.c` contains optional c implementation for many of the functions in `wys_lib.py`. You can learn more about it in `wys_lib.py`'s doc.
 
 ## Setup
 
-Take a look at the [setup manual](setup.md) :) .
+The [setup manual](setup.md) is in it's own file :) .
 
-## How to use?
-
-There is a lot of tools. The main part is **[wys arg decrypting toolkit :)](wys_lib_playground.md)**, but there are two [algorithm bruteforcers](#algorithm-bruteforcers), some [key bruteforcers](#key-bruteforcers) and multiple [scripts](#scripts).
-
-### scripts
+## Scripts
 
 Scripts include [key tester](scripts/wys_test.py) ([doc](scripts/doc/wys_test.md)) and [index table with L2 key finder](scripts/wys_indextable.py) ([doc](scripts/doc/wys_indextable.md)).
 
 ### algorithm bruteforcers
 
-There are two algortihm bruteforces, niether of them has good documentation :/. Each one has it's own folder and readme.
+There are two algortihm bruteforces, niether of them has good documentation :/. Both are written in C++ and each one has it's own folder and readme. There's not probably much use in trying to do something with them though.
 
 [algo_bruteforce's readme](bruteforcers/algo_bruteforce/README.md) - algo_bruteforce tries random expressions and checks if it makes a valid message.
 
@@ -38,6 +38,6 @@ There are two algortihm bruteforces, niether of them has good documentation :/. 
 
 ### key bruteforcers
 
-There are ~~multiple~~ (now three, but two of them are unfinished and one of those is not even in the repo) key bruteforcers. The [first one](bruteforcers/key_bruteforce/key_bruteforce.c) ([doc](bruteforcers/key_bruteforce/doc/key_bruteforce_c.md)) is simple one-threaded C key bruteforcer.
+The [only documented key bruteforcer](bruteforcers/key_bruteforce/key_bruteforce.c) ([doc](bruteforcers/key_bruteforce/doc/key_bruteforce_c.md)) is simple one-threaded L2 key bruteforcer written in C.
 
 TODO: other key bruteforcers - doc

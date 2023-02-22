@@ -1,0 +1,1 @@
+Look at the [old documentation]() for it now, I'll rewrite it "soon" :)
