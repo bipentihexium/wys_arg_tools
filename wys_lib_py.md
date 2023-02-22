@@ -1,1 +1,1 @@
-Look at the [old documentation]() for it now, I'll rewrite it "soon" :)
+Look at the [old documentation](wys_lib_playground.md) for it now, I'll rewrite it "soon" :)
