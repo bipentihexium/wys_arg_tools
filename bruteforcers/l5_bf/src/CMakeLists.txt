@@ -1,0 +1,12 @@
+add_executable(l5_bf main.cpp)
+target_compile_features(l5_bf PUBLIC cxx_std_20)
+target_compile_options(l5_bf PRIVATE ${WARN})
+if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+	if(ipo_supported)
+		message(STATUS "IPO (LTO) enabled")
+		set_property(TARGET l5_bf PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+	else()
+		message(STATUS "IPO (LTO) not supported: <${ipo_error}>")
+	endif()
+endif()
+
