@@ -23,7 +23,7 @@ There are multiple tools. Most importantly there's wys_lib, but there are some s
 
 ## GUI
 
-To make functions of `wys_lib.py` more accessibe, there's also [a gui](gui/), which could be used to try decrypting.
+To make functions of `wys_lib.py` more accessibe, there's also [a gui](gui/) ([doc](gui/gui.md)), which could be used to try decrypting.
 
 ## Setup
 
