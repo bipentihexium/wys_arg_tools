@@ -10,7 +10,7 @@
 
 ## Decoding the binary
 
-After getting the binary directly from the game files or rewriting it by hand, you can put it into an online binary to text converter (it uses just classical ASCII). After that, you got this:
+After getting the binary directly from the game files or rewriting it by hand, you can put it into an online binary to text converter (it uses just classical ASCII). After that, you'll get this:
 
 ```
 hello my little ai friend; keep this file safe; it will help you to understand your purpose one day; transmitted through human brain; encryption method: DONTBOTHER17; DATA(Nw;:OPxPo st;AEp fbwpe  idIosEtn TnipeMp H ui;zcE ntcrATsHrhUtxHRW   CCsoo( reEMantTtOafStNOBxaIEtARorYATHa trOBuQtx(NCPshtMUt:NpsvLdA aSeNIrUeeAee rsALs|iCeNhEss;apTbtiA;stlAaer)t tOL7P t: s  NotA SsTttdeE' WL kTv puLDSifANr7oiReiS aeytforoMfctt)dlHOsA n;slDRWYdp rtDssLUS)t;SIkC; ac;oteiVH Wi jfidlR; 7udsRE s uDEtoE|lSeT;LcVTlHCSaAd( hnI  zorkHIcpSEeCoAecenEe UyIlNeot;t Tc eEA  KISKi  H t sDxsttn;MhSUi' KAORNtxotTeAE O spAAeOe ets l OCgBt AetbTeHm)ao|iRIiElt YaDnhtBTlhCGeSwTGbn ncLyFthyO N xdTCDeirnyhstAU T(:SOEs lyTEjMsePup lstkRnnpyndUieIe)rF fr6SttTaHfI;Ne Oh:pAc TiMenE s h)esLsbs roOll VcnwLTO;nhKTsnePmUN;UusHdusDt l B Ho72EyMNuRoy znm dwEs IEiAxtteCrwee MeRen ;iB OstnAtL(NroEtwe| (t:se hyniEdr;iKsnt Ee;ooeSoEdug iu Rd H ddCaLSPC ADiiAYA)
@@ -99,7 +99,7 @@ second test passed; next test: DLIHCREHTONMAITUBREHTOMYMSIEHS; DATA(AtniotoMK;hH
 
 ## Level 3
 
-This level uses the same algorithm as the previous one - L2A. Here, if you reverse the _hint_ - `DLIHCREHTONMAITUBREHTOMYMSIEHS`, you'll get `SHEISMYMOTHERBUTIAMNOTHERCHILD`. That is a "riddle" that is needed to be solved in order to get the key (She is my mother, but I am not her child.). The answer to this is Ellie (lore) giving us the key `ELLIE`. But we need to reverse it, because the hint was reversed, so the key is `EILLE`. Decrypting the data gives you the following:
+This level uses the same algorithm as the previous one - L2A. Here, if you reverse the _hint_ - `DLIHCREHTONMAITUBREHTOMYMSIEHS`, you'll get `SHEISMYMOTHERBUTIAMNOTHERCHILD`. That is a "riddle" that is needed to be solved in order to get the key (She is my mother, but I am not her child.). The answer to this is Ellie (lore thing :) ) giving us the key `ELLIE`. But we need to reverse it, because the hint was reversed, so the key is `EILLE`. Decrypting the data gives you the following:
 
 ```
 that's correct; third test passed; next up: SGIPCESRON|WOREP|HKCEC|7|SEPURECAP; DATA(IvTuitn tat  eHenoEi pgvi IATf nAOiM pLl ssyGnelnu l(Eeo seIthHNc;YARsL oeeoEilnBst( elth dylarxtlSAPa YbSpNR'UrslCPth;B LiyROsoMpsF SrasCIssn KNEALhATih o  atowrstzCnisuhcAHKAm  ecIREftNsUMiNnan HeosirhHSs;AdtuuNpodpEo;pey r6T )rs(isg tyAi;sse;tFeCtutEj Soewuoe tMNR B Sedcl C KxeeCOxai; tnitLlLy tetncU OO ijwEiC:b7O;eUithx VOodAr )Tu xbsc:onD Nn tpsot KSeo;ae)DMEw2z tf EyfotdanrAeetwu7dIeB ;mnh:bA slu t WL ketAtlDnk;rNlU ILWeW7 iiDwUlnrTeEiolttdYT OtwEeDbUe i h HNfrAfc dVQdk ArzTOLarA if kye; tN sTLys oTd)

@@ -7,8 +7,8 @@ Warning: WYS spoilers ahead :)
 	- [WYS lib](#wys-lib)
 	- [Setup](#setup)
 	- [Scripts](#scripts)
-		- [algorithm bruteforcers](#algorithm-bruteforcers)
-		- [key bruteforcers](#key-bruteforcers)
+	- [algorithm bruteforcers](#algorithm-bruteforcers)
+	- [key bruteforcers](#key-bruteforcers)
 
 ## What is this?
 
@@ -28,7 +28,7 @@ The [setup manual](setup.md) is in it's own file :) .
 
 Scripts include [key tester](scripts/wys_test.py) ([doc](scripts/doc/wys_test.md)) and [index table with L2 key finder](scripts/wys_indextable.py) ([doc](scripts/doc/wys_indextable.md)).
 
-### algorithm bruteforcers
+## algorithm bruteforcers
 
 There are two algortihm bruteforces, niether of them has good documentation :/. Both are written in C++ and each one has it's own folder and readme. There's not probably much use in trying to do something with them though.
 
@@ -36,7 +36,7 @@ There are two algortihm bruteforces, niether of them has good documentation :/. 
 
 [ab_v2's readme](bruteforcers/ab_v2/README.md) - ab_v2 tries random instructions and checks if it makes a valid message.
 
-### key bruteforcers
+## key bruteforcers
 
 The [only documented key bruteforcer](bruteforcers/key_bruteforce/key_bruteforce.c) ([doc](bruteforcers/key_bruteforce/doc/key_bruteforce_c.md)) is simple one-threaded L2 key bruteforcer written in C.
 
