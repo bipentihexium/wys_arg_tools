@@ -5,6 +5,7 @@ Warning: WYS spoilers ahead :)
 - [WYS "ARG" tools](#wys-arg-tools)
 	- [What is this?](#what-is-this)
 	- [WYS lib](#wys-lib)
+	- [GUI](#gui)
 	- [Setup](#setup)
 	- [Scripts](#scripts)
 	- [algorithm bruteforcers](#algorithm-bruteforcers)
@@ -19,6 +20,10 @@ There are multiple tools. Most importantly there's wys_lib, but there are some s
 ## WYS lib
 
 `wys_lib.py` is a Python library which contains some data and functions to aid you with solving. Check out [it's own documentation](wys_lib_py.md) to learn more! `wys_playground.py` is just a script which imports `wys_lib` and contains a few examples on how you could use it. `wys_lib.c` contains optional c implementation for many of the functions in `wys_lib.py`. You can learn more about it in `wys_lib.py`'s doc.
+
+## GUI
+
+To make functions of `wys_lib.py` more accessibe, there's also [a gui](gui/), which could be used to try decrypting.
 
 ## Setup
 
