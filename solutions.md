@@ -64,6 +64,8 @@ abghklq             ejocipfmdnh
 # and so on, until data is empty
 ```
 
+If you have Python with Pygame installed, you can run [visualizer/a_vis.py](visualizer/a_vis.py) from it's folder to see animated "version" of the algorithm.
+
 After applying this algorithm on the data, you'll get this:
 
 ```

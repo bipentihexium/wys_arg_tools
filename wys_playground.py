@@ -60,7 +60,7 @@ def print_data_properties(data):
 print_data_properties(data5) # wys_lib contains data for each level - data1 (Nw;:OPx...), data2 (at iatuts...), data3 (AtniotoMK...), data4 (IvTuitn...) and data5 (e;R cNsR...)
 """
 
-#"""Example 3: wys_lib test
+"""Example 3: wys_lib test
 # data
 assert data1 == text1[text1.index("DATA(")+5:-1]
 assert data2 == text2[text2.index("DATA(")+5:-1]
@@ -85,4 +85,4 @@ assert intelligencecheck_decrypt(data2, [ord(x)-64 for x in key2]) == text3
 assert intelligencecheck_encrypt(text3, [ord(x)-64 for x in key2]) == data2
 
 print("all good!")
-#"""
+"""
