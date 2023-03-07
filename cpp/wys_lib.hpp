@@ -1,29 +1,6 @@
 #ifndef __WYS_LIB_CPP_HPP__
 #define __WYS_LIB_CPP_HPP__
 
-/* Copyright (c) 2022 bipentihexium
-
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without
-restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE. */
-
 #include <numeric>
 #include <string>
 #include <vector>
@@ -39,11 +16,11 @@ constexpr const char *text3 = "second test passed; next test: DLIHCREHTONMAITUBR
 constexpr const char *data3 = "AtniotoMK;hHLt hOT(NSCCiMs  aEeMifpCesul)t: su|'yhlRtsW ;tFpb7t actt lbA  L|c  Ar:SlihA7Eof kh rK;LSPrfdswdrBrHekblUytasxKsnc 7uAROslOyELt SSUC;G Amu snOaACtrutyreebN;TPx thNIteelset;seis;  drs  nDdEpdltueUc And o c dyS7tdTlwFcA TItiePoA:(slpr(ltefKaIeeR  EdN;AvtetEE psottTCTEaCoAa IyYfsnouotsbUti sAkSetL;iui hNpnedped nIhcetx ;ttAeN lsytTnhKtD EeiaexRELityHU'Uux )e UMVr NVhtYiHc  rj Blu;Oe rN e pdsYNHIDo6NeS: D OOAlnn aC TC f So RPoGMsntsan EI LtE anoOiEeP    wDThxdt;CLp)eoEHo arS;wrwgiABeRzwAsue evirjOotiimo;L L( NEwros|oIpNiWeisoin;AiOAit2EQnyUlzsR TWRn rfCAeBEO ks PTW in|sngscthezHt eD)";
 constexpr const char *hint3 = "DLIHCREHTONMAITUBREHTOMYMSIEHS";
 constexpr const char *hint3decrypted = "SHEISMYMOTHERBUTIAMNOTHERCHILD";
-constexpr const char *key3 = "EILLE"; // reversed ELLIE
+constexpr const char *key3 = "EILLE";
 constexpr const char *text4 = "that's correct; third test passed; next up: SGIPCESRON|WOREP|HKCEC|7|SEPURECAP; DATA(IvTuitn tat  eHenoEi pgvi IATf nAOiM pLl ssyGnelnu l(Eeo seIthHNc;YARsL oeeoEilnBst( elth dylarxtlSAPa YbSpNR'UrslCPth;B LiyROsoMpsF SrasCIssn KNEALhATih o  atowrstzCnisuhcAHKAm  ecIREftNsUMiNnan HeosirhHSs;AdtuuNpodpEo;pey r6T )rs(isg tyAi;sse;tFeCtutEj Soewuoe tMNR B Sedcl C KxeeCOxai; tnitLlLy tetncU OO ijwEiC:b7O;eUithx VOodAr )Tu xbsc:onD Nn tpsot KSeo;ae)DMEw2z tf EyfotdanrAeetwu7dIeB ;mnh:bA slu t WL ketAtlDnk;rNlU ILWeW7 iiDwUlnrTeEiolttdYT OtwEeDbUe i h HNfrAfc dVQdk ArzTOLarA if kye; tN sTLys oTd)";
 constexpr const char *data4 = "IvTuitn tat  eHenoEi pgvi IATf nAOiM pLl ssyGnelnu l(Eeo seIthHNc;YARsL oeeoEilnBst( elth dylarxtlSAPa YbSpNR'UrslCPth;B LiyROsoMpsF SrasCIssn KNEALhATih o  atowrstzCnisuhcAHKAm  ecIREftNsUMiNnan HeosirhHSs;AdtuuNpodpEo;pey r6T )rs(isg tyAi;sse;tFeCtutEj Soewuoe tMNR B Sedcl C KxeeCOxai; tnitLlLy tetncU OO ijwEiC:b7O;eUithx VOodAr )Tu xbsc:onD Nn tpsot KSeo;ae)DMEw2z tf EyfotdanrAeetwu7dIeB ;mnh:bA slu t WL ketAtlDnk;rNlU ILWeW7 iiDwUlnrTeEiolttdYT OtwEeDbUe i h HNfrAfc dVQdk ArzTOLarA if kye; tN sTLys oTd";
 constexpr const char *hint4 = "SGIPCESRON|WOREP|HKCEC|7|SEPURECAP";
-constexpr const char *hint4decrypted = "PROCESSING|POWER|CHECK|7|UPPERCASE"; // every word was scrambled
+constexpr const char *hint4decrypted = "PROCESSING|POWER|CHECK|7|UPPERCASE";
 constexpr const char *key4 = "XDYOYOY";
 constexpr const char *text5 = "ifo llszu uyjx just kidding it's correct; fourth test passed; next block encrypted with: INTELLIGENCECHECKx7x27; DATA(e;R cNsRtOs;;eE OanYti tieSCC Kd eNTT oxShNsteL emeif;pnlO Ka u TnAtTfdLe UTI;o irf lr EuytwHtte onirruEoLh yeltztl  OHSinpstUwA As L AfiMiNBlwsvnRrpTeEM:tyiIaNNsLUeeOTidPon  p DQt; i6inbADNeNFHAloltA BoieScney MI;EoEn otnoBDkWosB udtL lAs OEn yCogVrHnbsAwt  YrpOed s;oaIilteb7klaauL hsiW loFdUen))YsLOU aE  R tsIAdWes;esA tltopAyhr:bKyt( e hMiePaHAacShiRzSA rSsv umteTswe(Mn fVDNUtUwOtshrACh)";
 constexpr const char *data5 = "e;R cNsRtOs;;eE OanYti tieSCC Kd eNTT oxShNsteL emeif;pnlO Ka u TnAtTfdLe UTI;o irf lr EuytwHtte onirruEoLh yeltztl  OHSinpstUwA As L AfiMiNBlwsvnRrpTeEM:tyiIaNNsLUeeOTidPon  p DQt; i6inbADNeNFHAloltA BoieScney MI;EoEn otnoBDkWosB udtL lAs OEn yCogVrHnbsAwt  YrpOed s;oaIilteb7klaauL hsiW loFdUen))YsLOU aE  R tsIAdWes;esA tltopAyhr:bKyt( e hMiePaHAacShiRzSA rSsv umteTswe(Mn fVDNUtUwOtshrACh";
@@ -104,17 +81,49 @@ inline std::string sheismymother_decrypt(const std::string &data, const std::str
 inline std::string sheismymother_encrypt(const std::string &data, const std::string &key=key3) { return humanscantsolvethis_encrypt(data, key); }
 inline std::string processingpowercheck_decrypt(const std::string &data, const std::string &key=key4) { return humanscantsolvethis_decrypt(data, key); }
 inline std::string processingpowercheck_encrypt(const std::string &data, const std::string &key=key4) { return humanscantsolvethis_encrypt(data, key); }
-
-inline std::string humanscantsolvethis_decrypt_partial(const std::string &data, const std::string &key=key2, unsigned int length=100) {
+/// decrypts data encoded with L5A
+template<typename KIT>
+inline std::string intelligencecheck_decrypt(const std::string &data, KIT key_begin, KIT key_end) {
 	std::string datacpy(data);
 	std::string out;
 	out.reserve(datacpy.size());
-	for (unsigned int index = 0, keyindex = 0, counter = 0; counter < length && !datacpy.empty(); keyindex = (keyindex + 1) % key.size(), counter++) {
-		index = (index + key[keyindex] - 64) % datacpy.size();
+	KIT keyiter = key_begin;
+	for (unsigned int index = 0; !datacpy.empty();) {
+		index = (index + *keyiter) % datacpy.size();
+		if (index < 0)
+			index += datacpy.size();
+		if (++keyiter == key_end)
+			keyiter = key_begin;
 		out.push_back(datacpy[index]);
 		datacpy.erase(datacpy.begin() + index);
 	}
 	return out;
+}
+template<typename KIT>
+inline std::string intelligencecheck_encrypt(const std::string &data, KIT key_begin, KIT key_end) {
+	std::string out(data.size(), '\0');
+	std::vector<unsigned int> free_indices(data.size(), 0);
+	std::iota(free_indices.begin(), free_indices.end(), 0);
+	int index = 0;
+	KIT keyiter = key_begin;
+	for (const char &c : data) {
+		index = (index + *keyiter) % free_indices.size();
+		if (index < 0)
+			index += free_indices.size();
+		if (++keyiter == key_end)
+			keyiter = key_begin;
+		out[free_indices[index]] = c;
+		free_indices.erase(free_indices.begin() + index);
+	}
+	return out;
+}
+template<typename F>
+inline std::string mask(std::string data, F filter) { // data copy intentional
+	for (char &c : data) {
+		if (filter(c))
+			c = '.';
+	}
+	return data;
 }
 
 #endif

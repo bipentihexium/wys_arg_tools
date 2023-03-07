@@ -1,7 +1,5 @@
 # wys_lib.py
 
-This file is still "work in progress", check out [old documentation](wys_lib_playground.md) to find out information about things that aren't here yet.
-
 - [wys\_lib.py](#wys_libpy)
 	- [Quick start through examples](#quick-start-through-examples)
 		- [Solving the solved](#solving-the-solved)
@@ -13,6 +11,8 @@ This file is still "work in progress", check out [old documentation](wys_lib_pla
 		- [Statistics and mask](#statistics-and-mask)
 	- [wys\_lib.c](#wys_libc)
 		- [Using python implementations](#using-python-implementations)
+	- [Other utilities](#other-utilities)
+		- [reversing, (l2\_min\_remove)](#reversing-l2_min_remove)
 
 This is a Python library containing a few utilities for decrypting the WYS ARG.
 
@@ -197,3 +197,13 @@ If you have a c compiler, you can use c implementations for most of the function
 ### Using python implementations
 
 Even when using `wys_lib.dll/so`, you can use the python implementations by prefixing the function with `py_` (so `py_dontbother17_decrypt` is the python implementation for db17). This is useful for example when you want to use dontbother with large N, which would overflow when using the C implementations.
+
+## Other utilities
+
+### reversing, (l2_min_remove)
+
+Sometimes you want to find a key that produces specific message. The `rev5` function can find a sigle simple L5 key - it takes data and required result. `intelligencecheck_decrypt(data5, rev5(data5, "hello world"))` will return some string starting with "hello world".
+
+Often it's more useful to find _all_ keys with some skip range. `rev5_full` function takes data, required result, minimal skip and maximal skip and yields all L5 keys made from skips from [min_skip, max_skip).
+
+There's also `l2_min_remove`. It takes data and some string, and it calculates the first position where the string can appear in the data when using L2A.

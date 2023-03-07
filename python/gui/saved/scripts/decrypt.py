@@ -11,5 +11,3 @@ def decrypt(data, key):
 		data = data[:index] + data[index+1:]
 	return res
 print(decrypt(data, key))
-
-
