@@ -30,7 +30,7 @@ namespace wys_lib
 				index = (index + n) % data.Length;
 				if (index < 0)
 					index += data.Length;
-				res += datacpy[index];
+				res += data[index];
 				data.Remove(index, 1);
 			}
 			return res;
@@ -43,7 +43,7 @@ namespace wys_lib
 				if (index < 0)
 					index += data.Length;
 				keyindex++;
-				res += datacpy[index];
+				res += data[index];
 				data.Remove(index, 1);
 			}
 			return res;
@@ -56,7 +56,7 @@ namespace wys_lib
 				if (index < 0)
 					index += data.Length;
 				keyindex++;
-				res += datacpy[index];
+				res += data[index];
 				data.Remove(index, 1);
 			}
 			return res;
