@@ -26,97 +26,61 @@ constexpr const char *text5 = "ifo llszu uyjx just kidding it's correct; fourth 
 constexpr const char *data5 = "e;R cNsRtOs;;eE OanYti tieSCC Kd eNTT oxShNsteL emeif;pnlO Ka u TnAtTfdLe UTI;o irf lr EuytwHtte onirruEoLh yeltztl  OHSinpstUwA As L AfiMiNBlwsvnRrpTeEM:tyiIaNNsLUeeOTidPon  p DQt; i6inbADNeNFHAloltA BoieScney MI;EoEn otnoBDkWosB udtL lAs OEn yCogVrHnbsAwt  YrpOed s;oaIilteb7klaauL hsiW loFdUen))YsLOU aE  R tsIAdWes;esA tltopAyhr:bKyt( e hMiePaHAacShiRzSA rSsv umteTswe(Mn fVDNUtUwOtshrACh";
 constexpr const char *hint5 = "INTELLIGENCECHECKx7x27";
 
-/// decrypts data encoded with the DONTBOTHER N cypher (N defaults to 17)
-inline std::string dontbother17_decrypt(const std::string &data, unsigned int n=17) {
-	std::string datacpy(data);
-	std::string out;
-	out.reserve(datacpy.size());
-	for (unsigned int index = 0; !datacpy.empty();) {
-		index = (index + n) % datacpy.size();
-		out.push_back(datacpy[index]);
-		datacpy.erase(datacpy.begin() + index);
+#define GEN_DECRYPT_FUN(name, pre, incr, in, post, ...) \
+	std::string name##_decrypt(const std::string &odata, __VA_ARGS__) {\
+		std::string data(odata);\
+		std::string out; out.reserve(data.size());\
+		pre\
+		for (unsigned int index = 0; !data.empty();) {\
+			index = (index + (incr)) % data.size();\
+			in\
+			out.push_back(data[index]);\
+			data.erase(index, 1);\
+			post\
+		}\
+		return out;\
 	}
-	return out;
-}
-/// encrypts data using with the DONTBOTHER N cypher (N defaults to 17)
-inline std::string dontbother17_encrypt(const std::string &data, unsigned int n=17) {
-	std::string out(data.size(), '\0');
-	std::vector<unsigned int> free_indices(data.size(), 0);
-	std::iota(free_indices.begin(), free_indices.end(), 0);
-	unsigned int index = 0;
-	for (const char &c : data) {
-		index = (index + n) % free_indices.size();
-		out[free_indices[index]] = c;
-		free_indices.erase(free_indices.begin() + index);
+#define GEN_ENCRYPT_FUN(name, pre, incr, in, post, ...) \
+	std::string name##_encrypt(const std::string &data, __VA_ARGS__) {\
+		std::string out(data.size(), '\0');\
+		std::vector<unsigned int> free_indices(data.size(), 0);\
+		std::iota(free_indices.begin(), free_indices.end(), 0);\
+		unsigned int index = 0;\
+		pre\
+		for (const char c : data) {\
+			index = (index + (incr)) % free_indices.size();\
+			in\
+			out[free_indices[index]] = c;\
+			free_indices.erase(free_indices.begin() + index);\
+			post\
+		}\
+		return out;\
 	}
-	return out;
-}
-/// decrypts data encoded with the HCSTSBSH algorithm (key defaults to HUMANSCANTSOLVE...)
-inline std::string humanscantsolvethis_decrypt(const std::string &data, const std::string &key=key2) {
-	std::string datacpy(data);
-	std::string out;
-	out.reserve(datacpy.size());
-	for (unsigned int index = 0, keyindex = 0; !datacpy.empty(); keyindex = (keyindex + 1) % key.size()) {
-		index = (index + key[keyindex] - 64) % datacpy.size();
-		out.push_back(datacpy[index]);
-		datacpy.erase(datacpy.begin() + index);
+#define GEN_DECRYPT_FILTERED_FUN(name, pre, incr, in, post, ...) \
+	std::string name##_decrypt(const std::string &odata, const std::string &filter, __VA_ARGS__) {\
+		std::string data(odata);\
+		std::string out; out.reserve(data.size());\
+		pre\
+		for (unsigned int index = 0; !data.empty();) {\
+			index = (index + (incr)) % data.size();\
+			in\
+			out.push_back(data[index]);\
+			data.erase(index);\
+			post\
+		}\
+		return out;\
 	}
-	return out;
-}
-/// encrypts data using the HCSTSBSH algorithm (key defaults to HUMANSCANTSOLVE...)
-inline std::string humanscantsolvethis_encrypt(const std::string &data, const std::string &key=key2) {
-	std::string out(data.size(), '\0');
-	std::vector<unsigned int> free_indices(data.size(), 0);
-	std::iota(free_indices.begin(), free_indices.end(), 0);
-	unsigned int index = 0, keyindex = 0;
-	for (const char &c : data) {
-		index = (index + key[keyindex] - 64) % free_indices.size();
-		keyindex = (keyindex + 1) % key.size();
-		out[free_indices[index]] = c;
-		free_indices.erase(free_indices.begin() + index);
-	}
-	return out;
-}
-inline std::string sheismymother_decrypt(const std::string &data, const std::string &key=key3) { return humanscantsolvethis_decrypt(data, key); }
-inline std::string sheismymother_encrypt(const std::string &data, const std::string &key=key3) { return humanscantsolvethis_encrypt(data, key); }
-inline std::string processingpowercheck_decrypt(const std::string &data, const std::string &key=key4) { return humanscantsolvethis_decrypt(data, key); }
-inline std::string processingpowercheck_encrypt(const std::string &data, const std::string &key=key4) { return humanscantsolvethis_encrypt(data, key); }
-/// decrypts data encoded with L5A
-template<typename KIT>
-inline std::string intelligencecheck_decrypt(const std::string &data, KIT key_begin, KIT key_end) {
-	std::string datacpy(data);
-	std::string out;
-	out.reserve(datacpy.size());
-	KIT keyiter = key_begin;
-	for (unsigned int index = 0; !datacpy.empty();) {
-		index = (index + *keyiter) % datacpy.size();
-		if (index < 0)
-			index += datacpy.size();
-		if (++keyiter == key_end)
-			keyiter = key_begin;
-		out.push_back(datacpy[index]);
-		datacpy.erase(datacpy.begin() + index);
-	}
-	return out;
-}
-template<typename KIT>
-inline std::string intelligencecheck_encrypt(const std::string &data, KIT key_begin, KIT key_end) {
-	std::string out(data.size(), '\0');
-	std::vector<unsigned int> free_indices(data.size(), 0);
-	std::iota(free_indices.begin(), free_indices.end(), 0);
-	int index = 0;
-	KIT keyiter = key_begin;
-	for (const char &c : data) {
-		index = (index + *keyiter) % free_indices.size();
-		if (index < 0)
-			index += free_indices.size();
-		if (++keyiter == key_end)
-			keyiter = key_begin;
-		out[free_indices[index]] = c;
-		free_indices.erase(free_indices.begin() + index);
-	}
-	return out;
-}
+
+#define GEN_FUNS(name, fpre, ...) fpre GEN_DECRYPT_FUN(name, __VA_ARGS__)\
+	fpre GEN_ENCRYPT_FUN(name, __VA_ARGS__)
+
+GEN_FUNS(dontbother17, inline, , n, , , unsigned int n=17)
+GEN_FUNS(humanscantsolvethis, inline, unsigned int keyindex=0;, key[keyindex]-64, , keyindex = (keyindex+1) % key.size();, const std::string &key=key2)
+GEN_FUNS(sheismymother, inline, unsigned int keyindex=0;, key[keyindex]-64, , keyindex = (keyindex+1) % key.size();, const std::string &key=key3)
+GEN_FUNS(processingpowercheck, inline, unsigned int keyindex=0;, key[keyindex]-64, , keyindex = (keyindex+1) % key.size();, const std::string &key=key4)
+GEN_FUNS(intelligencecheck, template<typename KIT> inline, KIT ki = key_begin;, *ki, if (index < 0) index += data.size();,
+	if (++ki == key_end) ki = key_begin;, KIT key_begin, KIT key_end)
+
 template<typename F>
 inline std::string mask(std::string data, F filter) { // data copy intentional
 	for (char &c : data) {
