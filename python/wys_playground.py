@@ -32,8 +32,14 @@ def bruteforce_level_4(): # warning! this will take quite some time since this i
 									return text
 #L5text = bruteforce_level_4()
 L5data = L5text[L5text.index("DATA(")+5:-1]
-print("L5 text:", L5text)
-print("L5 text:", L5data)
+
+key5_original = pw_to_key("INTELLIGENCECHECKx7x27")
+key5 = key5_original.copy()
+for _ in range(7):
+	key5 = l5a(key5, key5_original)
+key5 = [x*27 for x in key5]
+L6text = l5a(data5, key5)
+L6data = L6text[L6text.index("DATA(")+5:-1]
 """
 
 """Example 2: Getting data properties
@@ -57,7 +63,7 @@ def print_data_properties(data):
 	print()
 	print(mask_data(data, "DATA(")) # 
 
-print_data_properties(data5) # wys_lib contains data for each level - data1 (Nw;:OPx...), data2 (at iatuts...), data3 (AtniotoMK...), data4 (IvTuitn...) and data5 (e;R cNsR...)
+print_data_properties(data6) # wys_lib contains data for each level - data1 (Nw;:OPx...), data2 (at iatuts...), data3 (AtniotoMK...), data4 (IvTuitn...), data5 (e;R cNsR...) and data6 (i Ihilfs6...)
 """
 
 """Example 3: wys_lib test
@@ -67,22 +73,25 @@ assert data2 == text2[text2.index("DATA(")+5:-1]
 assert data3 == text3[text3.index("DATA(")+5:-1]
 assert data4 == text4[text4.index("DATA(")+5:-1]
 assert data5 == text5[text5.index("DATA(")+5:-1]
+assert data6 == text6[text6.index("DATA(")+5:-1]
 
 # decrypt functions and keys
 assert dontbother17_decrypt(data1, 17) == text2
 assert humanscantsolvethis_decrypt(data2, key2) == text3
 assert humanscantsolvethis_decrypt(data3, key3) == text4
 assert humanscantsolvethis_decrypt(data4, key4) == text5
+assert intelligencecheck_decrypt(data5, key5) == text6
+
+# other decrypt version
+assert l5a(data5, key5) == text6
+assert l5a_str(data5, key5) == text6
 
 # encrypt functions
 assert dontbother17_encrypt(text2, 17) == data1
 assert humanscantsolvethis_encrypt(text3, key2) == data2
 assert humanscantsolvethis_encrypt(text4, key3) == data3
 assert humanscantsolvethis_encrypt(text5, key4) == data4
-
-# intelligencecheck_decrypt/encrypt
-assert intelligencecheck_decrypt(data2, [ord(x)-64 for x in key2]) == text3
-assert intelligencecheck_encrypt(text3, [ord(x)-64 for x in key2]) == data2
+assert intelligencecheck_encrypt(text6, key5) == data5
 
 print("all good!")
 """

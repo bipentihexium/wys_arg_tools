@@ -60,8 +60,16 @@ def bruteforce_level_4(): # warning! this will take quite some time since this i
 									return text
 #L5text = bruteforce_level_4()
 L5data = L5text[L5text.index("DATA(")+5:-1]
-print("L5 text:", L5text)
-print("L5 text:", L5data)
+
+key5_original = pw_to_key("INTELLIGENCECHECKx7x27")
+key5 = key5_original.copy()
+for _ in range(7):
+	key5 = l5a(key5, key5_original)
+key5 = [x*27 for x in key5]
+L6text = l5a(data5, key5)
+L6data = L6text[L6text.index("DATA(")+5:-1]
+print("L6 text:", L6text)
+print("L6 data:", L6data)
 ```
 
 ### Getting data properties
@@ -89,26 +97,26 @@ def print_data_properties(data):
 	print()
 	print(mask_data(data, "DATA(")) # replaces all characters in data with '.', but keeps characters that are inside the string "DATA("
 
-print_data_properties(data5) # wys_lib contains data for each level - data1 (Nw;:OPx...), data2 (at iatuts...), data3 (AtniotoMK...), data4 (IvTuitn...) and data5 (e;R cNsR...)
+print_data_properties(data6) # wys_lib contains data for each level - data1 (Nw;:OPx...), data2 (at iatuts...), data3 (AtniotoMK...), data4 (IvTuitn...), data5 (e;R cNsR...) and data6 (i Ihilfs6...)
 ```
 
 the output of this is:
 
 ```
-e;R cNsRtOs;;eE OanYti tieSCC Kd eNTT oxShNsteL emeif;pnlO Ka u TnAtTfdLe UTI;o irf lr EuytwHtte onirruEoLh yeltztl  OHSinpstUwA As L AfiMiNBlwsvnRrpTeEM:tyiIaNNsLUeeOTidPon  p DQt; i6inbADNeNFHAloltA BoieScney MI;EoEn otnoBDkWosB udtL lAs OEn yCogVrHnbsAwt  YrpOed s;oaIilteb7klaauL hsiW loFdUen))YsLOU aE  R tsIAdWes;esA tltopAyhr:bKyt( e hMiePaHAacShiRzSA rSsv umteTswe(Mn fVDNUtUwOtshrACh
+i Ihilfs6kdsRNot A gKBClr Mo;w; t tsEsnVpttzw O xiOhwTtubAaSDRl nesCelnBozuteLi afuiOnenSRa Olsrt iyiL iOTAid snehlw ;HAhoAiElkUi;a neAMh FrsoYatAetrDso:iSuLeeUo mLpt   bT ednfIh YbNt  n vdScpt lsltNee(I;iSeAsr;MULstaeoyM e  Bds ywr wWr too telrLsoyNsUiAiKeen;P yocel stdybteu  aeAnh) nREvNtHIAWLopaNuI eBtlo mnYrL 
 
-length: 392 - factorized: [2, 2, 2, 7, 7]
+length: 315 - factorized: [3, 3, 5, 7]
 
-⎵-47 t-25 e-25 s-19 i-17 o-15 n-15 A-15 l-12 r-10 a-9 O-9 N-9 ;-9 h-8 T-8 L-8 E-8 y-7 d-7 U-7 S-7 w-6 u-6 p-6 f-5 R-5 M-5 I-5 H-5 b-4 D-4 C-4 B-4 c-3 Y-3 W-3 K-3 z-2 v-2 m-2 k-2 V-2 P-2 F-2 :-2 )-2 (-2 x-1 g-1 Q-1 7-1 6-1
+⎵-42 e-22 t-21 s-16 i-15 o-14 n-13 l-12 A-11 r-9 a-8 L-8 h-7 ;-7 y-6 w-6 u-6 d-6 N-6 S-5 O-5 I-5 p-4 b-4 U-4 R-4 M-4 B-4 f-3 Y-3 T-3 E-3 z-2 v-2 m-2 k-2 c-2 W-2 K-2 H-2 D-2 C-2 x-1 g-1 V-1 P-1 F-1 :-1 6-1 )-1 (-1
 
-lower-209
-upper-119
-numbers-2
-special/splitters-15
-space-47
+lower-184
+upper-78
+numbers-1
+special/splitters-10
+space-42
 other-0
 
-...................................TT...........................T.A.T......T...................................................A.A....A..............T.................T.........D.........AD.....A....A........................D............A................A..........................................................A.......A......A........(..........A........A..........T...(.....D..........A..
+.................A...................................T...A..D............................................TA............A..A...........A..........A...D....................T..............................(.....A.............................................A..........................A............A.....................
 ```
 
 ### wys_lib test
@@ -116,30 +124,31 @@ other-0
 This tests some components of `wys_lib`:
 
 ```py
-from wys_lib import *
-
 # data
 assert data1 == text1[text1.index("DATA(")+5:-1]
 assert data2 == text2[text2.index("DATA(")+5:-1]
 assert data3 == text3[text3.index("DATA(")+5:-1]
 assert data4 == text4[text4.index("DATA(")+5:-1]
 assert data5 == text5[text5.index("DATA(")+5:-1]
+assert data6 == text6[text6.index("DATA(")+5:-1]
 
 # decrypt functions and keys
 assert dontbother17_decrypt(data1, 17) == text2
 assert humanscantsolvethis_decrypt(data2, key2) == text3
 assert humanscantsolvethis_decrypt(data3, key3) == text4
 assert humanscantsolvethis_decrypt(data4, key4) == text5
+assert intelligencecheck_decrypt(data5, key5) == text6
+
+# other decrypt version
+assert l5a(data5, key5) == text6
+assert l5a_str(data5, key5) == text6
 
 # encrypt functions
 assert dontbother17_encrypt(text2, 17) == data1
 assert humanscantsolvethis_encrypt(text3, key2) == data2
 assert humanscantsolvethis_encrypt(text4, key3) == data3
 assert humanscantsolvethis_encrypt(text5, key4) == data4
-
-# intelligencecheck_decrypt/encrypt
-assert intelligencecheck_decrypt(data2, [ord(x)-64 for x in key2]) == text3
-assert intelligencecheck_encrypt(text3, [ord(x)-64 for x in key2]) == data2
+assert intelligencecheck_encrypt(text6, key5) == data5
 
 print("all good!")
 ```
@@ -157,6 +166,7 @@ print(text2) # "first test passed..."
 print(text3) # "second test passed..."
 print(text4) # "that's correct..."
 print(text5) # "ifo llszu uyjx just kidding..."
+print(text6) # "fifth test passed..."
 ```
 
 as well as only the data (again, it's in format dataN) and hint (like `DONTBOTHER17` or `DLIHCREHTONMAITUBREHTOMYMSIEHS`). L3 and L4 have encrypted helps, so there's `hint3decrypted` and `hint4decrypted` containing decrypted versions of the helps. Levels 2, 3 and 4 need a key which we already know, so there are also `key2`, `key3` and `key4`.

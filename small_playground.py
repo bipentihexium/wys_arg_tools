@@ -1,10 +1,12 @@
 #!/usr/bin/python3
-data5 = "e;R cNsRtOs;;eE OanYti tieSCC Kd eNTT oxShNsteL emeif;pnlO Ka u TnAtTfdLe UTI;o irf lr EuytwHtte onirruEoLh yeltztl  OHSinpstUwA As L AfiMiNBlwsvnRrpTeEM:tyiIaNNsLUeeOTidPon  p DQt; i6inbADNeNFHAloltA BoieScney MI;EoEn otnoBDkWosB udtL lAs OEn yCogVrHnbsAwt  YrpOed s;oaIilteb7klaauL hsiW loFdUen))YsLOU aE  R tsIAdWes;esA tltopAyhr:bKyt( e hMiePaHAacShiRzSA rSsv umteTswe(Mn fVDNUtUwOtshrACh"
-hint5 = "INTELLIGENCECHECKx7x27"
+text6 = "fifth test passed; encryption: QUANTUMCHECK7THOUSANDTOTHEPOWEROFSEVEN; DATA(i Ihilfs6kdsRNot A gKBClr Mo;w; t tsEsnVpttzw O xiOhwTtubAaSDRl nesCelnBozuteLi afuiOnenSRa Olsrt iyiL iOTAid snehlw ;HAhoAiElkUi;a neAMh FrsoYatAetrDso:iSuLeeUo mLpt   bT ednfIh YbNt  n vdScpt lsltNee(I;iSeAsr;MULstaeoyM e  Bds ywr wWr too telrLsoyNsUiAiKeen;P yocel stdybteu  aeAnh) nREvNtHIAWLopaNuI eBtlo mnYrL )"
+data6 = "i Ihilfs6kdsRNot A gKBClr Mo;w; t tsEsnVpttzw O xiOhwTtubAaSDRl nesCelnBozuteLi afuiOnenSRa Olsrt iyiL iOTAid snehlw ;HAhoAiElkUi;a neAMh FrsoYatAetrDso:iSuLeeUo mLpt   bT ednfIh YbNt  n vdScpt lsltNee(I;iSeAsr;MULstaeoyM e  Bds ywr wWr too telrLsoyNsUiAiKeen;P yocel stdybteu  aeAnh) nREvNtHIAWLopaNuI eBtlo mnYrL "
+hint6 = "QUANTUMCHECK7THOUSANDTOTHEPOWEROFSEVEN"
 
-def pw_to_key(pw:str) -> list:
-	return [ord(c)-64 for c in pw]
-def decrypt(data, key:list):
+def pw_to_key(pw: str) -> list:
+	return [int(c) if c.isdigit() else ord(c) - 64 for c in pw.upper()]
+
+def decrypt(data, key: list):
 	index = 0
 	result = data[:0]
 	key_index = 0
@@ -19,5 +21,10 @@ def decrypt(data, key:list):
 #text3 = decrypt(data2, pw_to_key("HUMANSCANTSOLVETHISSOBETTERSTOPHERE"))
 #text4 = decrypt(data3, pw_to_key("EILLE"))
 #text5 = decrypt(data4, pw_to_key("XDYOYOY"))
-#text6 = ???
+#key5_original = pw_to_key("INTELLIGENCECHECKx7x27")
+#key5 = key5_original.copy()
+#for _ in range(7):
+#	key5 = decrypt(key5, key5_original)
+#key5 = [x*27 for x in key5]
+#text6 = decrypt(data5, key5)
 

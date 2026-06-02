@@ -6,6 +6,7 @@
 	- [Level 2](#level-2)
 	- [Level 3](#level-3)
 	- [Level 4](#level-4)
+	- [Level 5](#level-5)
 	- [What next?](#what-next)
 
 ## Decoding the binary
@@ -115,8 +116,17 @@ Here the words of the hint are shuffled. After unscrambling them, you'll get `PR
 ifo llszu uyjx just kidding it's correct; fourth test passed; next block encrypted with: INTELLIGENCECHECKx7x27; DATA(e;R cNsRtOs;;eE OanYti tieSCC Kd eNTT oxShNsteL emeif;pnlO Ka u TnAtTfdLe UTI;o irf lr EuytwHtte onirruEoLh yeltztl  OHSinpstUwA As L AfiMiNBlwsvnRrpTeEM:tyiIaNNsLUeeOTidPon  p DQt; i6inbADNeNFHAloltA BoieScney MI;EoEn otnoBDkWosB udtL lAs OEn yCogVrHnbsAwt  YrpOed s;oaIilteb7klaauL hsiW loFdUen))YsLOU aE  R tsIAdWes;esA tltopAyhr:bKyt( e hMiePaHAacShiRzSA rSsv umteTswe(Mn fVDNUtUwOtshrACh)
 ```
 
+## Level 5
+
+`INTELLIGENCECHECKx7x27` here has to be converted into key as a whole; it gets processed like `INTELLIGENCECHECKXGXBG` with digits as n-th letter (**now key may or may not contain digits**).  With this key, we need to decrypt itself 7 times and finally multiply every item in key by 27. That gives the key `[135, 135, 189, 54, 648, 135, 189, 324, 135, 81, 189, 243, 297, 216, 81, 378, 243, 81, 324, 648, 378, 540]`:
+```
+fifth test passed; encryption: QUANTUMCHECK7THOUSANDTOTHEPOWEROFSEVEN; DATA(i Ihilfs6kdsRNot A gKBClr Mo;w; t tsEsnVpttzw O xiOhwTtubAaSDRl nesCelnBozuteLi afuiOnenSRa Olsrt iyiL iOTAid snehlw ;HAhoAiElkUi;a neAMh FrsoYatAetrDso:iSuLeeUo mLpt   bT ednfIh YbNt  n vdScpt lsltNee(I;iSeAsr;MULstaeoyM e  Bds ywr wWr too telrLsoyNsUiAiKeen;P yocel stdybteu  aeAnh) nREvNtHIAWLopaNuI eBtlo mnYrL )
+```
+
 ## What next?
 
-And that's where we are now. We have been stuck on L5 for quite some time, and we've gotten some hints. From them we know that the algorithm is now generalized even more - instead of the key, we now need to know the step sizes themselves (which are still in a list, where the pointer wraps around), so it's a lot harder to bruteforce it now. It has names already - level 5 algorithm (L5A), and intelligencecheck.
+And that's where we are now. ~~We have been stuck on L5 for quite some time, and we've gotten some hints~~ We are on level 6 right now. (todo: add speculations/thoughts here later)
+
+During level 5 we've learned that before decrypting the whole message we might need to "decrypt" the key (for example, multiply values of the key or decrypt the key using the algorithm that we use for decrypting the message or something else entirely). Also the algorithm has generalized even more - instead of the key, we now need to know the step sizes themselves (which are still in a list, where the pointer wraps around), so it's a lot harder to bruteforce it now. It has names already - level 5 algorithm (L5A), and intelligencecheck.
 
 Congratulations! Now you are qualified to join our [decrypting discord server](https://discord.gg/6qR2KP83JC) :) !
